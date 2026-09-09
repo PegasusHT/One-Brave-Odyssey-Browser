@@ -4,13 +4,15 @@ A separate mobile-first browser project. No Unity files or hero assets are requi
 
 ## Run locally
 
-Open a terminal in this folder and run:
+Double-click `start-game.command` to open a normal macOS Terminal window and start the server. Keep that window open while playing and press Control-C inside it to stop.
+
+You can also open a terminal in this folder and run:
 
 ```sh
 python3 -m http.server 4173 --directory dist
 ```
 
-Open http://127.0.0.1:4173. On a phone connected to the same Wi-Fi, use this computer’s local network address with port 4173. Rotate the phone to landscape. A private hosted preview is also available after deployment.
+Open http://127.0.0.1:4173. On a phone connected to the same Wi-Fi, use the phone URL printed by the launcher. Rotate the phone to landscape.
 
 No package installation or build step is required. `dist/` contains the authored source, not disposable output. Optional Google Fonts have local serif/sans-serif fallbacks.
 
