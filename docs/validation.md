@@ -145,3 +145,22 @@ These are desktop emulation and scripted lifecycle checks, not physical iPhone o
 - Both optional WebMCP tools registered with expected schemas; progress read and destination navigation succeeded; invalid destination and unexpected read arguments were rejected.
 
 These are desktop-browser viewport tests, not physical-device certification. iOS Safari / Android Chrome touch feel, actual notch insets, safe-area behavior, audio unlock and mobile task-switch behavior still need on-device playtesting. All five trainer scoring paths are covered in logic tests; only strength was manually exercised in the browser during this pass. Local test progression is separate from the fresh hosted game save.
+
+## Mobile home UI — 12 September 2026
+
+- All 63 existing gameplay and service-worker tests pass; JavaScript syntax and diff whitespace checks pass.
+- Desktop Chrome touch viewports: 956×440, 844×390, 667×375, 568×320. Verified home labels, absence of bottom tabs, on-screen non-overlapping controls and minimum 44-pixel targets, every destination/return route, Settings, all five trainer exits and offline reload. Exercised an 18-character name and 999,999,999 gold.
+- Inspected 844×390 and 568×320 screenshots. No page errors or document overflow. Existing gameplay rules are unchanged. The existing local server was reused.
+- Prepared cache `obo-game-2026-09-12-2`; home changes are not yet published. Phone installation of the preceding release was confirmed by Jimmy; this revision has not been physically tested on iPhone.
+
+### Home placement refinement
+
+Checked the smaller hero card and labels below buildings at 956×440, 844×390, 667×375 and 568×320 in desktop Chrome. Corrected a slight Legacy/hero-card overlap at the smallest viewport. Home controls remain separated and at least 44 pixels, with destination routes, Settings and offline reload intact. Long-name and large-gold rendering were rechecked. No runtime errors; JavaScript syntax and diff whitespace checks pass. Prepared local cache `obo-game-2026-09-12-3`; not published or physically iPhone-tested.
+
+### Smaller map labels and town hero placement
+
+Desktop Chrome checks pass at 956×440, 844×390, 667×375 and 568×320. Verified 30–34-pixel visible label heights, text no larger than 15 pixels, at least 44-pixel button targets, separated home controls and no label over the town hero. Destination navigation/returns, Settings, offline reload, long names and large gold totals remain functional. Inspected screenshots at 844×390 and 568×320; no runtime errors or document overflow. Syntax and diff whitespace checks pass. Local cache is `obo-game-2026-09-12-4`; not published or physically iPhone-tested.
+
+### Local refresh correction and home release
+
+All 65 Node tests pass (59 gameplay, six mobile cache). New worker checks cover network-first localhost/127.0.0.1/IPv6 refreshes with offline fallback and unchanged cache-first hosted behavior. In actual Chrome at localhost and 127.0.0.1, marked cached JavaScript is skipped on an online reload and used on an offline reload. The latest home screen loads in both cases without page errors. No save storage was reset; no server was started. Release cache: `obo-game-2026-09-12-5`. Previously installed workers need one explicit update before the local-refresh correction takes effect. Physical phone update verification remains with Jimmy.

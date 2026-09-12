@@ -27,7 +27,7 @@ The current loop includes town, five training minigames, stat and skill growth, 
 - `dist/game.js` owns screens, input, settlement, saving, lifecycle and optional WebMCP tools.
 - Progress persists in `localStorage` under `one-brave-odyssey.browser.v1`.
 - Stable equipment IDs are `weapon_t1` through `weapon_t3` and `armor_t1` through `armor_t3`.
-- All 59 gameplay tests and four mobile-cache tests pass, including Critical’s fake-avoidance credit, miss/no-cue penalties, delayed airborne cue, lifetime mission normalization and once-only settlement. Chrome touch checks pass at 844×390, 667×375 and 568×320 with no runtime errors or overflow. These are desktop-emulated checks; physical iPhone playtesting remains.
+- All 59 gameplay tests and six mobile-cache tests pass, including Critical’s fake-avoidance credit, miss/no-cue penalties, delayed airborne cue, lifetime mission normalization and once-only settlement. Chrome touch checks pass at 844×390, 667×375 and 568×320 with no runtime errors or overflow. These are desktop-emulated checks; physical iPhone playtesting remains.
 
 ## Running and phone testing
 
@@ -183,7 +183,7 @@ In Critical, letting the entire 550 ms fake cue pass without tapping now earns e
 
 Validation: 59 gameplay tests pass. Browser checks at 844×390, 667×375 and 568×320 confirm marker/fill alignment for all four practice scenes at 0%, 5%, 50%, near-full and full values, during transitions and goal rollover, and with reduced motion. Inspected low/midpoint and successful-fake screenshots. Fake rewards, tapped-fake penalties, paused fake timers, retry and once-only +3 XP settlement pass with no runtime errors or document overflow. Syntax checks and `git diff --check` pass. No server, dependency, editor or other app was added. Physical iPhone testing remains.
 
-## Home Screen installation and offline play — latest revision, 12 September
+## Home Screen installation and offline play — prior revision, 12 September
 
 Jimmy wants a stable way to play on his iPhone with a Home Screen icon before an App Store release. The existing Site `appgprj_6aa106580cb08191b6936046473d90f4` is reused with its owner-only access. The Cloudflare Quick Tunnel remains a temporary local preview option, not the installation URL. Publishing uses the existing Sites manifest and exact tested source; the native deployment response supplies the permanent URL.
 
@@ -191,13 +191,43 @@ Added a standalone landscape manifest, iPhone Home Screen metadata, and 512/192/
 
 Updates wait for an explicit Settings action after a run finishes. The page saves before activation/reload, and the worker refuses activation while another window of this game remains open. This keeps new code out of an active run. Private-site sign-in and first offline setup still require connectivity; physical iPhone installation and offline-launch verification remain Jimmy’s next checks. Existing save storage stays local to each origin/installation, so tunnel or separate-browser saves are not migrated automatically. A storage reset requires downloading the game again.
 
-Current cache identifier: `obo-game-2026-09-12-1`. Every future release that changes runtime files must bump `CACHE_NAME`; new runtime modules/assets must be added to `FILES`. Keep updates out of active runs. `npm test` runs the 59 gameplay tests and four mobile tests.
+Cache identifier for the first published release: `obo-game-2026-09-12-1`. Every future release that changes runtime files must bump `CACHE_NAME`; new runtime modules/assets must be added to `FILES`. Keep updates out of active runs. `npm test` runs the 59 gameplay tests and four mobile tests.
 
 Validation: all 63 Node tests pass. Real service-worker browser checks against the existing local HTTP server pass at 844×390, 667×375 and 568×320: initial caching, complete offline reloads, all five trainers, arena, settlement and saved progress. Settings reports Ready for offline play. An isolated update fixture verifies waiting during a run, blocked activation with another game window, a single reload after applying in Town, and offline launch of the updated cache. The fixture was removed before packaging. No runtime errors or horizontal overflow occurred. These are desktop Chrome checks, not physical iOS certification. No additional server was started.
 
+## Mobile home UI — latest local revision, 12 September
+
+Jimmy confirmed that the published game opens from his iPhone Home Screen icon. The home screen now uses the full available landscape height. Removed the bottom destination tab bar throughout the application, the game-name brand, introductory/promotional copy, destination subtitles and the wallet's coins label. SkyHaven is centered at the top. The map has four single-label buttons: Training, Arena, Shop and Legacy. Shop retains the existing forge route and equipment IDs. The hero card shows only name, level, an XP bar with numeric progress, and View hero >. Long names truncate within the card. Gold uses an original shaded gold-ingot SVG and Settings uses a gear icon; both retain accessible labels.
+
+Other destination screens keep their Town buttons. Accuracy and arena retain their Pause/exit flows; the four immersive practice scenes keep their existing Town/results flow. No gameplay or settlement rules changed. No opening scene or other-screen redesign was added.
+
+The current runtime cache identifier is `obo-game-2026-09-12-5`. The home revisions and local-refresh correction are prepared for publication at Jimmy’s request. Editing files or pushing to GitHub does not deploy the Site. Publish the tested revision to the existing private Site, then launch the phone app online and use Settings → Install game update when it becomes available. An active run cannot apply an update. Local browsers still controlled by an older worker need to apply this update once; a refresh alone can continue to show the old cached release until then. The new worker loads current source from a running loopback server on subsequent refreshes.
+
+Validation: all 63 existing Node tests pass. Chrome touch checks at 956×440, 844×390, 667×375 and 568×320 verify labels, no bottom navigation, centered title, non-overlapping home controls with at least 44-pixel targets, all five destination routes and returns, Settings, all five trainer exits, offline reload and long-name/large-gold rendering. Inspected home screenshots at 844×390 and 568×320. No runtime errors or document overflow. These checks are desktop emulation, not physical iPhone validation. Reused the existing local server; no server or new editor was started.
+
+### Home placement refinement
+
+The hero card is now roughly 20% narrower with reduced padding, type and XP-bar height. Destination labels start below their building/ground bases, with a six-pixel offset; Shop is centered directly beneath its building. Legacy's building moves slightly left so its label and Training remain separate at compact widths. Its building is drawn in front of the neighboring trees. Labels remain 48-pixel touch targets. Short-screen hero spacing prevents the Legacy label from overlapping it at 568×320.
+
+Chrome touch checks at 956×440, 844×390, 667×375 and 568×320 cover non-overlapping home controls, destination navigation/returns, Settings, offline reload, long names and large gold totals. Inspected 844×390 and 568×320 screenshots. This is a local presentation refinement; no gameplay rules changed and it is not yet published.
+
+### Smaller map labels and visible town hero
+
+Destination labels now use approximately 30-pixel-high visible boxes, widths of 76–112 pixels and 12–15-pixel text. Their transparent button areas remain at least 44 pixels high for touch input. The six-pixel visual gap beneath each building/ground is retained. The town hero moves from world coordinates (816, 382) to (700, 276), above the training targets and left of the arena building, clear of its label. The hero summary card retains the previously approved compact layout.
+
+Chrome touch checks pass at 956×440, 844×390, 667×375 and 568×320: small visible labels with larger touch areas, no home-control overlap or label covering the hero, all destination routes/returns, Settings, offline reload, long names and large gold totals. Inspected 844×390 and 568×320 screenshots. No runtime errors or document overflow. This local presentation change is not yet published; physical iPhone checking remains.
+
+### Local refresh correction and requested publication
+
+Jimmy reported that refreshing localhost still showed the old UI and requested updating the existing online game. The original worker used cache-first loading on every origin. The worker now uses network requests without the HTTP cache on localhost, 127.0.0.1 and IPv6 loopback, with the installed cache as an offline fallback. Hosted origins retain the complete installed version until an explicit Settings update. Local previews already on an older worker must apply this update once; no save storage needs to be cleared.
+
+All 65 Node tests pass, including new checks for live loopback source, local offline fallback and unchanged hosted cache behavior. Actual Chrome checks at localhost and 127.0.0.1 distinguish deliberately marked cached code from current server code: an online refresh uses the server, an offline reload uses the cache, and the home screen works in both cases. No page errors. Existing home-layout checks cover four mobile landscape sizes. The existing server is reused.
+
+For the phone, finish any run, close other game tabs/windows, and reopen the same installed icon while online. Open Settings and choose Install game update once the download is ready. The app saves and reloads; wait for Ready for offline play before disconnecting. This release requires no new icon or local-data reset. Publishing targets the same owner-private Site. Use the successful native deployment response to confirm publication.
+
 ## Next requested work
 
-Install the published HTTPS site on the iPhone through Safari → Share → Add to Home Screen → Open as Web App. Launch it online, verify Settings says Ready for offline play, then try airplane mode and confirm the hero persists after closing/reopening. Keep the same site and installed icon for future releases. Test iPhone safe areas, audio, background/portrait recovery and the Settings update flow. Preserve all approved training rules. Accuracy remains the trainer awaiting a gameplay revision request.
+Apply the published update locally and on the phone, then continue the mobile UI redesign with Jimmy's next scene instructions. Check actual iPhone safe areas, visual scale, audio, background/portrait recovery and the Settings update flow. Preserve all approved training rules. Accuracy remains the trainer awaiting a gameplay revision request.
 
 A fresh chat can use this file and `AGENTS.md` as the handoff. Preserve the commercial mobile-game goal, original art, focused scope and visible-terminal requirement.
 

@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFile} from 'node:fs/promises';
 const source=await readFile(new URL('../dist/sw.js',import.meta.url),'utf8');
-function worker({offline=false,failFile='',windows=[]}={}){
-const listeners={},stores=new Map(),scope='https://example.test/game/',network=[];
+function worker({offline=false,failFile='',windows=[],scope='https://example.test/game/'}={}){
+const listeners={},stores=new Map(),network=[];
+let revision=1;
 let skipped=0,claimed=0;
 const caches={
 async open(name){if(!stores.has(name))stores.set(name,new Map());const store=stores.get(name);return{async put(key,response){store.set(key,response.clone())},async match(key){return store.get(key)?.clone()},async keys(){return [...store.keys()].map(url=>new Request(url))}}},
@@ -13,11 +14,11 @@ async keys(){return [...stores.keys()]},async delete(name){return stores.delete(
 const self={registration:{scope},addEventListener:(name,fn)=>listeners[name]=fn,clients:{async claim(){claimed++},async matchAll(){return windows}},async skipWaiting(){skipped++}};
 const fetch=async request=>{
 const url=typeof request==='string'?request:request.url;network.push(url);if(offline||url.endsWith(failFile)&&failFile)throw Error('Network unavailable');
-const type=url.endsWith('.js')?'text/javascript':'text/html';return new Response(type==='text/html'?'<canvas id="world"></canvas>':'export const ok=true',{headers:{'content-type':type}})
+const type=url.endsWith('.js')?'text/javascript':'text/html';return new Response(type==='text/html'?'<canvas id="world"></canvas>':'export const revision='+revision,{headers:{'content-type':type}})
 };
 vm.runInNewContext(source,{self,caches,fetch,Request,Response,URL});
 async function event(name,data={}){let completion;listeners[name]({...data,waitUntil:promise=>completion=promise,respondWith:promise=>completion=promise});return completion}
-return{event,stores,caches,network,setOffline:value=>offline=value,get skipped(){return skipped},get claimed(){return claimed}}
+return{event,stores,caches,network,setOffline:value=>offline=value,setRevision:value=>revision=value,get skipped(){return skipped},get claimed(){return claimed}}
 }
 
 test('mobile manifest and precache include real local game files and appropriately sized icons',async()=>{
@@ -47,4 +48,20 @@ let result;const message={data:{type:'APPLY_UPDATE'},source:{id:'current'},ports
 await w.event('message',message);assert.equal(result.ok,false);assert.equal(w.skipped,0);
 windows.pop();await w.event('message',message);assert.equal(result.ok,true);assert.equal(w.skipped,1);
 await w.caches.open('obo-game-old');await w.caches.open('unrelated-cache');await w.event('activate');assert.equal(w.claimed,1);assert.equal((await w.caches.keys()).includes('obo-game-old'),false);assert.equal((await w.caches.keys()).includes('unrelated-cache'),true);
+});
+
+
+test('localhost refresh uses current source while keeping an offline fallback',async()=>{
+for(const hostname of ['localhost','127.0.0.1','[::1]']){
+const scope='http://'+hostname+':4173/',w=worker({scope});await w.event('install');w.setRevision(2);
+const request=new Request(scope+'game.js');
+assert.equal(await (await w.event('fetch',{request})).text(),'export const revision=2');
+w.setOffline(true);assert.equal(await (await w.event('fetch',{request})).text(),'export const revision=1');
+}
+});
+
+test('hosted game stays on its complete installed version until an update is applied',async()=>{
+const w=worker();await w.event('install');const requests=w.network.length;w.setRevision(2);
+const response=await w.event('fetch',{request:new Request('https://example.test/game/game.js')});
+assert.equal(await response.text(),'export const revision=1');assert.equal(w.network.length,requests);
 });

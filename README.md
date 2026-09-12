@@ -22,7 +22,7 @@ Use the permanent HTTPS link returned by the Sites deployment, rather than a cha
 
 The game files are cached on this phone after successful setup. Town, every trainer and arena play can then launch offline. Progress remains local to the installation; an old tunnel URL or a different browser installation does not automatically transfer its saved hero. Browser storage can be cleared by the user or device, so this is personal playtesting rather than cloud-backed save storage.
 
-New releases download in the background when online. Settings shows Install game update when one is ready. Finish an active training/arena run first; updates are disabled during it. Close other windows of this game before applying an update. The game saves and reloads once, keeping the current hero. Offline files are replaced only after the complete new version downloads successfully. Optional online fonts have offline fallbacks.
+Reopen the installed app while online to check for a new release. Settings shows Install game update when one is ready. Finish an active training/arena run first; updates are disabled during it. Close other windows of this game before applying an update. The game saves and reloads once, keeping the current hero. Offline files are replaced only after the complete new version downloads successfully. Optional online fonts have offline fallbacks.
 
 For future releases, bump `CACHE_NAME` in `dist/sw.js` whenever cached game files change, and keep its file list synchronized with runtime imports and icons. Publish the exact source to the same Site. `npm test` includes both gameplay and mobile-cache checks.
 
@@ -88,3 +88,9 @@ Stable item IDs are `weapon_t1` through `weapon_t3` and `armor_t1` through `armo
 ## Current milestone and release direction
 
 The current first chapter provides a playable core loop. The production goal remains a fully completed, market-standard mobile game; release content, polish, device performance and App Store packaging/submission still require work. The full 30+ encounter campaign, additional mission types, extensive talents/consumables, secrets, expanded enemy roster, music and survival checkpoints are future work. All balance numbers are initial mobile-oriented tuning. Physical iOS Safari and Android Chrome playtesting remains necessary.
+
+## Mobile home screen and updates
+
+The home screen provides Training, Arena, Shop, Legacy and the hero card; destination pages return through Town. There is no bottom tab bar. The header shows SkyHaven, gold and Settings. Small destination labels sit below their buildings with larger invisible touch areas. The town hero stands above Training and left of the arena; the compact hero card stays in the lower-left corner. Landscape layouts are checked down to 568×320; physical iPhone verification remains separate.
+
+Local edits and GitHub pushes do not update the published phone app. Publish a tested version to the existing private Site, bumping the runtime cache identifier, then open the installed app online and choose Settings → Install game update once available. Finish any active run and close other game windows first. Apply the current update once in any local browser still using the old worker. Afterward, localhost, 127.0.0.1 and IPv6 loopback previews load current source on refresh while the server is running, falling back to their last installed cache when offline. The hosted phone app continues to use explicit updates.

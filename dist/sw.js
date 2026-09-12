@@ -1,5 +1,6 @@
-const CACHE_NAME='obo-game-2026-09-12-1';
+const CACHE_NAME='obo-game-2026-09-12-5';
 const FILES=['./','index.html','style.css','game.js','core.js','art.js','training.js','battle.js','strength-layout.js','strength-art.js','dodge-art.js','block-art.js','critical-art.js','mobile.js','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
+const localPreview=['localhost','127.0.0.1','[::1]'].includes(new URL(self.registration.scope).hostname);
 const urls=FILES.map(file=>new URL(file,self.registration.scope).href);
 self.addEventListener('install',event=>event.waitUntil((async()=>{
 try{
@@ -24,6 +25,7 @@ if(event.request.method!=='GET')return;
 const requested=new URL(event.request.url);requested.search='';requested.hash='';
 if(!urls.includes(requested.href))return;
 event.respondWith((async()=>{
+if(localPreview){try{return await fetch(new Request(event.request,{cache:'no-store'}))}catch{}}
 const cached=await (await caches.open(CACHE_NAME)).match(requested.href);
 return cached||fetch(event.request)
 })())
