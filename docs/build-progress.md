@@ -241,11 +241,11 @@ Training has five original illustrated stations, stat totals, ground levels/yiel
 
 `menuIllustration()` in `art.js` renders original Canvas props, gear and buildings from the existing appearance palette. No paid generation, downloaded assets, dependency or editor was added. The menu helpers in `game.js` build shared compact buttons, gold amounts, portraits and destination shells. Existing `data-*` action handlers and stable equipment IDs remain in use; no economy, combat, progression or settlement functions were changed. Short-screen menus retain internal scrolling, and action controls are authored with at least 44-pixel touch areas.
 
-Previews of all four menus were captured at one 956×440 viewport. No tests, assertions, gameplay checks or responsive/device matrix were run, per Jimmy's preference. These are visual layout previews only. The existing server was reused. Current local cache identifier is `obo-game-2026-09-12-7`; Arena and these menu changes have not been published. The last published release remains Site version 2/cache `obo-game-2026-09-12-5`.
+Previews of all four menus were captured at one 956×440 viewport. No tests, assertions, gameplay checks or responsive/device matrix were run, per Jimmy's preference. These are visual layout previews only. The existing server was reused. Published cache identifier is `obo-game-2026-09-12-7`. Jimmy approved and requested publication of Arena and the shared destination menus. Site version 3 was successfully published on 12 September 2026 at 09:49:44 UTC, retaining owner-only access and the existing URL: https://one-brave-odyssey-skyhaven.jimmybui1995.chatgpt.site. Published source commit: `148ec4b67631e23acb071bff95ec2ea781367f5b`. No tests were run for these menu revisions or publication.
 
 ## Next requested work
 
-Review the Training, Shop, Hero and Legacy menu layouts with Jimmy and apply his visual feedback. Do not run tests unless he asks. Keep the compact style and all approved gameplay rules. Publish the accepted menu changes to the existing private Site when requested.
+Jimmy can reopen the installed phone game online and apply Settings → Install game update to receive the published menus. Continue from his next feedback. Do not run tests unless he asks. Keep the compact style and all approved gameplay rules.
 
 A fresh chat can use this file and `AGENTS.md` as the handoff. Preserve the commercial mobile-game goal, original art, focused scope and visible-terminal requirement.
 

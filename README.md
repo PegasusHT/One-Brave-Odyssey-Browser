@@ -97,10 +97,10 @@ Local edits and GitHub pushes do not update the published phone app. Publish a t
 
 ## Arena layout preview
 
-The Arena selection screen uses compact numbered encounters, a central hero/opponent display, reward totals and Fight. The explanatory card and duplicate headings are removed. The latest Arena work is a local layout preview; it has not been published. Jimmy requested visual previews first and no tests unless explicitly asked.
+The Arena selection screen uses compact numbered encounters, a central hero/opponent display, reward totals and Fight. The explanatory card and duplicate headings are removed. The Arena layout is included in the menu release published on 12 September 2026. Jimmy requested visual previews first and no tests unless explicitly asked.
 
 ## Shared destination layouts
 
 Training, Shop, Hero and Legacy now follow the approved Arena style: open landscape scenery, compact controls, original Canvas illustrations and concise decision information. Training keeps stat/level/yield values; Shop keeps gear bonuses and costs; Hero keeps stats, skill effects and XP; Legacy keeps building benefits and collection totals. Settings and Appearance are also shortened. Menu actions use the existing progression and purchase handlers.
 
-These changes are local layout previews and have not been published. No tests were run, as requested. Previews were captured at a single 956×440 desktop-browser viewport; this does not establish gameplay correctness or physical-phone readiness.
+These menu changes were published on 12 September 2026. Reopen the installed game online and choose Settings → Install game update to receive them. No tests were run, as requested. Previews were captured at a single 956×440 desktop-browser viewport; this does not establish gameplay correctness or physical-phone readiness.

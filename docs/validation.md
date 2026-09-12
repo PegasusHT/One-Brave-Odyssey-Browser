@@ -172,3 +172,7 @@ At Jimmy’s request, no tests were run for this revision. A single 956×440 bro
 ## Shared destination menus — preview only
 
 Training selection, Shop, Hero and Legacy layouts were displayed for 956×440 screenshots. Settings and Appearance copy was shortened. No tests, scripted assertions, purchases, upgrades, skill/stat spending, gameplay checks or responsive/device matrix were run, at Jimmy's request. The screenshots are visual previews only. No runtime or physical-device validation is claimed. Existing action handlers and core progression functions are retained. Local cache `obo-game-2026-09-12-7` is not yet published.
+
+## Menu release publication — 12 September 2026
+
+The native Sites deployment reported success at 09:49:44 UTC for Site version 3, source `148ec4b67631e23acb071bff95ec2ea781367f5b`, cache `obo-game-2026-09-12-7`. No tests or additional browser QA were run for publication. Existing owner-private access was retained. Actual phone update and gameplay remain unverified.
