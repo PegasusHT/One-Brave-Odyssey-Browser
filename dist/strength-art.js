@@ -1,9 +1,9 @@
-import {hero,trainingPartner,ellipse,poly} from './art.js';
+import {hero,trainingPartner,ellipse,poly,appearTraining} from './art.js';
 import {STRENGTH_LAYOUT,strengthPoint} from './strength-layout.js';
 export function drawStrength(c,training,time,layout=STRENGTH_LAYOUT){
 const h=layout.hero,p=layout.partner;
-hero(c,h.x*1400,h.y*700,h.scale,training.player.equipment,time,training.attack,training.hit,training.player.scarf,training.action);
-c.save();c.translate(p.x*1400,p.y*700);c.scale(p.scale,p.scale);c.translate(-1190,-510);
+c.save();appearTraining(c,training,h.x*1400,h.y*700);hero(c,h.x*1400,h.y*700,h.scale,training.player.equipment,time,training.attack,training.hit,training.player.scarf,training.action);c.restore();
+c.save();appearTraining(c,training,p.x*1400,p.y*700,.28);c.translate(p.x*1400,p.y*700);c.scale(p.scale,p.scale);c.translate(-1190,-510);
 trainingPartner(c,training.throwPose,Math.max(0,1-(training.nextSpawn-training.elapsed)/.3),training.throwLane);c.restore();
 if(training.attack>0){
 const kick=training.action==='kick',point=strengthPoint(kick?170:430,kick?425:210+Number(training.action)*130,layout);
@@ -22,5 +22,5 @@ if(!e.active)continue;
 const point=strengthPoint(e.x,e.y,layout);
 c.save();c.globalAlpha=e.life/e.maxLife;ellipse(c,point.x,point.y,4,4,e.color);c.restore()
 }
-if(training.lastTextLife>0){c.save();c.textAlign='center';c.font='700 24px "DM Sans",sans-serif';c.fillStyle=training.combo?'#fff7ce':'#944e46';c.strokeStyle='#34626a';c.lineWidth=3;if(training.combo)c.strokeText(training.lastText,700,600);c.fillText(training.lastText,700,600);c.restore()}
+if(training.lastTextLife>0){c.save();c.textAlign='center';c.font='700 24px "DM Sans",sans-serif';c.fillStyle=training.combo?'#fff7ce':'#944e46';c.strokeStyle='#34626a';c.lineWidth=3;if(training.combo)c.strokeText(training.lastText,700,195);c.fillText(training.lastText,700,195);c.restore()}
 }

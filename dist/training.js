@@ -1,45 +1,154 @@
-import {Pool} from './core.js';
-import {hero,ellipse,poly} from './art.js';
+import {Pool,TRAINING_INTRO,TRAINING_PACE,CRITICAL_TIMING,DODGE_TIMING,trainingMission,PRACTICE_KINDS,BLOCK_RULES,GROUNDS} from './core.js';
+import {hero,ellipse,poly,appearTraining,CRITICAL_ART} from './art.js';
 import {drawStrength} from './strength-art.js';
+import {drawDodge} from './dodge-art.js';
+import {drawBlock} from './block-art.js';
+import {drawCritical} from './critical-art.js';
 export class Training{
-constructor(kind,player,feedback){this.kind=kind;this.player=player;this.feedback=feedback;this.elapsed=0;this.countdown=3;this.hits=0;this.combo=0;this.bestCombo=0;this.misses=0;this.rewarded=false;this.done=false;this.objects=new Pool(20);this.effects=new Pool(32);this.nextSpawn=.5;this.cooldown=0;this.attack=0;this.hit=0;this.lane=1;this.flash=0;this.target=700;this.phase=0;this.shield=0;this.lastText='';this.lastTextLife=0;this.goalTarget=4;this.goalProgress=0;this.goals=0;this.bonusStrength=0;this.bonusXp=0;this.goalFeedback=0;this.throwPose=0;this.throwLane=1;this.action='1';this.tutorialRemaining=kind==='strength'&&!player.tutorials?.strength?4:0}
+constructor(kind,player,feedback){this.kind=kind;this.streak=PRACTICE_KINDS.includes(kind);this.statName=GROUNDS.find(g=>g.id===kind)?.name||kind;this.player=player;this.feedback=feedback;this.elapsed=0;this.countdown=TRAINING_INTRO;this.reducedMotion=false;this.hits=0;this.combo=this.streak?1:0;this.comboFeedback=0;this.comboStar=false;this.bestCombo=0;this.misses=0;this.rewarded=false;this.done=false;this.objects=new Pool(20);this.effects=new Pool(32);this.nextSpawn=.5;this.cooldown=0;this.attack=0;this.hit=0;this.lane=1;this.flash=0;this.target=700;this.phase=0;this.lastText='';this.lastTextLife=0;this.goalTarget=4;this.goalProgress=0;this.goals=0;this.bonusStrength=0;this.bonusDodge=0;this.bonusBlock=0;this.bonusCrit=0;this.criticalRound=null;this.criticalRounds=0;this.shieldAngle=0;this.blockPulse=0;this.blockAngle=0;this.impactAngle=0;this.perfectDodges=0;this.perfectStar=0;this.stickAttack=null;this.dodgeAt=-Infinity;this.bonusXp=0;this.goalFeedback=0;this.throwPose=0;this.throwLane=1;this.action='1';this.tutorialRemaining=this.streak&&!player.tutorials?.[kind]?4:0;this.missionNumber=this.streak?player.trainingMissions?.[kind]||1:0;this.missionProgress=0;this.missionsCompleted=0;this.missionStats=0;this.missionXp=0;this.missionFeedback=0;this.missionMessage='';this.savePending=false}
+get motion(){return this.player.settings.motion&&!this.reducedMotion}
+entrance(delay=0){if(!this.motion)return 1;const p=Math.max(0,Math.min(1,(TRAINING_INTRO-this.countdown-delay)/.65));return 1-(1-p)**3}
 spawnStrength(lane,kick=false){
-const pace=1+Math.min(this.elapsed,120)/180;
+const pace=TRAINING_PACE*(1+Math.min(this.elapsed,120)/180);
 const startY=lane===2?470:340;
 const object=this.objects.spawn({x:kick?170:1110,y:kick?125:startY,lane,kick,speed:kick?165*pace:350*pace,angle:0,age:0,duration:680/(350*pace),startY,targetY:210+lane*130,arc:lane===0?100:0});
 if(object&&!kick){this.throwLane=lane;this.throwPose=1}
 return object
 }
+spawnDodge(lane=Math.floor(Math.random()*3)){
+const pace=TRAINING_PACE*(1+Math.min(this.elapsed,120)/240),windup=.85/pace,strike=.28/pace;
+this.stickAttack={lane,startedAt:this.elapsed,windup,strike,impactAt:this.elapsed+windup+strike,resolved:false};
+this.nextSpawn=this.stickAttack.impactAt+DODGE_TIMING.recovery+.4/pace;
+return this.stickAttack
+}
+stepDodge(){
+if(this.elapsed>=this.nextSpawn&&!this.stickAttack)this.spawnDodge();
+const a=this.stickAttack;
+if(!a)return;
+if(!a.resolved&&this.elapsed+1e-9>=a.impactAt){
+a.resolved=true;
+const lead=a.impactAt-this.dodgeAt,correct=this.action===['tuck','back','jump'][a.lane];
+if(correct&&lead>=0&&lead<=DODGE_TIMING.window+1e-9){
+const perfect=lead<=DODGE_TIMING.perfect+1e-9;
+this.success(560,[355,410,465][a.lane],perfect);
+if(perfect){this.perfectDodges++;this.perfectStar=.8}
+}else this.fail(560,[355,410,465][a.lane])
+}
+if(this.elapsed>=a.impactAt+DODGE_TIMING.recovery)this.stickAttack=null
+}
+inputDodge(action){
+if(!['tuck','jump','back'].includes(action)||this.cooldown>0)return;
+this.action=action;this.dodgeAt=this.elapsed;this.cooldown=DODGE_TIMING.cooldown
+}
+spawnBlock(angle=Math.random()*Math.PI*2,star=false){
+const {x,y,shieldRadius,flightTime}=BLOCK_RULES,dx=Math.cos(angle),dy=Math.sin(angle);
+const distance=Math.min((dx>=0?1350-x:x-50)/Math.max(.001,Math.abs(dx)),(dy>=0?650-y:y-50)/Math.max(.001,Math.abs(dy)));
+const pace=TRAINING_PACE*(1+Math.min(this.elapsed,120)/240);
+return this.objects.spawn({x:x+dx*distance,y:y+dy*distance,angle,distance,speed:(distance-shieldRadius)*pace/flightTime,star,kick:false})
+}
+aimShield(angle){if(this.kind==='block'&&!this.done&&Number.isFinite(angle))this.shieldAngle=angle}
+stepBlock(dt){
+const {x,y,shieldRadius,shieldHalfAngle,bodyRadius,spawnInterval}=BLOCK_RULES;
+if(this.elapsed>=this.nextSpawn){this.spawnBlock(Math.random()*Math.PI*2,Math.random()<.22);this.nextSpawn=this.elapsed+spawnInterval/(TRAINING_PACE*(1+Math.min(this.elapsed,120)/240))}
+for(const o of this.objects.items){
+if(!o.active)continue;
+const previous=o.distance;o.distance=Math.max(0,o.distance-o.speed*dt);o.x=x+Math.cos(o.angle)*o.distance;o.y=y+Math.sin(o.angle)*o.distance;
+const difference=Math.atan2(Math.sin(o.angle-this.shieldAngle),Math.cos(o.angle-this.shieldAngle));
+if(previous>=shieldRadius-16&&o.distance<=shieldRadius+16&&Math.abs(difference)<=shieldHalfAngle){o.active=false;this.blockPulse=1;this.blockAngle=o.angle;this.effects.spawn({type:o.star?'deflectedStar':'fruit',x:o.x,y:o.y,vx:Math.cos(o.angle)*260-Math.sin(o.angle)*100,vy:Math.sin(o.angle)*260+Math.cos(o.angle)*100,angle:o.angle,life:.55,maxLife:.55});if(o.star){this.missionEvent('skipStar');this.burst(o.x,o.y,'#d9d7af');this.feedback('block')}else this.success(o.x,o.y)}
+else if(o.distance<=bodyRadius){o.active=false;if(o.star){this.success(o.x,o.y,true);this.perfectStar=.8}else{this.impactAngle=o.angle;this.fail(o.x,o.y)}}
+}
+}
+spawnCritical(fake=this.criticalRounds===0||Math.random()<.5){
+this.criticalRounds++;this.tutorialRemaining=0;
+const phase=fake?'fake':'ready';
+this.criticalRound={phase,startedAt:this.elapsed,until:this.elapsed+CRITICAL_TIMING[phase],jumpAt:null,landFrom:0,perfect:false,landed:false};
+return this.criticalRound
+}
+setCriticalPhase(phase,at=this.elapsed,duration=CRITICAL_TIMING[phase]){
+const r=this.criticalRound;if(!r)return;
+r.phase=phase;r.startedAt=at;r.until=at+duration
+}
+criticalMistake(){
+const r=this.criticalRound,airborne=r&&r.jumpAt!==null&&!r.landed;
+if(r)r.failed=true;
+this.fail(airborne?CRITICAL_ART.jumpX:CRITICAL_ART.heroX,CRITICAL_ART.groundY-(airborne?200:70))
+}
+landCritical(perfect,at=this.elapsed){
+const r=this.criticalRound;if(!r)return;
+r.perfect=perfect;r.strike=perfect;r.landFrom=Math.max(0,Math.min(1,(at-r.jumpAt)/CRITICAL_TIMING.rise));
+if(!perfect)this.missionEvent('skipStar');
+this.setCriticalPhase('land',at)
+}
+stepCritical(){
+if(!this.criticalRound&&this.elapsed>=this.nextSpawn)this.spawnCritical();
+for(let i=0;i<6;i++){
+const r=this.criticalRound;if(!r||this.elapsed+1e-9<r.until)return;
+const at=r.until;
+if(r.phase==='fake'){this.success(CRITICAL_ART.heroX,CRITICAL_ART.groundY-70);this.setCriticalPhase('gap',at)}
+else if(r.phase==='gap')this.setCriticalPhase('ready',at);
+else if(r.phase==='ready'){this.criticalMistake();this.setCriticalPhase('recovery',at)}
+else if(r.phase==='rise'){this.setCriticalPhase('wait',at,r.airWait)}
+else if(r.phase==='wait')this.setCriticalPhase('finish',at);
+else if(r.phase==='finish'){this.criticalMistake();this.landCritical(false,at)}
+else if(r.phase==='land'){
+r.landed=true;r.landedAt=at;this.criticalParticles(r.perfect?CRITICAL_ART.strikeX:CRITICAL_ART.missX,CRITICAL_ART.groundY);
+if(r.perfect){this.success(CRITICAL_ART.dummyX-10,CRITICAL_ART.groundY-95,true);this.perfectStar=.8;this.criticalParticles(CRITICAL_ART.dummyX,CRITICAL_ART.groundY-100,true)}
+this.setCriticalPhase('recovery',at)
+}else if(r.phase==='recovery'&&r.landed)this.setCriticalPhase('reset',at);
+else{this.criticalRound=null;this.nextSpawn=at+CRITICAL_TIMING.interval;return}
+}
+}
+criticalParticles(x,y,straw=false){
+if(!this.motion)return;
+for(let i=0;i<8;i++)this.effects.spawn({type:straw?'straw':'dust',x,y,vx:(i-3.5)*(straw?37:26),vy:-35-(i%3)*35,life:straw?.65:.4,maxLife:straw?.65:.4,angle:i*.8})
+}
+inputCritical(action){
+if(action!=='hit')return;
+const misses=this.misses;this.stepCritical();
+if(this.misses!==misses)return;
+const r=this.criticalRound;
+if(r?.phase==='ready'){
+r.jumpAt=this.elapsed;r.airWait=CRITICAL_TIMING.waitMin+Math.random()*(CRITICAL_TIMING.waitMax-CRITICAL_TIMING.waitMin);
+this.success(CRITICAL_ART.heroX,CRITICAL_ART.groundY-70);this.criticalParticles(CRITICAL_ART.heroX,CRITICAL_ART.groundY);this.setCriticalPhase('rise')
+}else if(r?.phase==='finish')this.landCritical(true);
+else{
+this.criticalMistake();
+if(!r)return;
+if(r.phase==='rise'||r.phase==='wait')this.landCritical(false);
+else if(r.phase==='land'&&r.perfect){r.perfect=false;this.missionEvent('skipStar')}
+else if(r.phase==='fake'||r.phase==='gap')this.setCriticalPhase('recovery')
+}
+}
+
 step(dt){
 if(this.done)return;
 this.tutorialRemaining=Math.max(0,this.tutorialRemaining-dt);
-if(this.countdown>0){this.countdown=Math.max(0,this.countdown-dt);return}
+if(this.countdown>0){const wait=Math.min(this.countdown,dt);this.countdown=Math.max(0,this.countdown-wait);dt-=wait;if(dt<1e-9)return}
+const missionBefore=this.missionNumber,missesBefore=this.misses;
 this.elapsed+=dt;
-this.phase+=dt;
+this.phase+=dt*TRAINING_PACE;
+this.comboFeedback=Math.max(0,this.comboFeedback-dt);
 this.cooldown=Math.max(0,this.cooldown-dt);
 this.attack=Math.max(0,this.attack-dt*4);
 this.hit=Math.max(0,this.hit-dt*4);
+this.blockPulse=Math.max(0,this.blockPulse-dt*4);
 this.flash=Math.max(0,this.flash-dt*5);
-this.shield=Math.max(0,this.shield-dt);
 this.lastTextLife=Math.max(0,this.lastTextLife-dt);
 this.goalFeedback=Math.max(0,this.goalFeedback-dt);
+this.missionFeedback=Math.max(0,this.missionFeedback-dt);
 this.throwPose=Math.max(0,this.throwPose-dt*3);
-if(this.kind!=='strength'&&this.elapsed>=30){this.elapsed=30;this.done=true;return}
-const pace=1+this.elapsed/85;
-if(['strength','dodge','block'].includes(this.kind)&&this.elapsed>=this.nextSpawn&&(this.kind==='strength'||this.elapsed<28)){
-const lane=Math.floor(Math.random()*3);
-if(this.kind==='strength'){
-const kick=Math.random()<.22;
-this.spawnStrength(lane,kick);
-this.nextSpawn=this.elapsed+1.25/(1+Math.min(this.elapsed,120)/180)
-}else{
-this.nextSpawn=this.elapsed+(this.kind==='block'?1.7:1.15)/pace;
-this.objects.spawn({x:1200,y:210+lane*130,lane,kick:false,speed:330*pace,angle:Math.random()*6})
-}
+this.perfectStar=Math.max(0,this.perfectStar-dt);
+if(this.kind==='dodge')this.stepDodge();
+if(this.kind==='block')this.stepBlock(dt);
+if(this.kind==='crit')this.stepCritical();
+if(!this.streak&&this.elapsed>=30){this.elapsed=30;this.done=true;return}
+if(this.kind==='strength'&&this.elapsed>=this.nextSpawn){
+this.spawnStrength(Math.floor(Math.random()*3),Math.random()<.22);
+this.nextSpawn=this.elapsed+1.25/(TRAINING_PACE*(1+Math.min(this.elapsed,120)/180))
 }
 for(const o of this.objects.items){
-if(!o.active)continue;
-if(o.kick){o.y+=o.speed*dt;if(o.y>490){o.active=false;this.fail(170,470)}}
+if(!o.active||this.kind==='block')continue;
+if(o.kick){o.y+=o.speed*dt;if(o.y>490){o.active=false;this.missionEvent('skipStar')}}
 else{
 if(this.kind==='strength'&&o.duration){
 o.age+=dt;
@@ -47,16 +156,41 @@ const u=o.age/o.duration;
 o.x=1110-680*u;
 o.y=o.startY+(o.targetY-o.startY)*u-4*o.arc*u*(1-u)
 }else o.x-=o.speed*dt;
-if(this.kind==='dodge'&&o.x<=310){o.active=false;if(o.lane===this.lane)this.fail(300,o.y);else this.success(300,210+this.lane*130)}
-else if(this.kind==='block'&&o.x<450){o.active=false;this.fail(460,340)}
-else if(this.kind==='strength'&&o.x<345){o.active=false;this.fail(350,o.y)}
+if(this.kind==='strength'&&o.x<345){o.active=false;this.fail(350,o.y)}
 }
 }
+if(this.streak&&this.missionNumber===missionBefore&&this.misses===missesBefore)this.missionEvent('time',dt);
 for(const e of this.effects.items){if(!e.active)continue;e.life-=dt;e.x+=e.vx*dt;e.y+=e.vy*dt;e.vy+=100*dt;if(e.life<=0)e.active=false}
 }
-input(action){if(this.done||this.countdown>0)return;if(this.kind==='dodge'){const lane=Number(action);if(Number.isInteger(lane)&&lane>=0&&lane<=2)this.lane=lane;return}if(this.cooldown>0)return;this.cooldown=.23;this.attack=1;this.action=action;if(this.kind==='strength'){const kick=action==='kick';const lane=Number(action);const o=this.objects.items.find(o=>o.active&&(kick?o.kick&&Math.abs(o.y-425)<65:!o.kick&&o.lane===lane&&Math.abs(o.x-430)<85&&Math.abs(o.y-(210+lane*130))<65));if(o){o.active=false;this.success(o.x,o.y)}else this.fail(kick?170:430,kick?425:210+lane*130)}else if(this.kind==='block'){this.shield=.3;const o=this.objects.items.find(o=>o.active&&Math.abs(o.x-555)<90);if(o){o.active=false;this.success(o.x,340)}else this.fail(555,340)}else if(this.kind==='accuracy'){const x=700+Math.sin(this.phase*2.6)*305;if(Math.abs(x-this.target)<60){this.success(x,345);this.target=500+Math.random()*400}else this.fail(x,345)}else if(this.kind==='crit'){const radius=85+Math.sin(this.phase*3.3)*49;if(Math.abs(radius-85)<13)this.success(700,350);else this.fail(700,350)}}
-success(x,y){this.hits++;this.combo++;this.bestCombo=Math.max(this.combo,this.bestCombo);this.lastText=this.combo>=5?'PERFECT · '+this.combo+' COMBO':'NICE!';this.lastTextLife=.7;if(this.kind==='strength'){this.goalProgress++;if(this.goalProgress>=this.goalTarget){this.goals++;this.bonusStrength++;this.bonusXp+=6;this.goalProgress=0;this.goalTarget+=2;this.goalFeedback=1.8;this.lastText='Goal banked! +1 Strength · +6 XP';this.lastTextLife=1.8}}this.burst(x,y,'#fff0a0');this.feedback('hit')}
-fail(x,y){this.misses++;this.combo=0;this.goalProgress=0;this.hit=1;this.flash=1;this.lastText='Keep going';this.lastTextLife=.65;this.burst(x,y,'#ed997b');this.feedback('miss')}
-burst(x,y,color){for(let i=0;i<8;i++)this.effects.spawn({x,y,vx:Math.cos(i*Math.PI/4)*140,vy:Math.sin(i*Math.PI/4)*140,life:.5,maxLife:.5,color})}
-draw(c,t){if(this.kind==='strength'){drawStrength(c,this,t);return}const moving=this.kind==='dodge';const y=moving?210+this.lane*130:475;hero(c,this.kind==='block'?410:290,y,this.kind==='block'?1.2:.9,this.player.equipment,t,this.attack,this.hit,this.player.scarf);c.save();c.font='700 16px "DM Sans",sans-serif';c.textAlign='center';if(moving){for(let i=0;i<3;i++){const ly=210+i*130;c.strokeStyle='#527b7555';c.lineWidth=2;c.setLineDash([9,12]);c.beginPath();c.moveTo(360,ly);c.lineTo(1170,ly);c.stroke();c.setLineDash([]);ellipse(c,300,ly+8,45,12,i===this.lane?'#ffefbc88':'#477d6c44');c.fillStyle='#3e6d69';c.fillText(['HIGH','MID','LOW'][i],190,ly-25)}}if(this.kind==='block'){c.strokeStyle='#fff2bd';c.lineWidth=7;c.beginPath();c.arc(555,340,55,0,Math.PI*2);c.stroke();if(this.shield>0){c.fillStyle='#79dce0aa';c.beginPath();c.arc(450,375,100,-1.3,1.3);c.fill()}c.fillStyle='#335f66';c.fillText('BLOCK AT THE RING',700,450)}for(const o of this.objects.items){if(!o.active)continue;const y=this.kind==='block'?340:o.y;c.save();c.translate(o.x,y);c.rotate(o.angle+(this.player.settings.motion?this.elapsed*2:0));if(o.kick){poly(c,[[0,-25],[7,-7],[25,0],[7,7],[0,25],[-7,7],[-25,0],[-7,-7]],'#ffe3a1','#b78748')}else if(this.kind==='strength'){ellipse(c,0,0,23,20,'#f3932d');ellipse(c,-6,-6,12,9,'#ffd278');poly(c,[[0,-18],[8,-34],[19,-25],[6,-18]],'#458c69')}else{poly(c,[[0,-24],[26,0],[0,24],[-26,0]],this.kind==='block'?'#9d8dda':'#cb795f','#fff0bc');poly(c,[[0,-24],[3,0],[26,0]],'#ffffff66')}c.restore()}if(this.kind==='accuracy'){c.fillStyle='#355e61';c.fillText('TAP WHEN THE SIGHT CROSSES THE TARGET',750,230);for(const [r,col] of [[65,'#efcf93'],[48,'#d77360'],[29,'#f6e5ac'],[12,'#d77360']])ellipse(c,this.target,345,r,r,col);c.strokeStyle='#456e7380';c.lineWidth=4;c.beginPath();c.moveTo(360,345);c.lineTo(1040,345);c.stroke();const x=700+Math.sin(this.phase*2.6)*305;c.strokeStyle='#173a4b';c.lineWidth=4;c.strokeRect(x-16,329,32,32);c.beginPath();c.moveTo(x,315);c.lineTo(x,375);c.moveTo(x-30,345);c.lineTo(x+30,345);c.stroke()}if(this.kind==='crit'){c.lineWidth=26;c.strokeStyle='#e3b461';c.beginPath();c.arc(700,350,85,0,Math.PI*2);c.stroke();c.strokeStyle='#fff2c9';c.lineWidth=3;c.beginPath();c.arc(700,350,85,0,Math.PI*2);c.stroke();const r=85+Math.sin(this.phase*3.3)*49;c.strokeStyle='#fff';c.lineWidth=7;c.beginPath();c.arc(700,350,r,0,Math.PI*2);c.stroke();poly(c,[[700,327],[706,344],[723,350],[706,356],[700,373],[694,356],[677,350],[694,344]],'#fff4bc');c.fillStyle='#355e61';c.fillText('MATCH THE GOLD RING',700,520)}for(const e of this.effects.items){if(!e.active||!this.player.settings.motion)continue;c.globalAlpha=e.life/e.maxLife;ellipse(c,e.x,e.y,5,5,e.color)}c.globalAlpha=1;if(this.lastTextLife>0){c.font='700 28px "DM Sans",sans-serif';c.fillStyle=this.combo?'#fff7ce':'#944e46';c.strokeStyle='#34626a';c.lineWidth=3;if(this.combo)c.strokeText(this.lastText,720,this.kind==='strength'?575:165);c.fillText(this.lastText,720,this.kind==='strength'?575:165)}c.restore()}
+input(action){if(this.done||this.countdown>0||this.kind==='block')return;if(this.kind==='dodge'){this.inputDodge(action);return}if(this.kind==='crit'){this.inputCritical(action);return}if(this.cooldown>0)return;this.cooldown=.23;this.attack=1;this.action=action;if(this.kind==='strength'){const kick=action==='kick';const lane=Number(action);const o=this.objects.items.find(o=>o.active&&(kick?o.kick&&Math.abs(o.y-425)<65:!o.kick&&o.lane===lane&&Math.abs(o.x-430)<85&&Math.abs(o.y-(210+lane*130))<65));if(o){o.active=false;this.success(o.x,o.y,o.kick)}}else if(this.kind==='accuracy'){const x=700+Math.sin(this.phase*2.6)*305;if(Math.abs(x-this.target)<60){this.success(x,345);this.target=500+Math.random()*400}else this.fail(x,345)}}
+missionEvent(event,value=1){
+if(!this.streak||this.done)return;
+const mission=trainingMission(this.kind,this.missionNumber);
+if(mission.type==='unhurt'){if(event==='contact')this.missionProgress=0;else if(event==='time')this.missionProgress+=value}
+else if(mission.type==='perfect'&&event==='star')this.missionProgress++;
+else if(mission.type==='perfectCombo'){if(event==='skipStar')this.missionProgress=0;else if(event==='star')this.missionProgress++}
+else if(mission.type==='combo'&&(event==='success'||event==='contact'))this.missionProgress=this.combo;
+else if(mission.type==='goals'&&event==='goals')this.missionProgress+=value;
+if(this.missionProgress+1e-9>=mission.target){
+this.missionStats+=mission.reward;this.missionXp+=mission.reward*6;this.missionsCompleted++;this.missionNumber++;this.missionProgress=0;this.missionFeedback=2;this.missionMessage='';this.savePending=true
+}
+}
+success(x,y,star=false){
+if(this.done)return;
+const goals=this.goals,mission=this.missionNumber,credits=star?2:1;
+for(let i=0;i<credits;i++){
+this.hits++;
+if(this.streak)this.goalProgress+=this.combo*(1+.25*(this.player.trainingLevels[this.kind]-1));
+this.combo++;this.bestCombo=Math.max(this.combo,this.bestCombo);
+if(this.streak)while(this.goalProgress>=this.goalTarget){this.goalProgress-=this.goalTarget;this.goals++;if(this.kind==='strength')this.bonusStrength++;else if(this.kind==='dodge')this.bonusDodge++;else if(this.kind==='block')this.bonusBlock++;else this.bonusCrit++;this.bonusXp+=6;this.goalTarget+=2;this.goalFeedback=1.8;this.savePending=true}
+}
+this.lastText='';this.lastTextLife=0;this.comboFeedback=.42;this.comboStar=star;
+this.missionEvent('success');
+if(this.missionNumber===mission&&star)this.missionEvent('star');
+if(this.missionNumber===mission&&this.goals>goals)this.missionEvent('goals',this.goals-goals);
+this.burst(x,y,this.kind==='block'&&!star?'#b5ffec':'#fff0a0');this.feedback(star&&this.kind==='crit'?'star':this.kind==='block'?(star?'star':'block'):'hit')
+}
+fail(x,y){if(this.done)return;this.misses++;this.combo=this.streak?1:0;this.comboFeedback=0;this.comboStar=false;this.missionEvent('contact');this.hit=1;this.flash=1;this.lastText=this.streak?'':'Keep going';this.lastTextLife=this.streak?0:.8;this.burst(x,y,'#ed997b');this.feedback('miss')}
+burst(x,y,color){for(let i=0;i<8;i++)this.effects.spawn({type:'spark',x,y,vx:Math.cos(i*Math.PI/4)*140,vy:Math.sin(i*Math.PI/4)*140,life:.5,maxLife:.5,color})}
+draw(c,t){if(this.kind==='strength'){drawStrength(c,this,t);return}if(this.kind==='dodge'){drawDodge(c,this,t);return}if(this.kind==='block'){drawBlock(c,this);return}if(this.kind==='crit'){drawCritical(c,this);return}c.save();appearTraining(c,this,290,475,.12);hero(c,290,475,.9,this.player.equipment,t,this.attack,this.hit,this.player.scarf);c.restore();c.save();c.font='700 16px "DM Sans",sans-serif';c.textAlign='center';if(this.kind==='accuracy'){c.fillStyle='#355e61';c.fillText('TAP WHEN THE SIGHT CROSSES THE TARGET',750,230);for(const [r,col] of [[65,'#efcf93'],[48,'#d77360'],[29,'#f6e5ac'],[12,'#d77360']])ellipse(c,this.target,345,r,r,col);c.strokeStyle='#456e7380';c.lineWidth=4;c.beginPath();c.moveTo(360,345);c.lineTo(1040,345);c.stroke();const x=700+Math.sin(this.phase*2.6)*305;c.strokeStyle='#173a4b';c.lineWidth=4;c.strokeRect(x-16,329,32,32);c.beginPath();c.moveTo(x,315);c.lineTo(x,375);c.moveTo(x-30,345);c.lineTo(x+30,345);c.stroke()}for(const e of this.effects.items){if(!e.active||!this.player.settings.motion)continue;c.globalAlpha=e.life/e.maxLife;ellipse(c,e.x,e.y,5,5,e.color)}c.globalAlpha=1;if(this.lastTextLife>0){c.font='700 28px "DM Sans",sans-serif';c.fillStyle=this.combo?'#fff7ce':'#944e46';c.strokeStyle='#34626a';c.lineWidth=3;if(this.combo)c.strokeText(this.lastText,720,this.kind==='strength'?575:165);c.fillText(this.lastText,720,this.kind==='strength'?575:165)}c.restore()}
 }
