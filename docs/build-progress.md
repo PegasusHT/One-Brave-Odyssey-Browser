@@ -27,7 +27,7 @@ The current loop includes town, five training minigames, stat and skill growth, 
 - `dist/game.js` owns screens, input, settlement, saving, lifecycle and optional WebMCP tools.
 - Progress persists in `localStorage` under `one-brave-odyssey.browser.v1`.
 - Stable equipment IDs are `weapon_t1` through `weapon_t3` and `armor_t1` through `armor_t3`.
-- All 59 gameplay tests pass, including Critical’s fake-avoidance credit, miss/no-cue penalties, delayed airborne cue, lifetime mission normalization and once-only settlement. Chrome touch checks pass at 844×390, 667×375 and 568×320 with no runtime errors or overflow. These are desktop-emulated checks; physical iPhone playtesting remains.
+- All 59 gameplay tests and four mobile-cache tests pass, including Critical’s fake-avoidance credit, miss/no-cue penalties, delayed airborne cue, lifetime mission normalization and once-only settlement. Chrome touch checks pass at 844×390, 667×375 and 568×320 with no runtime errors or overflow. These are desktop-emulated checks; physical iPhone playtesting remains.
 
 ## Running and phone testing
 
@@ -175,7 +175,7 @@ The shared main-goal bar now renders a flat-edged fill clipped inside its rounde
 
 Validation: all 57 Node tests pass. Chrome touch checks at 844×390, 667×375 and 568×320 cover rapid double-taps, early airborne taps, both real-cue timeouts, the cue-free wait and pausing it, successful star timing, protected HUD/Town taps, keyboard-repeat and multi-touch suppression, results/retry/pagehide, portrait pause and reduced motion. For all four practice scenes, checked full completion followed by the exact 2/38 fill at ×19, and empty/half/nearly-full bars. Inspected screenshots at all three sizes; no runtime errors or overflow occurred. JavaScript syntax checks and `git diff --check` pass. No server, dependency or editor was added. Physical iPhone testing remains.
 
-## Moving goal diamond and fake-avoidance credit — latest revision, 12 September
+## Moving goal diamond and fake-avoidance credit — prior revision, 12 September
 
 Jimmy clarified that the diamond marks the current progress rather than the end of the track. It now sits at the visible fill edge in all four practice scenes, using the same progress variable and 120 ms transition as the fill. Its center stays aligned at empty, low, partial and full values, during movement, and through the existing goal-completion flash/rollover. The accessible native progress value remains unchanged.
 
@@ -183,9 +183,21 @@ In Critical, letting the entire 550 ms fake cue pass without tapping now earns e
 
 Validation: 59 gameplay tests pass. Browser checks at 844×390, 667×375 and 568×320 confirm marker/fill alignment for all four practice scenes at 0%, 5%, 50%, near-full and full values, during transitions and goal rollover, and with reduced motion. Inspected low/midpoint and successful-fake screenshots. Fake rewards, tapped-fake penalties, paused fake timers, retry and once-only +3 XP settlement pass with no runtime errors or document overflow. Syntax checks and `git diff --check` pass. No server, dependency, editor or other app was added. Physical iPhone testing remains.
 
+## Home Screen installation and offline play — latest revision, 12 September
+
+Jimmy wants a stable way to play on his iPhone with a Home Screen icon before an App Store release. The existing Site `appgprj_6aa106580cb08191b6936046473d90f4` is reused with its owner-only access. The Cloudflare Quick Tunnel remains a temporary local preview option, not the installation URL. Publishing uses the existing Sites manifest and exact tested source; the native deployment response supplies the permanent URL.
+
+Added a standalone landscape manifest, iPhone Home Screen metadata, and 512/192/180-pixel icons rendered from the game’s original procedural hero. No generated/third-party art or new runtime dependency was added. `mobile.js` registers the service worker, reports readiness in Settings and offers Install game update only when a version is waiting. `sw.js` caches the complete runtime shell and icons. Failed installs discard the incomplete new cache while retaining the previous version. Offline requests use the cached version consistently; non-game paths and third-party requests remain outside the cache.
+
+Updates wait for an explicit Settings action after a run finishes. The page saves before activation/reload, and the worker refuses activation while another window of this game remains open. This keeps new code out of an active run. Private-site sign-in and first offline setup still require connectivity; physical iPhone installation and offline-launch verification remain Jimmy’s next checks. Existing save storage stays local to each origin/installation, so tunnel or separate-browser saves are not migrated automatically. A storage reset requires downloading the game again.
+
+Current cache identifier: `obo-game-2026-09-12-1`. Every future release that changes runtime files must bump `CACHE_NAME`; new runtime modules/assets must be added to `FILES`. Keep updates out of active runs. `npm test` runs the 59 gameplay tests and four mobile tests.
+
+Validation: all 63 Node tests pass. Real service-worker browser checks against the existing local HTTP server pass at 844×390, 667×375 and 568×320: initial caching, complete offline reloads, all five trainers, arena, settlement and saved progress. Settings reports Ready for offline play. An isolated update fixture verifies waiting during a run, blocked activation with another game window, a single reload after applying in Town, and offline launch of the updated cache. The fixture was removed before packaging. No runtime errors or horizontal overflow occurred. These are desktop Chrome checks, not physical iOS certification. No additional server was started.
+
 ## Next requested work
 
-Phone-playtest the polished **Training → Critical** scene: tap open space for the two real cues, ignore fake cues for +1 combo, and tune timing/feel from Jimmy’s feedback. The latest rules reset combo for either missed real cue and any fresh tap outside a real cue, while preserving earned points. The current windows remain 650 ms and 350 ms; the second opens 550–750 ms after takeoff. Accuracy is the remaining trainer awaiting a gameplay revision request.
+Install the published HTTPS site on the iPhone through Safari → Share → Add to Home Screen → Open as Web App. Launch it online, verify Settings says Ready for offline play, then try airplane mode and confirm the hero persists after closing/reopening. Keep the same site and installed icon for future releases. Test iPhone safe areas, audio, background/portrait recovery and the Settings update flow. Preserve all approved training rules. Accuracy remains the trainer awaiting a gameplay revision request.
 
 A fresh chat can use this file and `AGENTS.md` as the handoff. Preserve the commercial mobile-game goal, original art, focused scope and visible-terminal requirement.
 

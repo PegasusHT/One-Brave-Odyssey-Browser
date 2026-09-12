@@ -11,3 +11,5 @@ Keep weapon_t1/armor_t1 and later tiers stable. Gameplay descriptors are in core
 The existing .openai/hosting.json identifies the private Site; reuse it. Do not register another Site. Follow Sites skills for hosting. Current scope is a first-chapter prototype with five trainers, 12 arena encounters, skills, gear, lodge/gallery upgrades and endless survival. Further campaign content, additional mission types, advanced talents and new art are follow-up work.
 
 Keep changes focused. Ask Jimmy before implementing a separate app, editor, or substantial tool for adjusting a scene; do not expand a UI change into a tooling project without agreement. Whenever starting a server, show its actual running terminal so Jimmy can stop/restart it, or provide the command for Jimmy to run in his own VS Code/macOS terminal. Do not leave a server running only in a hidden agent process.
+
+Mobile offline files are listed in `dist/sw.js`. Bump `CACHE_NAME` for each release that changes cached game files, and keep the file list aligned with runtime modules and icons. Updates must not reload an active training or arena run; implementation details belong in documentation.

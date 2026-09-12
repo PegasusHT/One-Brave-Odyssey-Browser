@@ -16,6 +16,16 @@ Open http://127.0.0.1:4173. On a phone connected to the same Wi-Fi, use the phon
 
 No package installation or build step is required. `dist/` contains the authored source, not disposable output. Optional Google Fonts have local serif/sans-serif fallbacks.
 
+## Install on iPhone
+
+Use the permanent HTTPS link returned by the Sites deployment, rather than a changing Quick Tunnel address. The site retains its existing private access, so sign in with the owning account if prompted. In Safari, choose Share → Add to Home Screen, keep Open as Web App enabled and tap Add. Open the new Brave Odyssey icon while online, then check Settings → Ready for offline play before disconnecting. The existing landscape rotation prompt still applies.
+
+The game files are cached on this phone after successful setup. Town, every trainer and arena play can then launch offline. Progress remains local to the installation; an old tunnel URL or a different browser installation does not automatically transfer its saved hero. Browser storage can be cleared by the user or device, so this is personal playtesting rather than cloud-backed save storage.
+
+New releases download in the background when online. Settings shows Install game update when one is ready. Finish an active training/arena run first; updates are disabled during it. Close other windows of this game before applying an update. The game saves and reloads once, keeping the current hero. Offline files are replaced only after the complete new version downloads successfully. Optional online fonts have offline fallbacks.
+
+For future releases, bump `CACHE_NAME` in `dist/sw.js` whenever cached game files change, and keep its file list synchronized with runtime imports and icons. Publish the exact source to the same Site. `npm test` includes both gameplay and mobile-cache checks.
+
 ## Play
 
 Every training run and retry now starts with a **1.5-second entrance**, with no countdown text. The goal bar, hero, partner where present, mission panel and controls briefly fade/settle into place. Attacks, scoring and mission timers wait until the entrance ends. Pausing, backgrounding or portrait rotation also freezes the entrance. Reduced motion shows the scene immediately while keeping the same 1.5-second preparation time.

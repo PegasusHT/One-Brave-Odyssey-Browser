@@ -1,3 +1,11 @@
+# Installable mobile game and offline updates — 12 September 2026
+
+- All **63 Node tests pass**: 59 gameplay tests and four mobile tests covering real precache files/icon dimensions, offline shell/module responses, atomic failure without deleting the previous cache, explicit activation, other-window protection and cache cleanup limited to this game.
+- Real service-worker checks on the existing local server pass at **844×390, 667×375 and 568×320**. After the initial download, browser network access is disabled and the game reloads successfully. All five trainers and arena work offline; rewards bank and saved progress survives another offline reload. Settings displays Ready for offline play. No runtime errors or document overflow occurred.
+- An isolated replacement worker confirms the new version waits during training, Settings disables applying it during a run, another open game window blocks activation, and applying from Town saves and reloads exactly once. The updated version also launches offline. The temporary test worker was removed before publication.
+- Inspected the original hero icon and Settings/training screenshots. JavaScript syntax checks and `git diff --check` pass. No new dependency or server was added; the existing local server was reused.
+- These results are desktop Chrome emulation. Actual Home Screen installation, private-site sign-in, iOS offline relaunch and storage behavior still need the target iPhone check. A permanent hosted origin/install does not automatically import saves from an earlier temporary tunnel origin.
+
 # Moving goal diamond and fake-avoidance reward — 12 September 2026
 
 - All **59 gameplay tests pass**. Coverage includes one ordinary reward exactly at an untouched fake cue’s deadline at 30/60/120 Hz, no reward before that deadline, no reward for a tapped/interrupted fake, no perfect-mission credit, +4 across a fake plus both real hits, and once-only settlement. Existing timing, penalties, missions and progression checks pass.
