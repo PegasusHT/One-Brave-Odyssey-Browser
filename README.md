@@ -94,3 +94,13 @@ The current first chapter provides a playable core loop. The production goal rem
 The home screen provides Training, Arena, Shop, Legacy and the hero card; destination pages return through Town. There is no bottom tab bar. The header shows SkyHaven, gold and Settings. Small destination labels sit below their buildings with larger invisible touch areas. The town hero stands above Training and left of the arena; the compact hero card stays in the lower-left corner. Landscape layouts are checked down to 568×320; physical iPhone verification remains separate.
 
 Local edits and GitHub pushes do not update the published phone app. Publish a tested version to the existing private Site, bumping the runtime cache identifier, then open the installed app online and choose Settings → Install game update once available. Finish any active run and close other game windows first. Apply the current update once in any local browser still using the old worker. Afterward, localhost, 127.0.0.1 and IPv6 loopback previews load current source on refresh while the server is running, falling back to their last installed cache when offline. The hosted phone app continues to use explicit updates.
+
+## Arena layout preview
+
+The Arena selection screen uses compact numbered encounters, a central hero/opponent display, reward totals and Fight. The explanatory card and duplicate headings are removed. The latest Arena work is a local layout preview; it has not been published. Jimmy requested visual previews first and no tests unless explicitly asked.
+
+## Shared destination layouts
+
+Training, Shop, Hero and Legacy now follow the approved Arena style: open landscape scenery, compact controls, original Canvas illustrations and concise decision information. Training keeps stat/level/yield values; Shop keeps gear bonuses and costs; Hero keeps stats, skill effects and XP; Legacy keeps building benefits and collection totals. Settings and Appearance are also shortened. Menu actions use the existing progression and purchase handlers.
+
+These changes are local layout previews and have not been published. No tests were run, as requested. Previews were captured at a single 956×440 desktop-browser viewport; this does not establish gameplay correctness or physical-phone readiness.

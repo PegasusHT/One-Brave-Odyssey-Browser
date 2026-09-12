@@ -164,3 +164,11 @@ Desktop Chrome checks pass at 956×440, 844×390, 667×375 and 568×320. Verifie
 ### Local refresh correction and home release
 
 All 65 Node tests pass (59 gameplay, six mobile cache). New worker checks cover network-first localhost/127.0.0.1/IPv6 refreshes with offline fallback and unchanged cache-first hosted behavior. In actual Chrome at localhost and 127.0.0.1, marked cached JavaScript is skipped on an online reload and used on an offline reload. The latest home screen loads in both cases without page errors. No save storage was reset; no server was started. Release cache: `obo-game-2026-09-12-5`. Previously installed workers need one explicit update before the local-refresh correction takes effect. Physical phone update verification remains with Jimmy.
+
+## Arena selection layout — preview only
+
+At Jimmy’s request, no tests were run for this revision. A single 956×440 browser screenshot was captured to present the local layout, without assertions or gameplay/regression checks. No physical-device validation or responsive matrix is claimed. Arena navigation, stage selection, battle start and rewards retain their existing handlers; the new presentation has not been tested. Local cache `obo-game-2026-09-12-6` is not yet published.
+
+## Shared destination menus — preview only
+
+Training selection, Shop, Hero and Legacy layouts were displayed for 956×440 screenshots. Settings and Appearance copy was shortened. No tests, scripted assertions, purchases, upgrades, skill/stat spending, gameplay checks or responsive/device matrix were run, at Jimmy's request. The screenshots are visual previews only. No runtime or physical-device validation is claimed. Existing action handlers and core progression functions are retained. Local cache `obo-game-2026-09-12-7` is not yet published.

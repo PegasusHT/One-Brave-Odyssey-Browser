@@ -13,3 +13,7 @@ The existing .openai/hosting.json identifies the private Site; reuse it. Do not 
 Keep changes focused. Ask Jimmy before implementing a separate app, editor, or substantial tool for adjusting a scene; do not expand a UI change into a tooling project without agreement. Whenever starting a server, show its actual running terminal so Jimmy can stop/restart it, or provide the command for Jimmy to run in his own VS Code/macOS terminal. Do not leave a server running only in a hidden agent process.
 
 Mobile offline files are listed in `dist/sw.js`. Bump `CACHE_NAME` for each release that changes cached game files, and keep the file list aligned with runtime modules and icons. Updates must not reload an active training or arena run; implementation details belong in documentation.
+
+Jimmy’s current preference: do not run tests unless he explicitly asks. For UI revisions, implement the layout and show a visual preview first. This supersedes the earlier default test commands for this workflow.
+
+Menu design preference: follow the approved Home/Arena style across destinations—full landscape scenery, centered short title, small Town return, gold and Settings, compact visible controls with generous tap areas, and minimal text. Keep prices, effects and progression numbers needed for decisions. Preserve approved training gameplay layouts while redesigning their selection menus.

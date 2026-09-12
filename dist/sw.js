@@ -1,4 +1,4 @@
-const CACHE_NAME='obo-game-2026-09-12-5';
+const CACHE_NAME='obo-game-2026-09-12-7';
 const FILES=['./','index.html','style.css','game.js','core.js','art.js','training.js','battle.js','strength-layout.js','strength-art.js','dodge-art.js','block-art.js','critical-art.js','mobile.js','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
 const localPreview=['localhost','127.0.0.1','[::1]'].includes(new URL(self.registration.scope).hostname);
 const urls=FILES.map(file=>new URL(file,self.registration.scope).href);

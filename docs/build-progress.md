@@ -27,7 +27,7 @@ The current loop includes town, five training minigames, stat and skill growth, 
 - `dist/game.js` owns screens, input, settlement, saving, lifecycle and optional WebMCP tools.
 - Progress persists in `localStorage` under `one-brave-odyssey.browser.v1`.
 - Stable equipment IDs are `weapon_t1` through `weapon_t3` and `armor_t1` through `armor_t3`.
-- All 59 gameplay tests and six mobile-cache tests pass, including Critical’s fake-avoidance credit, miss/no-cue penalties, delayed airborne cue, lifetime mission normalization and once-only settlement. Chrome touch checks pass at 844×390, 667×375 and 568×320 with no runtime errors or overflow. These are desktop-emulated checks; physical iPhone playtesting remains.
+- Last tested release: all 59 gameplay tests and six mobile-cache tests passed, including Critical’s fake-avoidance credit, miss/no-cue penalties, delayed airborne cue, lifetime mission normalization and once-only settlement. Chrome touch checks pass at 844×390, 667×375 and 568×320 with no runtime errors or overflow. These are desktop-emulated checks; physical iPhone playtesting remains.
 
 ## Running and phone testing
 
@@ -201,7 +201,7 @@ Jimmy confirmed that the published game opens from his iPhone Home Screen icon. 
 
 Other destination screens keep their Town buttons. Accuracy and arena retain their Pause/exit flows; the four immersive practice scenes keep their existing Town/results flow. No gameplay or settlement rules changed. No opening scene or other-screen redesign was added.
 
-The current runtime cache identifier is `obo-game-2026-09-12-5`. The home revisions and local-refresh correction were published at Jimmy’s request on 12 September 2026. Editing files or pushing to GitHub does not deploy the Site. Publish the tested revision to the existing private Site, then launch the phone app online and use Settings → Install game update when it becomes available. An active run cannot apply an update. Local browsers still controlled by an older worker need to apply this update once; a refresh alone can continue to show the old cached release until then. The new worker loads current source from a running loopback server on subsequent refreshes.
+The last published runtime cache identifier is `obo-game-2026-09-12-5`. The home revisions and local-refresh correction were published at Jimmy’s request on 12 September 2026. Editing files or pushing to GitHub does not deploy the Site. Publish the tested revision to the existing private Site, then launch the phone app online and use Settings → Install game update when it becomes available. An active run cannot apply an update. Local browsers still controlled by an older worker need to apply this update once; a refresh alone can continue to show the old cached release until then. The new worker loads current source from a running loopback server on subsequent refreshes.
 
 Validation: all 63 existing Node tests pass. Chrome touch checks at 956×440, 844×390, 667×375 and 568×320 verify labels, no bottom navigation, centered title, non-overlapping home controls with at least 44-pixel targets, all five destination routes and returns, Settings, all five trainer exits, offline reload and long-name/large-gold rendering. Inspected home screenshots at 844×390 and 568×320. No runtime errors or document overflow. These checks are desktop emulation, not physical iPhone validation. Reused the existing local server; no server or new editor was started.
 
@@ -225,9 +225,27 @@ All 65 Node tests pass, including new checks for live loopback source, local off
 
 For the phone, finish any run, close other game tabs/windows, and reopen the same installed icon while online. Open Settings and choose Install game update once the download is ready. The app saves and reloads; wait for Ready for offline play before disconnecting. This release requires no new icon or local-data reset. Publishing targets the same owner-private Site. Publication succeeded at 09:28:30 UTC on 12 September 2026. The existing URL remains https://one-brave-odyssey-skyhaven.jimmybui1995.chatgpt.site and owner-only access is preserved. Published source commit: `8a6e998b11f8d3f935324310703083d24a6d27c8`; saved Site version 2. Jimmy still needs to apply the update on his existing phone installation and any local browser with the older worker.
 
+## Arena selection layout — local preview, 12 September
+
+Jimmy asked to extend the compact, minimal-text home-screen style to Arena and explicitly requested no tests unless he asks. That standing preference is also recorded in AGENTS.md. This pass changes the Arena selection screen; combat and settlement behavior are not redesigned.
+
+Arena now fills the landscape scene with a centered Arena heading, a compact Town return, gold and Settings. Twelve small encounter tiles sit on the left, with gold selection, numeric locked stages and small lock/clear icons. The equipped hero and selected opponent stand in the arena. Visible detail is limited to the opponent name, gold/XP amounts, Fight and the survival symbol when unlocked. Removed duplicate headings, wave/explanation copy and the large battle card. Visible controls are compact with at least 44-pixel authored tap areas. Enemy preview scale is an optional canvas attribute; other enemy canvases retain their existing default.
+
+A single 956×440 local browser screenshot was captured to show the layout. No tests, scripted assertions, regression passes or device matrix were run, as requested. This is a layout preview, not validation. No server was started. Current local cache identifier is `obo-game-2026-09-12-6`; this Arena revision has not been published.
+
+## Training, Shop, Hero and Legacy menus — local preview, 12 September
+
+Jimmy approved the Arena selection design and asked to apply it to the other scenes. The same full-height landscape header, scenery, short Town control and compact buttons now cover Training selection, Shop, Hero and Legacy. The existing Home/Arena designs and approved training gameplay layouts are retained.
+
+Training has five original illustrated stations, stat totals, ground levels/yield, Train and a compact upgrade price. Accuracy's 30-second duration remains visible beside its level. Shop displays the equipped hero, six equipment illustrations with names/bonuses and purchase/equip controls, plus a compact tonic row. Hero displays the equipped character, name edit, level/XP, derived combat totals, five allocatable stats and three skills with concise effects/costs. Legacy shows Lodge/Gallery illustrations, level/benefit numbers, build/upgrade/collect actions and a compact records panel. Settings and Appearance lose their introductory copy; offline readiness, updates and save errors remain visible.
+
+`menuIllustration()` in `art.js` renders original Canvas props, gear and buildings from the existing appearance palette. No paid generation, downloaded assets, dependency or editor was added. The menu helpers in `game.js` build shared compact buttons, gold amounts, portraits and destination shells. Existing `data-*` action handlers and stable equipment IDs remain in use; no economy, combat, progression or settlement functions were changed. Short-screen menus retain internal scrolling, and action controls are authored with at least 44-pixel touch areas.
+
+Previews of all four menus were captured at one 956×440 viewport. No tests, assertions, gameplay checks or responsive/device matrix were run, per Jimmy's preference. These are visual layout previews only. The existing server was reused. Current local cache identifier is `obo-game-2026-09-12-7`; Arena and these menu changes have not been published. The last published release remains Site version 2/cache `obo-game-2026-09-12-5`.
+
 ## Next requested work
 
-Apply the published update locally and on the phone, then continue the mobile UI redesign with Jimmy's next scene instructions. Check actual iPhone safe areas, visual scale, audio, background/portrait recovery and the Settings update flow. Preserve all approved training rules. Accuracy remains the trainer awaiting a gameplay revision request.
+Review the Training, Shop, Hero and Legacy menu layouts with Jimmy and apply his visual feedback. Do not run tests unless he asks. Keep the compact style and all approved gameplay rules. Publish the accepted menu changes to the existing private Site when requested.
 
 A fresh chat can use this file and `AGENTS.md` as the handoff. Preserve the commercial mobile-game goal, original art, focused scope and visible-terminal requirement.
 
