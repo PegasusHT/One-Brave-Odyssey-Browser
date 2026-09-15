@@ -75,7 +75,11 @@ Use **Copy layout** or **Download JSON**, then give the layout to an agent to ap
 - `dist/critical-art.js`: original dummy, fake/hit cues, jump/strike/return animation and effects; timings are in `CRITICAL_TIMING` in `core.js`.
 - `dist/layout-editor.html`: standalone drag-and-drop layout workbench; see `docs/layout-workbench.md`.
 - `dist/battle.js`: automatic turns, critical windows, skills, waves and survival.
-- `dist/art.js`: original procedural Canvas art; separate weapon/armor visual descriptors.
+- `dist/art.js`: procedural Canvas art and replaceable equipment/idle-portrait appearance descriptors.
+- `dist/portrait-art.js`: supplied six-frame idle portraits, with image loading and procedural weapon helpers shared by action art.
+- `dist/action-art.js`: Critical jump/landing and Arena automatic-attack sprite presentation.
+- `dist/assets/hero-actions/`: supplied attack sheet and transparent jump/landing runtime sheet.
+- `dist/assets/hero-idle/`: supplied transparent hero sheet and Upgrade III blade runtime PNGs.
 - `dist/game.js`: screens, Pointer Events, responsive canvas, lifecycle, settings and optional WebMCP navigation/read tools.
 - `dist/style.css`: safe-area and landscape layout; short-screen rules.
 - `docs/mechanics-map.md`: sourced research, adaptations and deliberately limited first-chapter scope.
@@ -83,7 +87,7 @@ Use **Copy layout** or **Download JSON**, then give the layout to an agent to ap
 
 ## Swapping placeholder art
 
-Stable item IDs are `weapon_t1` through `weapon_t3` and `armor_t1` through `armor_t3`. Gameplay stats live in `ITEMS`; appearance descriptors live in `EQUIPMENT_ART`. Replace the `hero`, `enemy` and `drawWorld` rendering functions with sprite or atlas renderers while retaining their arguments. Hero drawing uses feet as its origin, with independent weapon and armor layers. No gameplay logic depends on any asset filenames or shape details.
+Stable item IDs are `weapon_t1` through `weapon_t3` and `armor_t1` through `armor_t3`. Gameplay stats live in `ITEMS`; appearance descriptors live in `EQUIPMENT_ART`. The first idle-art integration is limited to Shop and Hero `data-hero="idle"` canvases. Keep the procedural `hero()` renderer for Arena selection, training and battles. Hero drawing uses feet as its origin, with independent weapon and armor layers. No gameplay logic depends on any asset filenames or shape details.
 
 ## Current milestone and release direction
 
@@ -104,3 +108,15 @@ The Arena selection screen uses compact numbered encounters, a central hero/oppo
 Training, Shop, Hero and Legacy now follow the approved Arena style: open landscape scenery, compact controls, original Canvas illustrations and concise decision information. Training keeps stat/level/yield values; Shop keeps gear bonuses and costs; Hero keeps stats, skill effects and XP; Legacy keeps building benefits and collection totals. Settings and Appearance are also shortened. Menu actions use the existing progression and purchase handlers.
 
 These menu changes were published on 12 September 2026. Reopen the installed game online and choose Settings → Install game update to receive them. No tests were run, as requested. Previews were captured at a single 956×440 desktop-browser viewport; this does not establish gameplay correctness or physical-phone readiness.
+
+## Idle portrait review — 15 September 2026
+
+Shop and Hero use the supplied six-frame idle sheet, at 400 ms per frame (2.4 seconds per loop). Both source PNGs already have alpha transparency and are copied unchanged. The supplied `Wayfarer Blade.png` is assigned to `weapon_t3` as the requested Upgrade III art; its existing shop name remains Sunbreak edge. Tiers 1 and 2 retain procedural swords. The sprite keeps its base clothing and teal scarf; armor and scarf appearance changes remain procedural-scene features for this test.
+
+`IDLE_PORTRAIT_ART` in `dist/art.js` contains explicit source rectangles, size/baseline normalization, per-frame hand coordinates, rotation, scale and the hand-over-grip mask. `PORTRAIT_WEAPON_ART` holds the blade image, grip pivot and image scale. The renderer reads current equipment on every frame. This local first placement awaits Jimmy’s review of size, position, speed, sword angle and grip. Run `npm start` and open http://127.0.0.1:4173. That first portrait step did not include action animations or published Site changes.
+
+## Critical and Arena action art — 15 September 2026
+
+Critical now uses the supplied jump/landing sheet during its existing two-cue sequence. Arena normal attacks use the supplied attack sheet, with anticipation before the existing damage moment and follow-through afterward. Both scenes use the first idle drawing at rest and keep equipped weapons separate. `ACTION_HERO_ART` in `dist/art.js` stores the frame/hand placements; `dist/action-art.js` selects poses from current scene time/state. Other trainers and Shop/Hero idle playback retain their current presentation.
+
+The jump source contained a baked checkerboard; the runtime copy adds real transparency without changing the hero colors. This first action placement has frozen desktop visual previews only, with no test suite or publication. Run `npm start`, open http://127.0.0.1:4173, then visit Training → Critical or Arena → Fight to review live motion. The idle roughness diagnosis and deferred options are in `docs/build-progress.md`.

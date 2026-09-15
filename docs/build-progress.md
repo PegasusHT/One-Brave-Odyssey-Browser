@@ -1,6 +1,6 @@
 # Browser build progress
 
-Last updated: 12 September 2026
+Last updated: 15 September 2026
 
 ## Purpose and direction
 
@@ -11,6 +11,34 @@ JavaScript and the browser currently provide a fast development path for a playa
 A Unity conversion remains a production option, including when its visual editing workflow better supports Jimmy’s design process or when expanded content/browser limitations justify it. If needed, use the browser behavior as the reference and port complete vertical slices deliberately. There is no commitment to a Unity port before release; packaging, device performance, release content, polish and App Store readiness still need to be completed and validated.
 
 The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, twelve encounters and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
+
+## Idle portrait art test — accepted; smoothing deferred
+
+- Shop and Hero profiles use `data-hero="idle"` and `dist/portrait-art.js`. Their approved first placement remains unchanged. The later Critical/Arena action integration below expands the supplied hero to those two active scenes; other procedural uses remain.
+- Supplied PNGs are copied unchanged into `dist/assets/hero-idle/`: `idle.png` is 1536×1024 and `wayfarer-upgrade-iii.png` (source `Wayfarer Blade.png`) is 2172×724. Both already contain transparency, preserving the cream shirt, eyes and highlights without background removal or generation.
+- `IDLE_PORTRAIT_ART` in `art.js` defines six explicit rectangles, foot origins and source heights. Each frame is normalized to a 500-unit reference height and drawn at a 300-pixel height in the existing 400×340 portrait canvas, with feet 15 pixels from its bottom. Playback uses 400 ms per frame / 2.4 seconds per six-frame loop, through the existing motion/visibility behavior.
+- Each frame has source-pixel `hand.x` / `hand.y`, a clockwise rotation of 0.48 radians from a right-pointing blade and scale 1. The weapon is drawn separately after the body; a clipped copy of the original gripping hand covers its handle. All weapon IDs reuse this attachment. The shared `handMask` follows the fist; no hand or weapon pixels are permanently composited into the assets.
+- `PORTRAIT_WEAPON_ART.weapon_t3` maps the supplied Upgrade III blade with source-pixel grip pivot `[480,355]` and scale 0.14 relative to the normalized hero. `weapon_t1` and `weapon_t2` use simple procedural swords from their existing `EQUIPMENT_ART` descriptors. Tier 3 retains its existing Sunbreak edge shop label; prices, stats, ownership, buy/equip handlers and save structure are unchanged.
+- The sprite keeps its base clothing and teal scarf; swappable armor artwork is deferred. Armor progression and appearance controls keep their existing behavior in procedural scenes.
+- Existing buy/equip handlers update `player.equipment`, save and rebuild the menu. The portrait reads that value every frame, with cached image objects and no cached equipment choice. Failed or pending images have procedural fallbacks.
+- Cache `obo-game-2026-09-15-1` includes the new module and both PNGs; update activation behavior is unchanged. This is local only; the private Site is not republished.
+- Jimmy accepted the portrait result and requested an explanation of its stepping without an idle fix. He then authorized Critical jump/landing and Arena normal-attack art. `npm start` runs the local game; Control-C stops it.
+
+## Critical and Arena action art — 15 September 2026
+
+- `dist/action-art.js` draws the supplied hero in active Critical practice and Arena/survival battles, retaining the procedural renderer as an asset-loading fallback. Rest uses the first approved idle drawing so the character stays visually consistent between actions. Shop/Hero idle playback and its descriptors were not adjusted.
+- `dist/assets/hero-actions/attack.png` is the supplied 1536×1024 RGBA sheet copied unchanged. `jump-land.png` is a 1536×1024 RGBA runtime copy of the supplied RGB `jump_land.png`: its baked checkerboard was removed with a local color/component mask and about one source pixel of edge feathering. Original hero RGB, eye whites and cream clothing were preserved; source files are untouched. No paid generation or processing/editor app was used.
+- `ACTION_HERO_ART` in `art.js` holds source rectangles, constant sequence scale, body/foot origins and per-frame hand placement. Airborne origins follow the torso instead of the changing lowest boot pixel. Two small source clip polygons exclude neighboring hair/boot fragments in attack frames 3 and 6, whose rectangles overlap vertically.
+- Critical selects the crouch/extension/tuck frames during the existing 300 ms rise, holds airborne poses through the wait and second cue, uses the descent frame during the existing 180 ms landing, then shows the ground impact and recovery. Failed jumps use a non-striking landing. Existing travel, cues, input windows, effects, reward timing and settlement stay in their existing code paths. Reduced motion selects representative action poses.
+- Arena uses a 240 ms visual windup before the already scheduled automatic hero turn; the strike pose begins when that turn resolves damage, followed by 320 ms of visual follow-through/recovery. `Battle.normalAttackAt` is a transient presentation timestamp set only by automatic attacks. Skills and the golden event retain their existing responses and do not restart this sprite sequence. Animation derives from active battle time, so pausing freezes it.
+- Weapons remain separate layers using the existing ID mapping: supplied Upgrade III blade for `weapon_t3`, procedural fallbacks for tiers 1/2, and original hand overdraw over the grip. Base clothing is baked into these sheets; equipment logic and stats remain unchanged.
+- Cache `obo-game-2026-09-15-2` includes `action-art.js` and both action PNGs. The existing visible Terminal launcher was reopened for previews. This revision is local only and awaits Jimmy’s motion/placement review; no tests or deployment were run.
+
+### Idle diagnosis only — no fix applied
+
+The six drawings are hard-switched every 400 ms (2.5 pose changes per second), with stance/scarf/face changes and an equally long blink hold. Those are direct causes of visible stepping. Full-height normalization varies from 478 to 506 source pixels (about a 5.9% correction range), the grip moves roughly five portrait-canvas pixels vertically between frames 4 and 5, and frame 6 directly wraps to a different frame 1; these likely add apparent popping. This is an art/playback diagnosis, not a performance profile.
+
+For a later revision, align stable body/foot landmarks and hand grips, shorten transitional/blink holds while keeping a slow overall cycle, and add consistent in-between drawings including the loop seam. Six drawings can support much smaller movement; another option is a gently animated base pose with separate scarf/blink layers. Simple opacity crossfades may produce double outlines instead of coherent limb motion. Adobe’s tweening documentation describes automatic interpolation of layer position, opacity and effects, not redrawing intermediate poses: https://helpx.adobe.com/photoshop/desktop/add-video-and-animation/create-animation-frames/create-frames-using-tweening.html.
 
 ## Current working build
 

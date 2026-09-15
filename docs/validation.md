@@ -1,3 +1,18 @@
+# Critical/Arena supplied action art — visual preview only, 15 September 2026
+
+- No test suite, scripted gameplay assertions, responsive matrix or physical-device checks were run for this revision, following Jimmy’s default preference. The prior 65-test result below belongs to the idle integration.
+- Desktop browser snapshots at 844×390 show Critical airborne/ground impact poses and Arena normal-attack follow-through, including the separate tier-3 blade. These use a temporary in-memory game fixture with frozen presentation states, so they demonstrate composition rather than live input, animation smoothness or scoring correctness. The fixture was removed and did not change the persistent player save. No browser error logs appeared during these previews.
+- Inspected one composite of the jump runtime sheet: all six silhouettes retain the cream clothing and eyes, and the checkerboard gaps are transparent. Pixel component inspection identified and excluded neighboring art in attack frames 3 and 6.
+- A focused source review found the normal attack timestamp is assigned only on automatic hero turns; action rendering follows existing Critical phases and active battle time. Gameplay timing, damage, inputs and settlement code paths were retained. This is source review, not execution-based regression coverage.
+- Cache `obo-game-2026-09-15-2` includes both new action assets and the new renderer. Not published. Jimmy should review live takeoff/landing transitions, sword attachment and the Arena windup/strike/recovery sequence before further art tuning.
+
+# Idle portrait art integration — 15 September 2026
+
+- Explicitly requested `npm test`: all 65 existing tests pass (59 gameplay and six mobile-cache tests). No tests were added or changed. `game.js` and the new `portrait-art.js` pass syntax checks; diff whitespace checks pass.
+- One focused browser pass displayed the first Shop placement at 844×390, then used a temporary copy of the game with in-memory storage and 1,000 test coins to exercise the unchanged Forge actions. Bought tier 3 for 650 coins and saw the supplied image; equipped tier 1 and saw the procedural fallback; bought tier 2 for 180 coins; re-equipped the owned tier 3 for free and opened Hero with that same supplied blade. The final test balance was 170 and equipped ID was `weapon_t3`. No browser error logs appeared. The temporary fixture was removed and did not write the persistent player save.
+- The isolated Shop/Hero screenshots used the browser’s default 1280×720 viewport. No extended visual iteration, responsive matrix, action-animation integration or physical phone testing was performed. Hero size, frame cadence, sword size/angle and grip placement await Jimmy’s visual feedback.
+- Runtime PNGs were copied unchanged after confirming existing alpha transparency and actual sizes: idle 1536×1024, blade 2172×724. Cache `obo-game-2026-09-15-1` lists both images and `portrait-art.js`. Existing update activation behavior is retained. This change has not been published.
+
 # Installable mobile game and offline updates — 12 September 2026
 
 - All **63 Node tests pass**: 59 gameplay tests and four mobile tests covering real precache files/icon dimensions, offline shell/module responses, atomic failure without deleting the previous cache, explicit activation, other-window protection and cache cleanup limited to this game.
