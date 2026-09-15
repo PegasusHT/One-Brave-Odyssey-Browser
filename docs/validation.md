@@ -1,3 +1,11 @@
+# Installable mobile game and offline updates — 12 September 2026
+
+- All **63 Node tests pass**: 59 gameplay tests and four mobile tests covering real precache files/icon dimensions, offline shell/module responses, atomic failure without deleting the previous cache, explicit activation, other-window protection and cache cleanup limited to this game.
+- Real service-worker checks on the existing local server pass at **844×390, 667×375 and 568×320**. After the initial download, browser network access is disabled and the game reloads successfully. All five trainers and arena work offline; rewards bank and saved progress survives another offline reload. Settings displays Ready for offline play. No runtime errors or document overflow occurred.
+- An isolated replacement worker confirms the new version waits during training, Settings disables applying it during a run, another open game window blocks activation, and applying from Town saves and reloads exactly once. The updated version also launches offline. The temporary test worker was removed before publication.
+- Inspected the original hero icon and Settings/training screenshots. JavaScript syntax checks and `git diff --check` pass. No new dependency or server was added; the existing local server was reused.
+- These results are desktop Chrome emulation. Actual Home Screen installation, private-site sign-in, iOS offline relaunch and storage behavior still need the target iPhone check. A permanent hosted origin/install does not automatically import saves from an earlier temporary tunnel origin.
+
 # Moving goal diamond and fake-avoidance reward — 12 September 2026
 
 - All **59 gameplay tests pass**. Coverage includes one ordinary reward exactly at an untouched fake cue’s deadline at 30/60/120 Hz, no reward before that deadline, no reward for a tapped/interrupted fake, no perfect-mission credit, +4 across a fake plus both real hits, and once-only settlement. Existing timing, penalties, missions and progression checks pass.
@@ -137,3 +145,34 @@ These are desktop emulation and scripted lifecycle checks, not physical iPhone o
 - Both optional WebMCP tools registered with expected schemas; progress read and destination navigation succeeded; invalid destination and unexpected read arguments were rejected.
 
 These are desktop-browser viewport tests, not physical-device certification. iOS Safari / Android Chrome touch feel, actual notch insets, safe-area behavior, audio unlock and mobile task-switch behavior still need on-device playtesting. All five trainer scoring paths are covered in logic tests; only strength was manually exercised in the browser during this pass. Local test progression is separate from the fresh hosted game save.
+
+## Mobile home UI — 12 September 2026
+
+- All 63 existing gameplay and service-worker tests pass; JavaScript syntax and diff whitespace checks pass.
+- Desktop Chrome touch viewports: 956×440, 844×390, 667×375, 568×320. Verified home labels, absence of bottom tabs, on-screen non-overlapping controls and minimum 44-pixel targets, every destination/return route, Settings, all five trainer exits and offline reload. Exercised an 18-character name and 999,999,999 gold.
+- Inspected 844×390 and 568×320 screenshots. No page errors or document overflow. Existing gameplay rules are unchanged. The existing local server was reused.
+- Prepared cache `obo-game-2026-09-12-2`; home changes are not yet published. Phone installation of the preceding release was confirmed by Jimmy; this revision has not been physically tested on iPhone.
+
+### Home placement refinement
+
+Checked the smaller hero card and labels below buildings at 956×440, 844×390, 667×375 and 568×320 in desktop Chrome. Corrected a slight Legacy/hero-card overlap at the smallest viewport. Home controls remain separated and at least 44 pixels, with destination routes, Settings and offline reload intact. Long-name and large-gold rendering were rechecked. No runtime errors; JavaScript syntax and diff whitespace checks pass. Prepared local cache `obo-game-2026-09-12-3`; not published or physically iPhone-tested.
+
+### Smaller map labels and town hero placement
+
+Desktop Chrome checks pass at 956×440, 844×390, 667×375 and 568×320. Verified 30–34-pixel visible label heights, text no larger than 15 pixels, at least 44-pixel button targets, separated home controls and no label over the town hero. Destination navigation/returns, Settings, offline reload, long names and large gold totals remain functional. Inspected screenshots at 844×390 and 568×320; no runtime errors or document overflow. Syntax and diff whitespace checks pass. Local cache is `obo-game-2026-09-12-4`; not published or physically iPhone-tested.
+
+### Local refresh correction and home release
+
+All 65 Node tests pass (59 gameplay, six mobile cache). New worker checks cover network-first localhost/127.0.0.1/IPv6 refreshes with offline fallback and unchanged cache-first hosted behavior. In actual Chrome at localhost and 127.0.0.1, marked cached JavaScript is skipped on an online reload and used on an offline reload. The latest home screen loads in both cases without page errors. No save storage was reset; no server was started. Release cache: `obo-game-2026-09-12-5`. Previously installed workers need one explicit update before the local-refresh correction takes effect. Physical phone update verification remains with Jimmy.
+
+## Arena selection layout — preview only
+
+At Jimmy’s request, no tests were run for this revision. A single 956×440 browser screenshot was captured to present the local layout, without assertions or gameplay/regression checks. No physical-device validation or responsive matrix is claimed. Arena navigation, stage selection, battle start and rewards retain their existing handlers; the new presentation has not been tested. Local cache `obo-game-2026-09-12-6` is not yet published.
+
+## Shared destination menus — preview only
+
+Training selection, Shop, Hero and Legacy layouts were displayed for 956×440 screenshots. Settings and Appearance copy was shortened. No tests, scripted assertions, purchases, upgrades, skill/stat spending, gameplay checks or responsive/device matrix were run, at Jimmy's request. The screenshots are visual previews only. No runtime or physical-device validation is claimed. Existing action handlers and core progression functions are retained. Local cache `obo-game-2026-09-12-7` is not yet published.
+
+## Menu release publication — 12 September 2026
+
+The native Sites deployment reported success at 09:49:44 UTC for Site version 3, source `148ec4b67631e23acb071bff95ec2ea781367f5b`, cache `obo-game-2026-09-12-7`. No tests or additional browser QA were run for publication. Existing owner-private access was retained. Actual phone update and gameplay remain unverified.
