@@ -10,7 +10,8 @@ const rotate=(p,a)=>[p[0]*Math.cos(a)-p[1]*Math.sin(a),p[0]*Math.sin(a)+p[1]*Mat
 export function sampleRigPose(keys,t){
 let i=1;while(i<keys.length-1&&t>keys[i][0])i++;
 const [start,from]=keys[i-1],[end,to]=keys[i],f=smooth(Math.max(0,Math.min(1,(t-start)/(end-start))));
-const pose={};for(const k of Object.keys(A.poses.standing)){const a=A.poses[from][k],b=A.poses[to][k],angular=!/^(hip|nearFoot[XY]|farFoot[XY])/.test(k)&&!A.directedAngles.includes(k);pose[k]=angular?a+Math.atan2(Math.sin(b-a),Math.cos(b-a))*f:mix(a,b,f)}return pose
+const source=typeof from==='string'?A.poses[from]:from,target=typeof to==='string'?A.poses[to]:to;
+const pose={};for(const k of Object.keys(A.poses.standing)){const a=source[k],b=target[k],angular=!/^(hip|nearFoot[XY]|farFoot[XY])/.test(k)&&!A.directedAngles.includes(k);pose[k]=angular?a+Math.atan2(Math.sin(b-a),Math.cos(b-a))*f:mix(a,b,f)}return pose
 }
 
 export function rigPose(name='standing',time=0,animated=false){
@@ -39,12 +40,12 @@ const along=(upper*upper-lower*lower+reach*reach)/(2*reach),side=Math.sqrt(Math.
 return [hip[0]+dx/d*along+dy/d*side,hip[1]+dy/d*along-dx/d*side]
 }
 
-function arm(c,images,parts,side,shoulder,upperAngle,lowerAngle,equipment,wristAngle=0){
+function arm(c,images,parts,side,shoulder,upperAngle,lowerAngle,equipment,wristAngle=0,showWeapon=true){
 const spec=A.body[side],elbow=point(shoulder,upperAngle,spec.upperArm),wrist=point(elbow,lowerAngle,spec.forearm),angle=.18-lowerAngle+wristAngle;
 ellipse(c,...elbow,9,9,'#f8bd88');
 segment(c,images,parts,`${side}UpperArm`,shoulder,elbow);segment(c,images,parts,`${side}Forearm`,elbow,wrist);
 if(parts[`${side}Sleeve`])segment(c,images,parts,`${side}Sleeve`,shoulder,elbow,true);
-if(side==='near'){
+if(side==='near'&&showWeapon){
 const hand=A.parts.nearHand,offset=rotate([(hand.grip[0]-hand.pivot[0])*spec.handScale,(hand.grip[1]-hand.pivot[1])*spec.handScale],angle);
 const w=PORTRAIT_WEAPON_ART[equipment.weapon],sword=w?asset(w.src):null;
 c.save();c.translate(wrist[0]+offset[0],wrist[1]+offset[1]);c.rotate(angle+spec.weaponRotation);
@@ -74,7 +75,7 @@ stamp(c,images,parts,'torso',hip,A.body.torsoScale,p.lean);
 const head=local(A.body.neck),headAngle=p.head+p.lean;
 stamp(c,images,parts,'head',head,A.body.headScale,headAngle);
 if(parts.helmet)stamp(c,images,parts,'helmet',head,1,headAngle);
-arm(c,images,parts,'near',local(A.body.near.shoulder),p.nearArm-p.lean,p.nearForearm-p.lean,equipment,p.nearWrist);
+arm(c,images,parts,'near',local(A.body.near.shoulder),p.nearArm-p.lean,p.nearForearm-p.lean,equipment,p.nearWrist,options.weapon!==false);
 if(options.hit>0){c.globalAlpha*=options.hit*.35;ellipse(c,0,-50,95,180,'#fff7df')}
 c.restore();return true
 }

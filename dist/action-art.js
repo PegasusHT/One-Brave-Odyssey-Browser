@@ -34,7 +34,7 @@ let p=rigPose('standing',training.elapsed,motion),elevation=0;
 if(r?.jumpAt!==null&&r?.jumpAt!==undefined){
 if(phase==='rise'){const t=Math.min(1,(training.elapsed-r.jumpAt)/CRITICAL_TIMING.rise);p=motion?sampleRigPose([[0,'crouch'],[1,'airborne']],t):rigPose('airborne');elevation=75*(motion?t*t*(3-2*t):1)}
 else if(phase==='wait'||phase==='finish'){p=rigPose('airborne');elevation=75}
-else if(phase==='land'){const t=Math.min(1,age/CRITICAL_TIMING.land);p=motion?sampleRigPose([[0,'airborne'],[1,r.strike?'landing':'crouch']],t):rigPose(r.strike?'landing':'crouch');elevation=motion?75*(1-t*t*(3-2*t)):0}
+else if(phase==='land'){const t=Math.min(1,age/CRITICAL_TIMING.land),from=Math.max(0,Math.min(1,r.landFrom??1)),start=sampleRigPose([[0,'crouch'],[1,'airborne']],from);p=motion?sampleRigPose([[0,start],[1,r.strike?'landing':'crouch']],t):rigPose(r.strike?'landing':'crouch');elevation=motion?75*from*from*(3-2*from)*(1-t*t*(3-2*t)):0}
 else if(phase==='recovery'&&r.landed)p=motion?sampleRigPose([[0,r.strike?'landing':'crouch'],[1,'standing']],Math.min(1,age/.3)):rigPose('standing');
 }
 p.hipY+=elevation;p.nearFootY+=elevation;p.farFootY+=elevation;
