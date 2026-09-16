@@ -1,3 +1,54 @@
+# Independent equipment integration — visual preview only, 16 September 2026
+
+- Local desktop previews covered Set A Standing/Raised at 844×390; both complete sets Standing at 1100×600; Set B Raised/Airborne/Landing; and Set A armor with Set B helmet/bottoms in Attack. The four Shop categories and new item images were also visually reviewed at 844×390. Screenshots `equipment-set-a.png`, `equipment-set-b.png` and `equipment-shop.png` are in the thread's 16 September visualization directory. This is not a claim that every combination or animation transition has been reviewed.
+- Six supplied armor/helmet/bottoms A/B PNGs are copied unchanged into `dist/assets/hero-equipment/`. `MODULAR_EQUIPMENT_ART` supplies their garment-part attachments to the shared rig. The base sheets and complete starter sprites are retained; modular rendering has no hair, and the weapon arm stays in front of the head.
+- Source review confirms four independent shop categories, saved helmet/bottoms slots with base defaults for older saves, and additive armor/helmet/bottoms HP. Existing armor IDs, prices and bonuses remain stable. This is source inspection, not purchase, migration or save-persistence testing.
+- Shared render entry points now cover previews, portraits and item illustrations; `hero-art.js` routes town/training and `action-art.js` routes Critical/Arena for equipped upgrades. Live gameplay, purchase/re-equip persistence, animation transitions and loading fallbacks were not exercised. The reviewed static poses and mixed outfit do not establish gameplay correctness.
+- Source review corrected two integration details: Block's guard omits the sword, and Critical landing begins from the partial rise pose at `landFrom` when an early tap aborts a jump. The rig's extra airborne root offset is removed in proportion to that same pose, leaving world travel to the existing Critical renderer. These corrections were not gameplay-tested.
+- No tests, scripted assertions, responsive matrix, offline checks, deployment or physical-device checks were run. Cache `obo-game-2026-09-16-4` lists the new hero wrapper and six equipment PNGs; update activation behavior is unchanged. This version is local only.
+- Neck/head contact, near-side diagonal alignment, far-palm repair, later shields/swords and the proposed visual editor remain explicit follow-ups.
+
+# Continuous lift and foreground arm — visual preview only, 16 September 2026
+
+- Visually inspected the bald Raised arm pose with both swords and started the revised attack playback at 844×390. The near arm, hand and sword now draw over the head. Captured `hero-rig-foreground-no-hair.png` in the current thread visualization directory. No browser errors appeared during the preview.
+- Removed intermediate lift/takeoff waypoints whose per-segment easing stopped the arm midway, plus the extra duplicate windup hold. The upward intervals now use one continuous smoothstep segment with the same unwrapped counterclockwise direction. This is a source-based timing correction and visual preview, not a frame-rate benchmark or gameplay test.
+- Hair calls and descriptors are removed from the rig; original source sheets and the approved full starter sprites are retained. Upgraded outfit fitting uses the bald modular head.
+- No tests, scripted assertions, responsive matrix, offline checks or physical-device checks were run. Existing server reused. Cache `obo-game-2026-09-16-3` is local only and unpublished.
+
+# Counterclockwise preparation and helmet rule — visual preview only, 16 September 2026
+
+- At 844×390, viewed Raised arm with both sword samples, Airborne with the supplied blade pointing behind the head, the horizontal forward attack endpoint, and attack playback entering its front lift. The same head/hair now occludes the cocked hand. These are visual previews, not a gameplay or physical-device test.
+- Source review confirms the weapon arm and wrist use unwrapped authored angles, preserving counterclockwise preparation. Grip position, fist rotation and blade rotation share one hand transform. Final attack/landing mounting angles remain horizontal.
+- The helmet preference is documented and both hair layers honor a supplied helmet attachment ID. Helmet art/equipment UI does not yet exist, so no equipped-helmet visual result is claimed.
+- No tests, scripted assertions, responsive matrix or offline checks were run. Existing local server reused. Cache `obo-game-2026-09-16-2` is local and unpublished; no new assets or dependencies.
+
+# Modular body assembly — visual preview only, 16 September 2026
+
+- Added Hero → Animation preview inside the existing app. Inspected actual local renders at 844×390 for Standing, Raised arm, Attack, Airborne and Landing. Viewed attack playback and Play/Pause, then left the jump/landing preview available. Both procedural tier-1 and supplied tier-3 swords were viewed on the same hand attachment. No browser errors were reported during the preview.
+- Inspected the supplied upper/lower sheets and their alpha bounds; copies are unchanged. Fitting uses explicit component crops, independent initial scales, neck/pelvis clipping, separate hair alignment, mirrored far foot, internal limb-end clipping and temporary skin-colored joint fills. These prove assembly and expose art limitations; they do not certify finished anatomy, perfect grip in every frame or polished motion.
+- This is a base-body and weapon prototype. No armor/helmet/bottom/shield swap or gameplay migration is claimed. Landing is a compression pose awaiting art/motion review; it is not a completed ground-contact strike. Existing portrait and action renderers remain in use outside the preview.
+- Source review covered chained arm/hand transforms, current leg reach, shortest-path angle interpolation and preview clock guards. Visibility, orientation and reduced-motion handling were read, not exercised as a regression suite. No tests, scripted assertions, syntax-test commands, responsive matrix, offline check or physical-phone check was run, per Jimmy's preference.
+- Reused the running local server. No separate editor, paid generation, dependency or new server was added. Cache `obo-game-2026-09-16-1` includes `rig-art.js` and the two source sheets. Local only; not published. Targeted repair prompts are in `docs/hero-rig-next-art.md`.
+
+# Horizontal sword refinement — visual preview only, 15 September 2026
+
+Set idle, Critical descent/landing and Arena strike/follow-through/recovery sword angles to horizontal. Inspected a single frozen three-pose comparison rendered with the real sprite helpers and tier-3 sword; no tests, gameplay checks or physical-device checks were run. The temporary preview page was removed. Cache `obo-game-2026-09-15-3` is local and unpublished.
+
+# Critical/Arena supplied action art — visual preview only, 15 September 2026
+
+- No test suite, scripted gameplay assertions, responsive matrix or physical-device checks were run for this revision, following Jimmy’s default preference. The prior 65-test result below belongs to the idle integration.
+- Desktop browser snapshots at 844×390 show Critical airborne/ground impact poses and Arena normal-attack follow-through, including the separate tier-3 blade. These use a temporary in-memory game fixture with frozen presentation states, so they demonstrate composition rather than live input, animation smoothness or scoring correctness. The fixture was removed and did not change the persistent player save. No browser error logs appeared during these previews.
+- Inspected one composite of the jump runtime sheet: all six silhouettes retain the cream clothing and eyes, and the checkerboard gaps are transparent. Pixel component inspection identified and excluded neighboring art in attack frames 3 and 6.
+- A focused source review found the normal attack timestamp is assigned only on automatic hero turns; action rendering follows existing Critical phases and active battle time. Gameplay timing, damage, inputs and settlement code paths were retained. This is source review, not execution-based regression coverage.
+- Cache `obo-game-2026-09-15-2` includes both new action assets and the new renderer. Not published. Jimmy should review live takeoff/landing transitions, sword attachment and the Arena windup/strike/recovery sequence before further art tuning.
+
+# Idle portrait art integration — 15 September 2026
+
+- Explicitly requested `npm test`: all 65 existing tests pass (59 gameplay and six mobile-cache tests). No tests were added or changed. `game.js` and the new `portrait-art.js` pass syntax checks; diff whitespace checks pass.
+- One focused browser pass displayed the first Shop placement at 844×390, then used a temporary copy of the game with in-memory storage and 1,000 test coins to exercise the unchanged Forge actions. Bought tier 3 for 650 coins and saw the supplied image; equipped tier 1 and saw the procedural fallback; bought tier 2 for 180 coins; re-equipped the owned tier 3 for free and opened Hero with that same supplied blade. The final test balance was 170 and equipped ID was `weapon_t3`. No browser error logs appeared. The temporary fixture was removed and did not write the persistent player save.
+- The isolated Shop/Hero screenshots used the browser’s default 1280×720 viewport. No extended visual iteration, responsive matrix, action-animation integration or physical phone testing was performed. Hero size, frame cadence, sword size/angle and grip placement await Jimmy’s visual feedback.
+- Runtime PNGs were copied unchanged after confirming existing alpha transparency and actual sizes: idle 1536×1024, blade 2172×724. Cache `obo-game-2026-09-15-1` lists both images and `portrait-art.js`. Existing update activation behavior is retained. This change has not been published.
+
 # Installable mobile game and offline updates — 12 September 2026
 
 - All **63 Node tests pass**: 59 gameplay tests and four mobile tests covering real precache files/icon dimensions, offline shell/module responses, atomic failure without deleting the previous cache, explicit activation, other-window protection and cache cleanup limited to this game.

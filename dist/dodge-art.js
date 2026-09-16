@@ -1,5 +1,6 @@
+import {equippedHero as hero} from './hero-art.js';
 import {DODGE_TIMING} from './core.js';
-import {hero,trainingPartner,ellipse,poly,appearTraining} from './art.js';
+import {trainingPartner,ellipse,poly,appearTraining} from './art.js';
 
 export function drawDodge(c,training,time){
 const h={x:560,y:476,scale:.972},p={x:840,y:476,scale:.72};

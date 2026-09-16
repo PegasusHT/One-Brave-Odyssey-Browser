@@ -1,5 +1,6 @@
 import {CRITICAL_TIMING} from './core.js';
 import {hero,ellipse,poly,appearTraining,CRITICAL_ART as art} from './art.js';
+import {drawCriticalHero} from './action-art.js';
 
 const clamp=n=>Math.max(0,Math.min(1,n)),ease=n=>n*n*(3-2*n),mix=(a,b,n)=>a+(b-a)*n;
 function dummy(c,x,y,pose,flash){
@@ -70,7 +71,7 @@ if(motion&&phase==='land'&&r.strike){
 c.save();c.strokeStyle='#e3fff391';c.lineWidth=12;c.lineCap='round';c.beginPath();c.moveTo(art.jumpX-25,art.groundY-art.jumpHeight-45);c.lineTo(pose.x-24,pose.y-40);c.stroke();
 c.strokeStyle='#fff4ba';c.lineWidth=6;c.beginPath();c.arc(pose.x+27,pose.y-74,93,-2.55,-Math.PI/2+pose.swordAngle);c.stroke();c.restore()
 }
-hero(c,pose.x,pose.y,art.scale,training.player.equipment,motion&&(r?.jumpAt===null||!r)?training.elapsed:0,0,training.hit,training.player.scarf,null,{...pose,shadow:false});c.restore();
+if(!drawCriticalHero(c,training,pose))hero(c,pose.x,pose.y,art.scale,training.player.equipment,motion&&(r?.jumpAt===null||!r)?training.elapsed:0,0,training.hit,training.player.scarf,null,{...pose,shadow:false});c.restore();
 if(motion){
 particles(c,training);
 if(r?.perfect&&impact<.35){const u=clamp(impact/.35);c.save();c.globalAlpha=(1-u)*.7;c.strokeStyle='#fff3b5';c.lineWidth=5*(1-u)+1;c.beginPath();c.ellipse(art.strikeX,art.groundY,25+u*100,6+u*18,0,0,Math.PI*2);c.stroke();c.restore()}
