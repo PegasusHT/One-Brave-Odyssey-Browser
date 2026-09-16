@@ -1,5 +1,6 @@
+import {equippedHero as hero} from './hero-art.js';
 import {BLOCK_RULES} from './core.js';
-import {hero,ellipse,poly,appearTraining,trainingShield} from './art.js';
+import {ellipse,poly,appearTraining,trainingShield} from './art.js';
 
 function orange(c,x,y,rotation=0){
 c.save();c.translate(x,y);c.rotate(rotation);

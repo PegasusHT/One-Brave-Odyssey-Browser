@@ -1,5 +1,6 @@
+import {equippedHero as hero} from './hero-art.js';
 import {Pool,TRAINING_INTRO,TRAINING_PACE,CRITICAL_TIMING,DODGE_TIMING,trainingMission,PRACTICE_KINDS,BLOCK_RULES,GROUNDS} from './core.js';
-import {hero,ellipse,poly,appearTraining,CRITICAL_ART} from './art.js';
+import {ellipse,poly,appearTraining,CRITICAL_ART} from './art.js';
 import {drawStrength} from './strength-art.js';
 import {drawDodge} from './dodge-art.js';
 import {drawBlock} from './block-art.js';

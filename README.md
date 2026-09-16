@@ -30,7 +30,7 @@ For future releases, bump `CACHE_NAME` in `dist/sw.js` whenever cached game file
 
 Every training run and retry now starts with a **1.5-second entrance**, with no countdown text. The goal bar, hero, partner where present, mission panel and controls briefly fade/settle into place. Attacks, scoring and mission timers wait until the entrance ends. Pausing, backgrounding or portrait rotation also freezes the entrance. Reduced motion shows the scene immediately while keeping the same 1.5-second preparation time.
 
-Train to improve stats, spend skill points in Hero, and enter arena encounters for coins. The forge sells visible weapon and armor upgrades. The lodge increases battle income; gallery trophies earn passive coins. Tap the golden opening during auto-battles. Strength, Dodge, Block and Critical continue until you choose to leave; Accuracy lasts 30 seconds and can be paused. Leaving banks earned progress. Twelve encounters unlock endless survival.
+Train to improve stats, spend skill points in Hero, and enter arena encounters for coins. Shop sells independently purchased and equipped weapons, armor, helmets and bottoms. The lodge increases battle income; gallery trophies earn passive coins. Tap the golden opening during auto-battles. Strength, Dodge, Block and Critical continue until you choose to leave; Accuracy lasts 30 seconds and can be paused. Leaving banks earned progress. Twelve encounters unlock endless survival.
 
 In Strength, use the visible High, Low and Mid buttons on the right to slash fruit as it reaches your hero. High sits above Low; Mid sits to the right of Low. Use Kick on the left for falling sparks. Both characters occupy the central play area, with the partner throwing toward the hero. Only High fruit follows an arc. Mid travels horizontally at the middle height; Low travels horizontally near the feet, with a short crouch-and-release motion from the partner. Instructions appear for about four seconds on the first visit only. Town immediately banks the run and shows the total stats and XP, with Back to Town and Train again buttons; there is no confirmation step. Backgrounding or portrait rotation also pauses play.
 
@@ -60,6 +60,8 @@ Strength, Dodge, Block and Accuracy retain the **1.35× pace** revision. Strengt
 
 ## Visual layout editing
 
+Hero → Animation preview opens the modular hero within the game. Select Standing, Raised arm, Attack, Airborne or Landing to inspect a pose; Play animates it and Pause holds the current frame. Sword, armor, helmet and bottoms controls mix temporary samples without buying or changing saved equipment. The received Set A/B armor, helmets and bottoms now use this shared bald rig in portraits and active scenes when an upgraded garment is equipped. The existing complete starter sprite paths remain when armor, helmet and bottoms are at base. See [next artwork prompts](docs/hero-rig-next-art.md) for the shields and swords still to come. No separate editor is needed for this preview.
+
 Open [the layout workbench](http://127.0.0.1:4173/layout-editor.html) while the local server is running. Drag each character or action button, adjust its position and size, and check the landscape preview sizes. Undo, local draft saving, JSON import and export are included.
 
 Use **Copy layout** or **Download JSON**, then give the layout to an agent to apply. The workbench is a placement tool: it shares the game's renderer, but draft edits do not modify the shipped game or its progression save. It also provides a concrete visual specification for a later Unity implementation. [Workflow and handoff notes](docs/layout-workbench.md).
@@ -75,9 +77,13 @@ Use **Copy layout** or **Download JSON**, then give the layout to an agent to ap
 - `dist/critical-art.js`: original dummy, fake/hit cues, jump/strike/return animation and effects; timings are in `CRITICAL_TIMING` in `core.js`.
 - `dist/layout-editor.html`: standalone drag-and-drop layout workbench; see `docs/layout-workbench.md`.
 - `dist/battle.js`: automatic turns, critical windows, skills, waves and survival.
-- `dist/art.js`: procedural Canvas art and replaceable equipment/idle-portrait appearance descriptors.
+- `dist/art.js`: procedural Canvas art and replaceable appearance descriptors, including `RIG_HERO_ART`, `MODULAR_EQUIPMENT_ART` and idle/action sprite placement.
 - `dist/portrait-art.js`: supplied six-frame idle portraits, with image loading and procedural weapon helpers shared by action art.
-- `dist/action-art.js`: Critical jump/landing and Arena automatic-attack sprite presentation.
+- `dist/action-art.js`: Critical and Arena presentation, routing equipped upgrades through the modular rig and retaining original starter action sprites.
+- `dist/rig-art.js`: shared `drawRigHero`, `rigPortrait`, `rigPreview` and `equipmentIllustration` renderers; fixed limb lengths, connected hand/weapon attachment, garment replacement and authored pose interpolation. Fitting descriptors live in `art.js`.
+- `dist/hero-art.js`: equipped-hero wrapper for town and training, with the existing base renderer retained as fallback.
+- `dist/assets/hero-rig/`: unchanged copies of the supplied upper/lower character-parts sheets.
+- `dist/assets/hero-equipment/`: six unchanged supplied PNGs, `set-a-armor.png`, `set-b-armor.png`, `set-a-helmet.png`, `set-b-helmet.png`, `set-a-bottoms.png` and `set-b-bottoms.png`.
 - `dist/assets/hero-actions/`: supplied attack sheet and transparent jump/landing runtime sheet.
 - `dist/assets/hero-idle/`: supplied transparent hero sheet and Upgrade III blade runtime PNGs.
 - `dist/game.js`: screens, Pointer Events, responsive canvas, lifecycle, settings and optional WebMCP navigation/read tools.
@@ -87,7 +93,19 @@ Use **Copy layout** or **Download JSON**, then give the layout to an agent to ap
 
 ## Swapping placeholder art
 
-Stable item IDs are `weapon_t1` through `weapon_t3` and `armor_t1` through `armor_t3`. Gameplay stats live in `ITEMS`; appearance descriptors live in `EQUIPMENT_ART`. The first idle-art integration is limited to Shop and Hero `data-hero="idle"` canvases. Keep the procedural `hero()` renderer for Arena selection, training and battles. Hero drawing uses feet as its origin, with independent weapon and armor layers. No gameplay logic depends on any asset filenames or shape details.
+Shop has four equipment categories: weapons, armor, helmets and bottoms. Each item is bought, owned, saved and equipped independently. Stable weapon and armor IDs remain `weapon_t1`–`weapon_t3` and `armor_t1`–`armor_t3`; the received Set A/B armor replaces appearance for `armor_t2`/`armor_t3` without changing their names, prices or HP bonuses. New `helmet_t1`–`helmet_t3` and `bottoms_t1`–`bottoms_t3` slots include free base choices. Older saves acquire the base slots while retaining existing ownership and progression.
+
+| Equipment | Set A | Set B |
+|---|---|---|
+| Armor | `armor_t2` · 150 gold · +35 HP | `armor_t3` · 550 gold · +85 HP |
+| Helmet | `helmet_t2` · 80 gold · +12 HP | `helmet_t3` · 280 gold · +30 HP |
+| Bottoms | `bottoms_t2` · 100 gold · +18 HP | `bottoms_t3` · 350 gold · +45 HP |
+
+Armor, helmet and bottoms HP bonuses add together; weapon bonuses retain their existing attack behavior. Gameplay descriptors live in `ITEMS`, while supplied garment source rectangles and attachments live in `MODULAR_EQUIPMENT_ART`. The shared rig replaces the corresponding base garment pieces rather than stacking complete outfits. Equipment drawing remains separate from gameplay rules.
+
+The modular hero is bald, including when its helmet slot is None. The foreground weapon arm, counterclockwise preparation and wrist-mounted blade remain shared across gear combinations. Existing complete starter sprites are retained when armor, helmet and bottoms are all at base. Unused hair in the lower source sheet needs no fitting or replacement.
+
+Six of the 12 planned PNGs are integrated locally. The remaining four shield faces and two swords are described in the [two-set equipment prompt pack](docs/equipment-two-set-prompts.md). Shield outer/front faces are for Shop; matching inner/back faces with grip and straps are for the held far-hand sprite. Shields, replacement swords, the neck/head and near-side alignment, far-palm repair and the proposed visual editor remain follow-ups. This integration has a desktop visual preview at 844×390 only; no tests or deployment were run. Cache `obo-game-2026-09-16-4` includes the shared hero wrapper and six equipment images.
 
 ## Current milestone and release direction
 

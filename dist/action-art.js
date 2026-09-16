@@ -1,6 +1,7 @@
 import {CRITICAL_TIMING} from './core.js';
 import {ACTION_HERO_ART,IDLE_PORTRAIT_ART,PORTRAIT_WEAPON_ART,CRITICAL_ART,ellipse} from './art.js';
 import {asset,fallbackWeapon} from './portrait-art.js';
+import {drawRigHero,hasRigEquipment,rigPose,sampleRigPose} from './rig-art.js';
 
 function paintFrame(c,sheet,frame,normal){
 const [sx,sy,sw,sh]=frame.rect,[ox,oy]=frame.origin;
@@ -28,6 +29,17 @@ c.restore();return true
 
 export function drawCriticalHero(c,training,pose){
 const r=training.criticalRound,phase=r?.phase,age=r?training.elapsed-r.startedAt:0,motion=training.motion;
+if(hasRigEquipment(training.player.equipment)){
+let p=rigPose('standing',training.elapsed,motion),elevation=0;
+if(r?.jumpAt!==null&&r?.jumpAt!==undefined){
+if(phase==='rise'){const t=Math.min(1,(training.elapsed-r.jumpAt)/CRITICAL_TIMING.rise);p=motion?sampleRigPose([[0,'crouch'],[1,'airborne']],t):rigPose('airborne');elevation=75*(motion?t*t*(3-2*t):1)}
+else if(phase==='wait'||phase==='finish'){p=rigPose('airborne');elevation=75}
+else if(phase==='land'){const t=Math.min(1,age/CRITICAL_TIMING.land);p=motion?sampleRigPose([[0,'airborne'],[1,r.strike?'landing':'crouch']],t):rigPose(r.strike?'landing':'crouch');elevation=motion?75*(1-t*t*(3-2*t)):0}
+else if(phase==='recovery'&&r.landed)p=motion?sampleRigPose([[0,r.strike?'landing':'crouch'],[1,'standing']],Math.min(1,age/.3)):rigPose('standing');
+}
+p.hipY+=elevation;p.nearFootY+=elevation;p.farFootY+=elevation;
+if(drawRigHero(c,pose.x,pose.y,158*CRITICAL_ART.scale,training.player.equipment,training.elapsed,{pose:p,shadow:false,hit:training.hit}))return true
+}
 let spec=IDLE_PORTRAIT_ART,index=0;
 asset(ACTION_HERO_ART.jump.src);
 if(r?.jumpAt!==null&&r?.jumpAt!==undefined){
@@ -41,6 +53,12 @@ return drawFrame(c,pose.x,pose.y,158*CRITICAL_ART.scale,training.player.equipmen
 
 export function drawArenaHero(c,battle){
 const attack=ACTION_HERO_ART.attack,until=battle.nextTurn-battle.time,since=battle.time-battle.normalAttackAt,motion=battle.player.settings.motion;
+if(hasRigEquipment(battle.player.equipment)){
+let p=rigPose('standing',battle.time,motion);
+if(since>=0&&since<attack.recovery)p=motion?sampleRigPose([[0,'attack'],[.24,'attack'],[1,'standing']],since/attack.recovery):rigPose('attack');
+else if(motion&&!battle.done&&battle.turn%2===0&&until>=0&&until<=attack.windup)p=sampleRigPose([[0,'standing'],[.72,'windup'],[1,'attack']],1-until/attack.windup);
+if(drawRigHero(c,410+battle.heroAttack*18*1.65,500,158*1.65,battle.player.equipment,battle.time,{pose:p,hit:battle.heroHit}))return true
+}
 let spec=IDLE_PORTRAIT_ART,index=0;
 asset(attack.src);
 if(since>=0&&since<attack.recovery){spec=attack;index=motion?(since<.08?3:since<.18?4:5):3}

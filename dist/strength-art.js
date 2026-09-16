@@ -1,4 +1,5 @@
-import {hero,trainingPartner,ellipse,poly,appearTraining} from './art.js';
+import {equippedHero as hero} from './hero-art.js';
+import {trainingPartner,ellipse,poly,appearTraining} from './art.js';
 import {STRENGTH_LAYOUT,strengthPoint} from './strength-layout.js';
 export function drawStrength(c,training,time,layout=STRENGTH_LAYOUT){
 const h=layout.hero,p=layout.partner;

@@ -1,6 +1,6 @@
 # Browser build progress
 
-Last updated: 15 September 2026
+Last updated: 16 September 2026
 
 ## Purpose and direction
 
@@ -12,12 +12,66 @@ A Unity conversion remains a production option, including when its visual editin
 
 The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, twelve encounters and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
 
+## Independent armor, helmets and bottoms integrated — 16 September 2026
+
+Jimmy supplied six PNGs and chose separate purchases for armor, helmets and bottoms. Their unchanged runtime copies are `dist/assets/hero-equipment/set-a-armor.png`, `set-b-armor.png`, `set-a-helmet.png`, `set-b-helmet.png`, `set-a-bottoms.png` and `set-b-bottoms.png`. Set A/B armor now supplies the appearance of existing `armor_t2`/`armor_t3`; stable IDs, names, prices and bonuses remain unchanged. `MODULAR_EQUIPMENT_ART` in `dist/art.js` owns the source rectangles, pivots and garment-piece fitting.
+
+Added independently owned, saved and equipped `helmet_t1`–`helmet_t3` and `bottoms_t1`–`bottoms_t3` slots. Base choices are free and supplied by save normalization when loading older saves. Helmet A is 80 gold/+12 HP, helmet B 280/+30; bottoms A is 100/+18, bottoms B 350/+45. Armor remains 150/+35 and 550/+85. Armor, helmet and bottoms HP bonuses add together; existing weapon attack bonuses retain their behavior. Shop now has four categories with separate buy/equip controls. Hero motion offers transient sword, armor, helmet and bottoms mixing without purchases or saved-equipment changes.
+
+`dist/rig-art.js` now shares `drawRigHero`, `rigPortrait`, `rigPreview` and `equipmentIllustration`. Equipped armor replaces torso/sleeve parts; bottoms replace pelvis, thighs, shins and feet; helmets fit the bald head. `dist/hero-art.js` routes town/training hero drawing through the rig for supplied upgrades, while `dist/action-art.js` routes Critical and Arena actions. The existing complete starter sprite paths remain when armor, helmet and bottoms are all at base. The foreground weapon arm, continuous counterclockwise lift and shared wrist/blade attachment are retained, with no modular hair.
+
+Local desktop previews reviewed Set A standing/raised at 844×390, both complete sets standing at 1100×600, Set B raised/airborne/landing, and a mixed Set A torso with Set B helmet/bottoms in Attack. The four Shop categories and received item thumbnails were reviewed at 844×390. Torso clipping excludes baked shoulder pieces so the rotating sleeve owns its pauldron; new right-facing far boots do not inherit the old foot mirroring. Critical reuses the existing world jump path and removes the rig's extra airborne root lift, keeping the same gameplay timing. These are source and visual reviews, not purchase/save, gameplay or physical-phone testing. No tests or deployment were run, following Jimmy's preference. Cache `obo-game-2026-09-16-4` adds `hero-art.js` and all six supplied PNGs. Update activation still waits until an active run ends and an explicit Settings action; no live training or arena reload is introduced.
+
+The full two-set artwork pack is 12 PNGs: six received, with four shield views and two swords still to come. Each shield's outer/front face is for Shop and its matching inner/back face with grip/straps is for the held far hand. Head/neck contact, near-side diagonal alignment, far hand/palm repair and the proposed visual editor remain follow-ups. No separate editor was built.
+
+## Two equipment sets requested — 16 September 2026
+
+Jimmy likes the current motion enough to proceed with two designs each of armor, helmets, shields, one-handed swords and bottoms (pants plus shoes/boots). Head/neck contact, near-side diagonal alignment and the incorrect far hand/palm remain follow-ups. Preserve his wording about the near-side alignment until the specific joint is clear during visual fitting. He suggested a visual editor for a later task; do not build it during the equipment-art briefing. Far-palm generation is also later.
+
+`docs/equipment-two-set-prompts.md` contains five copy-ready image-agent prompts, each requesting two PNGs: Set A brown leather/cream/bronze and Set B steel/navy/teal/brass. These are proposed working art labels rather than a reassignment of stable item IDs. Armor is a three-piece torso/near-sleeve/far-sleeve atlas. Bottoms is a seven-piece hips/thighs/shins/feet atlas, with split boot shafts and feet. Helmets fit the bald head; shields and swords are single attachments without hands. The pack documents source references, consistent attachment placement, output names, order and manual fitting limits. Existing starter art is already complete and is not regenerated.
+
+This turn created prompts and updated handoff documentation only. No images were generated, no runtime/gameplay or equipment slots were changed, no editor was built, and no tests/server/deployment were run. The current runtime cache remains `obo-game-2026-09-16-3`. Start with the two armor images, then fit and continue the other four batches; corrections to the base do not require generating equipment combinations or new action sheets.
+
+## Continuous lift, foreground weapon arm and bald base — 16 September 2026
+
+Jimmy accepted the counterclockwise direction but reported a pause midway through the sword lift. The `lift`/`takeoff` waypoints caused each smoothstep segment to reach zero velocity before the next segment accelerated again. Removed those intermediate keys and their unused poses: standing-to-windup, standing-to-raised and crouch-to-airborne now each have one uninterrupted eased segment. Removed the duplicate attack windup key's extra hold so the completed preparation flows straight into the strike. Existing deliberate rest, airborne and impact holds remain.
+
+The near/weapon arm is closer to the viewer and now renders after the head. Upper arm, forearm, sword and gripping hand all occlude the head naturally, retaining the shared wrist attachment and the accepted counterclockwise motion. This supersedes the previous behind-head draw order; the hand can sit beside the ear without being hidden by the face.
+
+Removed all hair rendering and hair descriptors from the modular Hero motion preview. The bald base is the fitting surface for upgraded helmets. No modular hair or starter-outfit recreation is needed: the approved original starter sprite set already supplies that appearance. Unused hair pixels remain untouched in the original lower sheet. README and next-art guidance now request one sample upgraded outfit after body approval, with no hair work.
+
+Viewed the bald raised pose, foreground hand/sword with both sword samples, and attack playback at 844×390. No browser errors appeared. No tests, assertions, device matrix or physical-phone checks were run. Existing server reused; cache `obo-game-2026-09-16-3`, local and unpublished.
+
+## Weapon-arm direction and helmet rule — 16 September 2026
+
+Jimmy clarified that the weapon arm must lift counterclockwise in the right-facing view: from low/rest through the front to the head for attack, and hand beside the ear/behind the head during the jump and critical preparation. Changed the preview's weapon-arm channels to authored unwrapped positive angles, with a front-lift waypoint before cocking. These three channels use direct interpolation instead of shortest-path rotation, so the forearm cannot choose the opposite arc when it passes a half-turn. The jump loop retains the cocked pose through its descent preparation.
+
+Replaced the independent world-space sword angle with a grip-local mounting angle and an authored wrist turn. Both fist and blade now inherit the same forearm/wrist transform. Raised/airborne preparation points the blade almost horizontally backward; standing, final attack extension and landing remain horizontal forward. The near arm renders over the torso but under the head/hair, allowing the ear/head to occlude the hand in preparation.
+
+All upgraded helmets cover the entire hairstyle. The base/bareheaded hero keeps existing hair; no bangs or rear hair remain visible with a helmet. `RIG_HERO_ART.helmetHidesHair` gates both hair layers when a helmet attachment ID is supplied. This is a future attachment hook: no helmet art, saved slot or shop option was added. README and the future helmet prompt clause in `docs/hero-rig-next-art.md` record the same rule. No new images are needed for this motion correction.
+
+Visually reviewed the local raised/airborne poses with both swords, final attack extension and the front-lift playback at 844×390. No tests were run. Cache is `obo-game-2026-09-16-2`; same asset list and update behavior. Local only; not published.
+
+## Modular hero assembly and motion preview — 16 September 2026
+
+Jimmy authorized the staged modular-hero plan: assemble the supplied body parts, inspect difficult poses, author shared motion, then request targeted artwork and fit equipment. The current milestone is available at Hero → Animation preview inside the existing game. It is a base-body preview, not a replacement for approved production portraits or combat art. No separate app/editor, dependency, paid generation or deployment was added.
+
+`dist/rig-art.js` renders the original sheets through appearance descriptors in `RIG_HERO_ART` in `dist/art.js`. Copies of `upper.png` and `ChatGPT Image Sep 16, 2026 at 03_26_48 AM.png` live unchanged at `dist/assets/hero-rig/upper.png` and `lower.png`; both are 1254×1254 with real alpha. Explicit crops, source pivots and calibrated segment lengths compensate for independent part scale. A torso transform carries the head and shoulders; two linked arm segments carry hands and the sword. Two-segment leg placement maintains foot targets through crouches. Motion uses smooth interpolation with shortest-path angles and a small breathing cycle.
+
+The fitting excludes the head's duplicate neck, masks the pelvis to leave leg motion to the thighs, mirrors the left-pointing far foot, and clips limb ends at internal joins. Small unoutlined skin-colored joint fills cover temporary elbow/knee overlap gaps. Hair layers use separate placement/scale so the face remains visible. These are prototype fitting decisions, not corrected source artwork. The landing currently demonstrates crouch/compression, not a final ground-contact strike.
+
+Five static choices are Standing, Raised arm, Attack, Airborne and Landing. Play adds idle breathing, arm raise/recovery, attack windup/strike/recovery, or a shared crouch/jump/landing loop. Pause retains the current frame; selecting a pose resets it to its representative frame. The preview clock stops while hidden, portrait-oriented, in Settings or when motion is disabled by either preference. Its weapon sample button changes only transient state between `weapon_t1` and `weapon_t3`; the image blade follows the hand with the hand drawn over the grip. Standing, attack extension and landing keep horizontal swords.
+
+Only weapon swapping is demonstrated. Armor, helmet, bottoms and shield fittings, starter scarf pieces, blink artwork, gear shop/data expansion and migration into active Critical/Arena remain subsequent steps. The current game still saves its existing weapon/armor slots. Review this body and motion before generating more equipment. `docs/hero-rig-next-art.md` contains two targeted image-agent prompts for knee/ankle/far-foot repair and a central pelvis without duplicate shorts legs. Preserve the originals and fit new results before replacing runtime crops.
+
+Local visual preview at 844×390 was inspected for standing, raised arm, attack, airborne and landing, with both sword samples and Play/Pause. Screenshots are in the thread's 16 September visualization directory. No tests, assertions, responsive matrix, gameplay regression, offline behavior checks or physical-phone checks were run. The existing server was reused. Cache is `obo-game-2026-09-16-1` and lists the new module and both sheets; update activation behavior is unchanged. Not published.
+
 ## Idle portrait art test — accepted; smoothing deferred
 
 - Shop and Hero profiles use `data-hero="idle"` and `dist/portrait-art.js`. Their approved first placement remains unchanged. The later Critical/Arena action integration below expands the supplied hero to those two active scenes; other procedural uses remain.
 - Supplied PNGs are copied unchanged into `dist/assets/hero-idle/`: `idle.png` is 1536×1024 and `wayfarer-upgrade-iii.png` (source `Wayfarer Blade.png`) is 2172×724. Both already contain transparency, preserving the cream shirt, eyes and highlights without background removal or generation.
 - `IDLE_PORTRAIT_ART` in `art.js` defines six explicit rectangles, foot origins and source heights. Each frame is normalized to a 500-unit reference height and drawn at a 300-pixel height in the existing 400×340 portrait canvas, with feet 15 pixels from its bottom. Playback uses 400 ms per frame / 2.4 seconds per six-frame loop, through the existing motion/visibility behavior.
-- Each frame has source-pixel `hand.x` / `hand.y`, a clockwise rotation of 0.48 radians from a right-pointing blade and scale 1. The weapon is drawn separately after the body; a clipped copy of the original gripping hand covers its handle. All weapon IDs reuse this attachment. The shared `handMask` follows the fist; no hand or weapon pixels are permanently composited into the assets.
+- Each frame has source-pixel `hand.x` / `hand.y`, a horizontal sword rotation of 0 radians (updated after Jimmy’s angle review) and scale 1. The weapon is drawn separately after the body; a clipped copy of the original gripping hand covers its handle. All weapon IDs reuse this attachment. The shared `handMask` follows the fist; no hand or weapon pixels are permanently composited into the assets.
 - `PORTRAIT_WEAPON_ART.weapon_t3` maps the supplied Upgrade III blade with source-pixel grip pivot `[480,355]` and scale 0.14 relative to the normalized hero. `weapon_t1` and `weapon_t2` use simple procedural swords from their existing `EQUIPMENT_ART` descriptors. Tier 3 retains its existing Sunbreak edge shop label; prices, stats, ownership, buy/equip handlers and save structure are unchanged.
 - The sprite keeps its base clothing and teal scarf; swappable armor artwork is deferred. Armor progression and appearance controls keep their existing behavior in procedural scenes.
 - Existing buy/equip handlers update `player.equipment`, save and rebuild the menu. The portrait reads that value every frame, with cached image objects and no cached equipment choice. Failed or pending images have procedural fallbacks.
@@ -39,6 +93,10 @@ The current loop includes town, five training minigames, stat and skill growth, 
 The six drawings are hard-switched every 400 ms (2.5 pose changes per second), with stance/scarf/face changes and an equally long blink hold. Those are direct causes of visible stepping. Full-height normalization varies from 478 to 506 source pixels (about a 5.9% correction range), the grip moves roughly five portrait-canvas pixels vertically between frames 4 and 5, and frame 6 directly wraps to a different frame 1; these likely add apparent popping. This is an art/playback diagnosis, not a performance profile.
 
 For a later revision, align stable body/foot landmarks and hand grips, shorten transitional/blink holds while keeping a slow overall cycle, and add consistent in-between drawings including the loop seam. Six drawings can support much smaller movement; another option is a gently animated base pose with separate scarf/blink layers. Simple opacity crossfades may produce double outlines instead of coherent limb motion. Adobe’s tweening documentation describes automatic interpolation of layer position, opacity and effects, not redrawing intermediate poses: https://helpx.adobe.com/photoshop/desktop/add-video-and-animation/create-animation-frames/create-frames-using-tweening.html.
+
+## Horizontal sword refinement — 15 September 2026
+
+Jimmy approved the action placement and requested horizontal swords for standing idle, landing and the end of normal attacks. Set `hand.rotation` to zero for all six idle frames, jump frames 5–6, and attack frames 1/4/5/6 (frame numbers are one-based). Raised-hand/windup angles, grip pivots, hand positions, sizes and timing remain as approved. Both supplied and fallback weapons share these values. Cache is now `obo-game-2026-09-15-3`; local only. A single frozen pose comparison was captured for visual review; no tests were run.
 
 ## Current working build
 
