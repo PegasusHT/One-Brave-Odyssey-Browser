@@ -8,7 +8,7 @@ Mobile landscape is primary. Use pointer-down, large targets, safe-area padding,
 
 Keep weapon_t1/armor_t1 and later tiers stable. Gameplay descriptors are in core.js and replaceable appearance descriptors are in art.js. Do not use paid AI generation. Keep first-clear and session reward settlement idempotent.
 
-The existing .openai/hosting.json identifies the private Site; reuse it. Do not register another Site. Follow Sites skills for hosting. Current scope is a first-chapter prototype with five trainers, 12 arena encounters, skills, gear, lodge/gallery upgrades and endless survival. Further campaign content, additional mission types, advanced talents and new art are follow-up work.
+The existing .openai/hosting.json identifies the private Site; reuse it. Do not register another Site. Follow Sites skills for hosting. Current scope is a prototype with five trainers, 30 arena encounters grouped into three stages of ten, skills, gear, lodge/gallery upgrades and endless survival. The other two towns, additional mission types, advanced talents and further art are follow-up work.
 
 Keep changes focused. Ask Jimmy before implementing a separate app, editor, or substantial tool for adjusting a scene; do not expand a UI change into a tooling project without agreement. Whenever starting a server, show its actual running terminal so Jimmy can stop/restart it, or provide the command for Jimmy to run in his own VS Code/macOS terminal. Do not leave a server running only in a hidden agent process.
 

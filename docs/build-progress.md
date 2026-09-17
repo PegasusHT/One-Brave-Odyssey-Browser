@@ -10,9 +10,19 @@ JavaScript and the browser currently provide a fast development path for a playa
 
 A Unity conversion remains a production option, including when its visual editing workflow better supports Jimmy’s design process or when expanded content/browser limitations justify it. If needed, use the browser behavior as the reference and port complete vertical slices deliberately. There is no commitment to a Unity port before release; packaging, device performance, release content, polish and App Store readiness still need to be completed and validated.
 
-The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, twelve encounters and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
+The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, thirty encounters across three stages and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
 
-## Larger proportional heroes — latest local revision, 16 September 2026
+## Arena scene and three-stage selection — latest local revision, 16 September 2026
+
+Arena selection uses Jimmy's supplied hall background with aspect-preserving landscape cropping. Town's Home icon is now dark teal. Arena places an icon-only Town return at top left, existing Settings at top right, the shared level/XP bar at bottom left and the existing wallet at bottom right. The hero and opponent remain, alongside a compact Fight button; their visible names and the pre-fight reward display are removed.
+
+One central panel shows ten battle buttons and previous/next arrows for Stage 1 (1–10), Stage 2 (11–20) and Stage 3 (21–30). Browsing a later stage never unlocks its battles; Fight and locked choices remain disabled. Thirty encounter IDs now use the existing enemy appearances, three-wave fights and existing scaling/reward formulas. The first twelve encounter IDs and tuning are unchanged; the extended progression awaits balancing and playtesting.
+
+Save version 2 keeps the existing storage key and progress. `player.stage` still means next unlocked battle, not campaign stage. Existing saves that already unlocked Endless after battle 12 retain it; new saves unlock Endless after battle 30. The other two towns remain future art/content work. Combat and training scene layouts are unchanged by this menu revision.
+
+Cache `obo-game-2026-09-16-21` includes the new background. No automated tests, fights or publication. Focused layout/page-navigation preview is recorded in validation; see [Arena layout](arena-layout.md) for implementation details.
+
+## Larger proportional heroes — earlier local revision, 16 September 2026
 
 Town's hero is approximately 25% taller, while Arena and all five training heroes are 20% taller. Their existing foot anchors and gameplay positions remain. Rendering now compensates for the gameplay canvas's independent width/height scaling before applying each hero pose, preserving source proportions across landscape viewports. The supplied PNGs remain unchanged; high-quality smoothing and a 3× device-pixel-ratio ceiling improve sampling on dense displays.
 
