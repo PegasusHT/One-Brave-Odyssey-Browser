@@ -1,5 +1,5 @@
 import {CRITICAL_TIMING} from './core.js';
-import {hero,ellipse,poly,appearTraining,CRITICAL_ART as art} from './art.js';
+import {hero,ellipse,poly,appearTraining,CRITICAL_ART as art,HERO_SCENE_ART,placeSceneHero} from './art.js';
 import {drawCriticalHero} from './action-art.js';
 
 const clamp=n=>Math.max(0,Math.min(1,n)),ease=n=>n*n*(3-2*n),mix=(a,b,n)=>a+(b-a)*n;
@@ -71,16 +71,17 @@ if(motion&&phase==='land'&&r.strike){
 c.save();c.strokeStyle='#e3fff391';c.lineWidth=12;c.lineCap='round';c.beginPath();c.moveTo(art.jumpX-25,art.groundY-art.jumpHeight-45);c.lineTo(pose.x-24,pose.y-40);c.stroke();
 c.strokeStyle='#fff4ba';c.lineWidth=6;c.beginPath();c.arc(pose.x+27,pose.y-74,93,-2.55,-Math.PI/2+pose.swordAngle);c.stroke();c.restore()
 }
-if(!drawCriticalHero(c,training,pose))hero(c,pose.x,pose.y,art.scale,training.player.equipment,motion&&(r?.jumpAt===null||!r)?training.elapsed:0,0,training.hit,training.player.scarf,null,{...pose,shadow:false});c.restore();
+c.save();placeSceneHero(c,pose.x,pose.y,HERO_SCENE_ART.trainingScale);c.translate(-pose.x,-pose.y);
+if(!drawCriticalHero(c,training,pose))hero(c,pose.x,pose.y,art.scale,training.player.equipment,motion&&(r?.jumpAt===null||!r)?training.elapsed:0,0,training.hit,training.player.scarf,null,{...pose,shadow:false});c.restore();c.restore();
 if(motion){
 particles(c,training);
 if(r?.perfect&&impact<.35){const u=clamp(impact/.35);c.save();c.globalAlpha=(1-u)*.7;c.strokeStyle='#fff3b5';c.lineWidth=5*(1-u)+1;c.beginPath();c.ellipse(art.strikeX,art.groundY,25+u*100,6+u*18,0,0,Math.PI*2);c.stroke();c.restore()}
 }
 if(phase==='fake'||phase==='ready')cue(c,art.dummyX,225,phase==='fake',(r.until-training.elapsed)/CRITICAL_TIMING[phase],age,motion);
-if(phase==='finish')cue(c,pose.x,pose.y-190,false,(r.until-training.elapsed)/CRITICAL_TIMING.finish,age,motion);
+if(phase==='finish')cue(c,pose.x,pose.y-158*art.scale*HERO_SCENE_ART.trainingScale-36,false,(r.until-training.elapsed)/CRITICAL_TIMING.finish,age,motion);
 if(training.perfectStar>0){
 const u=clamp(1-training.perfectStar/.8),scale=motion?1+.25*Math.sin(clamp(u/.3)*Math.PI):1;
-c.save();c.translate(pose.x,pose.y-185-(motion?u*28:0));c.scale(scale,scale);c.globalAlpha=clamp(training.perfectStar/.2);
+c.save();c.translate(pose.x,pose.y-158*art.scale*HERO_SCENE_ART.trainingScale-31-(motion?u*28:0));c.scale(scale,scale);c.globalAlpha=clamp(training.perfectStar/.2);
 ellipse(c,0,0,31,31,'#fff0aa30');poly(c,[[0,-22],[6,-7],[23,-7],[10,5],[14,22],[0,12],[-14,22],[-10,5],[-23,-7],[-6,-7]],'#ffe38b','#a77a42');c.restore()
 }
 }

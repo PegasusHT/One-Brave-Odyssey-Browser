@@ -1,6 +1,6 @@
 import {equippedHero as hero} from './hero-art.js';
 import {BLOCK_RULES} from './core.js';
-import {ellipse,poly,appearTraining,trainingShield} from './art.js';
+import {ellipse,poly,appearTraining,trainingShield,HERO_SCENE_ART,placeSceneHero} from './art.js';
 import {heldShield} from './portrait-art.js';
 
 function orange(c,x,y,rotation=0){
@@ -23,10 +23,14 @@ ellipse(c,x,y+76,107,27,'#7f976344');ellipse(c,x,y+71,96,22,'#e2d5a13b');
 if(motion&&pulse>0){c.save();c.globalAlpha*=pulse*.65;c.lineWidth=4;c.strokeStyle='#d1fff1';c.beginPath();const r=shieldRadius+16+(1-pulse)*36;c.arc(x,y,r,training.blockAngle-shieldHalfAngle,training.blockAngle+shieldHalfAngle);c.stroke();c.restore()}
 if(hit>0){c.save();c.globalAlpha*=hit*.45;c.strokeStyle='#d67454';c.lineWidth=5;c.beginPath();c.arc(x,y,57+(motion?(1-hit)*22:0),0,Math.PI*2);c.stroke();c.restore()}
 const heldRadius=shieldRadius-28*low*low-recoil,sx=x+Math.cos(angle)*heldRadius,sy=y+Math.sin(angle)*heldRadius;
-c.save();c.translate(hx,hy);if(Math.cos(angle)<-.1)c.scale(-1,1);if(motion)c.rotate(-recoil*.006);
-c.scale(1,1-low*.12);hero(c,0,0,.92,{...training.player.equipment,shield:'shield_t1'},t,0,hit,training.player.scarf,'guard');c.restore();
-if(low>0){c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle='#c4875c';c.lineWidth=13;c.beginPath();const side=Math.cos(angle)<-.1?-1:1;c.moveTo(hx+side*22,hy-63);c.lineTo(hx+side*32,hy-40+low*7);c.lineTo(sx,sy-8);c.stroke();ellipse(c,sx,sy-8,8,7,'#efbb83');c.restore()}
-if(heldShield(c,sx,sy,104,training.player.equipment.shield,Math.cos(angle)*Math.PI/2))ellipse(c,sx,sy,8,7,'#efbb83');else trainingShield(c,sx,sy,angle,pulse);
+const sceneTransform=c.getTransform();let armStart,armBend;
+c.save();placeSceneHero(c,hx,hy,HERO_SCENE_ART.trainingScale);if(Math.cos(angle)<-.1)c.scale(-1,1);if(motion)c.rotate(-recoil*.006);
+c.scale(1,1-low*.12);
+if(low>0){const toScene=sceneTransform.inverse().multiply(c.getTransform());armStart=toScene.transformPoint({x:22,y:-63});armBend=toScene.transformPoint({x:32,y:-40+low*7})}
+hero(c,0,0,.92,{...training.player.equipment,shield:'shield_t1'},t,0,hit,training.player.scarf,'guard');c.restore();
+if(low>0){c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle='#c4875c';c.lineWidth=13;c.beginPath();c.moveTo(armStart.x,armStart.y);c.lineTo(armBend.x,armBend.y);c.lineTo(sx,sy-8);c.stroke();ellipse(c,sx,sy-8,8,7,'#efbb83');c.restore()}
+c.save();placeSceneHero(c,sx,sy);c.rotate(Math.cos(angle)*Math.PI/2);const shieldDrawn=heldShield(c,0,0,104,training.player.equipment.shield);c.restore();
+if(shieldDrawn)ellipse(c,sx,sy,8,7,'#efbb83');else trainingShield(c,sx,sy,angle,pulse);
 c.restore();
 for(const o of training.objects.items){
 if(!o.active)continue;
@@ -43,7 +47,7 @@ else{c.translate(e.x,e.y);c.rotate((1-life)*3);poly(c,[[0,-5],[3,0],[0,5],[-3,0]
 c.restore()
 }
 if(training.perfectStar>0){
-const life=training.perfectStar/.8,age=1-life,sy=y-110-(motion?age*22:0);
+const life=training.perfectStar/.8,age=1-life,sy=y-110-158*.92*(HERO_SCENE_ART.trainingScale-1)-(motion?age*22:0);
 c.save();c.globalAlpha=Math.min(1,life*4);
 if(motion){c.globalAlpha*=.5;c.strokeStyle='#fff3ba';c.lineWidth=3;c.beginPath();c.arc(x,y,28+age*74,0,Math.PI*2);c.stroke();c.globalAlpha=Math.min(1,life*4)}
 star(c,x,sy,motion?.8+Math.sin(Math.min(1,age*3)*Math.PI)*.25:.8);c.restore()

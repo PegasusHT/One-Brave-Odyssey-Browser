@@ -12,7 +12,31 @@ A Unity conversion remains a production option, including when its visual editin
 
 The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, twelve encounters and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
 
-## Starter original sprite sheets — latest local revision, 16 September 2026
+## Larger proportional heroes — latest local revision, 16 September 2026
+
+Town's hero is approximately 25% taller, while Arena and all five training heroes are 20% taller. Their existing foot anchors and gameplay positions remain. Rendering now compensates for the gameplay canvas's independent width/height scaling before applying each hero pose, preserving source proportions across landscape viewports. The supplied PNGs remain unchanged; high-quality smoothing and a 3× device-pixel-ratio ceiling improve sampling on dense displays.
+
+Training controls, partners, target and collision rules, progression and reward settlement are unchanged. Strength's shared layout scale stays fixed because it also maps projectiles. Hero-attached effects and head feedback follow the larger bodies; Block retains its independent guard path. Existing deliberate pose transforms remain. See [armory integration](armory-integration.md) for rendering details.
+
+Cache `obo-game-2026-09-16-20` contains this local revision. No tests, gameplay sessions or publication; brief visual review is recorded in validation. Physical-phone clarity and performance await Jimmy's playtest.
+
+## Town presentation polish — earlier local revision, 16 September 2026
+
+Town uses smaller destination labels and visible boxes while retaining generous tap areas. Training uses the same dark treatment as the other destinations. Home is an icon-only transparent control at the top left; Settings stays top right. Arena's label sits closer to its building. Each Town entry recreates a name-only SkyHaven announcement that disappears after 3.2 seconds, with fading disabled when motion is disabled. Its timer is canceled when navigating away.
+
+Jimmy's planned campaign direction is 30 battles across three campaign stages of ten battles each, with a distinct town for each stage. This is a future content/progression change: the current implementation remains the single-town, 12-encounter prototype. Additional town names, artwork and unlock rules are not defined yet. Existing `player.stage` means an encounter number, so the future campaign requires an explicit progression/save migration rather than just changing displayed counts.
+
+Cache `obo-game-2026-09-16-19` contains this local layout revision. No gameplay rules, save data, training layouts or Home placeholder content changed. No tests or publication; the focused visual preview is recorded in validation.
+
+## Town artwork and temporary Home — earlier local revision, 16 September 2026
+
+Jimmy supplied a complete sky-island Town background and two loose hierarchy references. Before editing, the existing Town, Hero/View Hero, Settings, navigation, wallet/XP, Lodge state and lifecycle implementations were inspected. The background is copied unchanged to `assets/town/town-facilities.png`. Town fills the landscape viewport using a shared aspect-preserving cover transform for both the Canvas scene and HTML destination anchors. Shop is by the left building, Legacy by the upper hall, Training by the practice yard, Arena on the right, and the equipped hero stands on the nearby circular stage.
+
+Town now groups Home and the existing Settings button in the top-right corner, moves the existing gold display to bottom-right, and presents the current level/XP as a compact bottom-left badge and bar. The lower middle stays empty. Home opens a minimal same-app placeholder with the game name, Play Game returning to Town, and disabled Credits/Achievements entries. Existing destinations, player progression, localStorage, pausing and reward settlement are reused. The Lodge’s `player.home` value is untouched.
+
+Only Town and the temporary Home receive the new scene layout. No training gameplay layout, external library, editor, scene tool or new progress system was added. See [Town layout](town-layout.md) for the shared placement/state details. Cache `obo-game-2026-09-16-18` includes the new image and retains safe activation behavior. No tests or publication were requested or performed; focused layout previews are recorded in validation.
+
+## Starter original sprite sheets — earlier local revision, 16 September 2026
 
 Jimmy requested the original `assets/hero-actions/attack.png` for the Starter instead of the rigged body. Starter now uses that six-drawing attack sheet, the original `hero-idle/idle.png` loop and `hero-actions/jump-land.png` through the same complete-body rendering path as the other outfits. Existing source crops, roots, display heights and the 1.4× sword multiplier remain. The six attack keys run in the preview and Arena uses the original three windup/three recovery keys at its existing timing. Strength uses the supplied lift, preparation, strike and recovery drawings.
 

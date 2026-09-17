@@ -1,3 +1,25 @@
+## Larger proportional heroes — 16 September 2026
+
+- One representative 844×390 desktop Town preview shows the larger Starter on the existing stage, with the Hero target and nearby labels retained. No additional outfit/animation matrix or live gameplay preview was run.
+- Source review covers Town's uniform cover placement, the direct Arena/Critical routes and all five training renderers. Arena/training now correct the viewport's unequal axis scales before their local pose transforms, enlarge only hero art, and retain original foot anchors. Strength's shared projectile mapping and all gameplay rules are unchanged. Source PNGs are unchanged and sampled directly with high-quality smoothing.
+- World canvas backing resolution now follows device pixel ratio up to 3×. Physical-phone sharpness, motion and performance were not measured; the desktop preview does not verify them.
+- No automated tests, gameplay sessions, purchases, progression edits or publication. Existing local server reused. Cache `obo-game-2026-09-16-20` contains the renderer changes; offline activation was not exercised.
+
+## Town presentation polish — 16 September 2026
+
+- One focused 844×390 desktop visual preview of the revised Town: smaller destination labels/boxes, dark Training button, top-left icon-only Home, unchanged top-right Settings, smaller gold/level text and raised Arena label. Large underlying tap targets remain in CSS.
+- Observed SkyHaven appear on opening Town and disappear afterward. Used the Home icon and Play Game to return; the name appeared again. Source sets a 3.2-second lifetime, cancels the prior timer on navigation and removes only the temporary name node. Reduced-motion behavior was reviewed in source, not exercised.
+- No automated tests, gameplay sessions, purchases, progression edits, physical-phone checks or publication. Reused the running local server. Cache is `obo-game-2026-09-16-19`; offline activation was not exercised.
+- The 30-battle, three-stage, three-town campaign is documented as future direction; existing twelve-encounter progression remains unchanged.
+
+## Town artwork and temporary Home — 16 September 2026
+
+- No automated tests, gameplay sessions, purchases, progression edits or publication. Training gameplay and other destination layouts were not exercised.
+- Visually reviewed Town at 844×390 and 568×320 in the desktop browser: supplied full-screen artwork, landmark-aligned destination labels, equipped hero on the circular stage, top-right Home/Settings, bottom-left level/XP and bottom-right gold. The bottom center remains empty. At the compact size, Shop uses a 64×48 target to separate it from Hero while preserving its landmark anchor.
+- Opened Home at 844×390, reviewed the game title and simple placeholders, and used Play Game to return to Town. Existing saved level, XP and gold remain displayed. This is a focused layout/navigation preview, not physical-phone or full gameplay validation.
+- Source inspection covered existing Town, Home/Lodge, Hero, Settings, navigation, progression and pause handling before editing. Existing actions and state are reused; `core.js` and the training gameplay layouts were not changed.
+- Reused the local server and opened the existing launcher in visible Terminal. Cache `obo-game-2026-09-16-18` includes the supplied Town image; offline installation and update activation were not exercised.
+
 ## Starter original sprite sheets — 16 September 2026
 
 - No tests, gameplay sessions, purchases, progression changes or publication.

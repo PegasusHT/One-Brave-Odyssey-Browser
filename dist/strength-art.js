@@ -1,9 +1,9 @@
 import {equippedHero as hero} from './hero-art.js';
-import {trainingPartner,ellipse,poly,appearTraining} from './art.js';
+import {trainingPartner,ellipse,poly,appearTraining,HERO_SCENE_ART,placeSceneHero} from './art.js';
 import {STRENGTH_LAYOUT,strengthPoint} from './strength-layout.js';
 export function drawStrength(c,training,time,layout=STRENGTH_LAYOUT){
 const h=layout.hero,p=layout.partner;
-c.save();appearTraining(c,training,h.x*1400,h.y*700);hero(c,h.x*1400,h.y*700,h.scale,training.player.equipment,time,training.attack,training.hit,training.player.scarf,training.action);c.restore();
+c.save();appearTraining(c,training,h.x*1400,h.y*700);placeSceneHero(c,h.x*1400,h.y*700,HERO_SCENE_ART.trainingScale);hero(c,0,0,h.scale,training.player.equipment,time,training.attack,training.hit,training.player.scarf,training.action);c.restore();
 c.save();appearTraining(c,training,p.x*1400,p.y*700,.28);c.translate(p.x*1400,p.y*700);c.scale(p.scale,p.scale);c.translate(-1190,-510);
 trainingPartner(c,training.throwPose,Math.max(0,1-(training.nextSpawn-training.elapsed)/.3),training.throwLane);c.restore();
 if(training.attack>0){
