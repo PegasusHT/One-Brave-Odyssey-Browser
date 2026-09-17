@@ -1,6 +1,18 @@
 export function setupMobile(onChange){
 const state={ready:false,updateReady:false,status:'Preparing offline play…',registration:null,applying:false,checking:false};
 const change=()=>onChange(state);
+if(['localhost','127.0.0.1','[::1]'].includes(window.location.hostname)){
+state.status='Local preview · Keep the game server running.';
+state.applyUpdate=async()=>'Refresh this page after finishing your run.';
+state.checkForUpdates=async()=>{state.status='Finish your run, then refresh to load local changes.';change()};
+if('serviceWorker' in navigator){
+const scope=new URL('./',import.meta.url).href,script=new URL('./sw.js',import.meta.url).href;
+navigator.serviceWorker.getRegistration(scope).then(registration=>{
+if(registration?.scope===scope&&[registration.active,registration.waiting,registration.installing].some(worker=>worker?.scriptURL===script))return registration.unregister()
+}).catch(()=>{state.status='Close this local game tab and reopen it with the server running.';change()})
+}
+queueMicrotask(change);return state
+}
 const message=(worker,type)=>new Promise(resolve=>{
 if(!worker){resolve(null);return}
 const channel=new MessageChannel(),timer=setTimeout(()=>{channel.port1.close();resolve(null)},4000);

@@ -1,4 +1,4 @@
-import {combatStats,enemyStats,skillEffect,SKILLS,Pool,clamp} from './core.js';
+import {combatStats,enemyStats,skillEffect,COMBAT_BALANCE,SKILLS,Pool,clamp} from './core.js';
 import {hero,enemy,ellipse,HERO_SCENE_ART,placeSceneHero} from './art.js';
 import {drawArenaHero} from './action-art.js';
 export class Battle{
@@ -18,7 +18,7 @@ const wave=this.wave;this.nextTurn=this.time+1.05;
 if(this.turn%2===0){
 this.attacks++;this.heroAttack=1;this.normalAttackAt=this.time;
 if(Math.random()<this.stats.hit){
-const crit=Math.random()<this.stats.crit;this.damageEnemy(Math.round(this.stats.attack*(crit?1.7:1)),crit?'CRITICAL!':'');
+const crit=Math.random()<this.stats.crit;this.damageEnemy(Math.round(this.stats.attack*(crit?COMBAT_BALANCE.criticalMultiplier:1)),crit?'CRITICAL!':'');
 if(!this.done&&this.wave===wave&&this.attacks%3===0){this.event=1.3;this.message='An opening! Tap the golden burst.'}
 }else{this.pop(980,275,'MISS','#e6e7cd');this.message='Your strike missed. Accuracy training improves hit chance.'}
 }else if(this.stunTurns>0){this.stunTurns--;this.pop(980,275,'STUNNED','#ffe397');this.message='Bash stopped the enemy attack.'}

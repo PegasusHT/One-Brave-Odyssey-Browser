@@ -1,3 +1,26 @@
+## Localhost stale-cache diagnosis — 17 September 2026
+
+- Read-only HTTP inspection found no server listening on4173; both ordinary and escalated localhost requests failed to connect. No gameplay tests were run.
+- Source review identified loopback network-failure fallback to cached game files. Local previews now skip worker registration and unregister only this game's exact scoped worker; the worker's loopback fetch path no longer falls back to cache.
+- A temporary local server successfully returned HTTP 200 and the updated attack/elite descriptors. It was stopped after inspection rather than left in a hidden agent process. Launch start-game.command in a user-visible Terminal for continued play.
+- Hosted offline behavior and explicit update activation are unchanged. No saved hero or cache data was erased, and no active run was reloaded. Version26 is local only.
+
+## Starting attack follow-up — 17 September 2026
+
+- Source review only; no tests, simulations, battle/training runs, browser preview or publishing.
+- Hero attack base increases from 24 to 30 while enemy HP stays on its independent 24-base reference. This is an actual damage increase rather than matching HP inflation.
+- Battle 1 uses a fixed 150-HP elite with 14% reference-HP attack. Derived fresh-hero values are 31 ATK / 183 HP against 63/70/150 enemy HP and 15/15/26 enemy attack. Five plain landed strikes defeat the elite; criticals and skills may shorten that count. The introductory exception avoids treating a fresh hero as a full training round behind.
+- Later elite damage and HP, saved stats, currency, equipment costs and training layouts are unchanged. Skills can now one-shot some ordinary enemies; later hit counts may be lower than the preceding five-action budget.
+- Version 25 remains local. Publish only on Jimmy's explicit request.
+
+## Short-fight combat tuning — 17 September 2026
+
+- Source review only. No automated tests, syntax checks, combat simulations, gameplay runs or physical-phone testing, per Jimmy's preference.
+- Normal enemies use 2.5/2.8 reference basic-attack HP; the third enemy budgets about five offensive actions including available ranked skills, reference critical chance and four early Poison ticks. Sunflare remains below prepared normal HP at every rank.
+- Elite damage accounts for the expected shield and integer rounding so three unblocked hits defeat the reference hero twenty defensive points behind. Defense/healing can change survival; actual player values never feed enemy creation.
+- Prepared and Skip recent training share the twenty-point round descriptor, including boss and stage boundaries. Saves, prices, rewards and training layouts are unchanged.
+- Settings/cache advance to Version 24. The old five-hour total and numerical test expectations remain unvalidated; use the documented battle-5 comparison for manual feedback.
+
 ## Fast test mode and Collect cooldown — 16 September 2026
 
 - No automated tests, battle simulations, fights, trainer runs, purchases, test-victory awards or idle collections were performed. The new tools are available for Jimmy's focused manual economy checks.

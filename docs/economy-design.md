@@ -1,12 +1,12 @@
-# Economy and progression — first balance pass
+# Economy and progression
 
-16 September 2026. Jimmy requested implementation without tests. These are authored tuning targets, not measured completion times or win rates.
+Updated 17 September 2026. Jimmy requested implementation without tests. These are authored tuning targets, not measured completion times or win rates.
 
 ## The intended loop
 
 Clear a new battle, buy the next matching equipment set, spend earned stat/skill points, practise each of the five disciplines, then return to the Arena. Strong execution, earlier overtraining and different builds can change the order. There is no timer that forces a loss, compulsory training checklist, energy system or required offline wait.
 
-The campaign has 30 encounters in three stages of ten. Battles 10, 20 and 30 are preparation peaks. A useful starting budget is about 145 minutes of ordinary training (29 intervals × five trainers × one minute), 100–110 minutes of combat, and 45–55 minutes for boss preparation, upgrades and navigation. This totals approximately five hours of active play, which can be spread over three days. Two or three extra practice runs before a boss are a design intention, not a guaranteed requirement.
+The campaign has 30 encounters in three stages of ten. Battles 10, 20 and 30 are preparation peaks. The original five-hour budget included about 145 minutes of ordinary training (29 intervals × five trainers × one minute), 100–110 minutes of combat, and 45–55 minutes for boss preparation, upgrades and navigation. The 17 September request replaces long fights with short 2–3-hit normals and approximately five-action elites, so the old combat-time allocation and five-hour total are no longer supported estimates. Five hours across three days remains a broader pacing goal to revisit after manual feedback; this pass adds no extra grind or waiting. Two or three extra practice runs before a boss are a design intention, not a guaranteed requirement.
 
 ## Sources and spending
 
@@ -55,6 +55,18 @@ Side-mission rewards stay at +1 rather than growing with the mission number. Mis
 Combat power grows far more slowly than currency. Weapon and armor multipliers grow 3.5% per equipment rank; shield ranks add 0.6 percentage points of incoming-damage reduction, up to 17.4%. All 30 ranks have gameplay value. Original tiers 1–6 retain their appearance IDs; later ranks cycle through A/B/C/D/F art with +N names. No new artwork is required.
 
 Each battle has a fixed reference stat target. The baseline advances by 20 per encounter, which budgets both direct training gains and allocated points. Stage transitions retain an additional 28-point step, and bosses add 28 points. Enemy strength never reads the actual player's current stats. Attack and health depend on trained stats and equipment; hit, dodge, block and critical probabilities compare the relevant stat with the encounter target. Training therefore keeps helping beyond the old early-game caps.
+
+### Short-fight balance — 17 September
+
+`COMBAT_BALANCE` in `core.js` holds the attack/HP growth, training-round size and hit budgets. The stat growth rates and hero health remain unchanged. The attack base is now 30 rather than 24, giving about 25% more real hero damage; enemy HP retains a separate reference base of 24 so the attack improvement is not cancelled by larger enemies. Enemy values are fixed from the encounter reference stats and matching equipment tier; they never read the current hero. Normal wave HP is 2.5 and 2.8 times the rounded reference attack, replacing the former roughly 65-times multiplier. Prepared heroes generally need two or three successful strikes; misses, overtraining and critical hits can change the count.
+
+The third wave is an elite in every encounter. After battle 1, its HP retains the earlier five-action budget on the separate enemy reference curve: one use of each available offensive skill at the encounter's rank cap, with the remaining actions as basic strikes at the reference 25% critical chance. Poison contributes only its first four ticks to this short-fight budget, not an instantaneous eight-second payout; its actual duration remains eight seconds. A Poison cast is one offensive action, and its ticks are not separate player actions. Golden openings, cooldown availability, critical variance and the order of casts mean five is an approximate target, not a scripted hit gate. Sunflare deals 200% attack at rank one and 245% at rank ten. With the later hero attack increase, it can one-shot some normal enemies; the 2–3-hit target refers to basic strikes, with skills and criticals allowed to shorten fights. Bash, Poison, defensive skills and cooldown progression retain their existing effects.
+
+A training round is twenty points per stat in the reference progression. Elite attack is `ceil(ceil(behindHP / 3) / (1 − referenceShieldMitigation))`, from battle 2 onward, where behindHP uses reference defensive stats minus twenty (minimum one) and the encounter's matching armor. Double rounding ensures three unblocked hits are lethal after shield reduction. The prepared reference generally survives three such hits from full health; accumulated normal-wave damage still matters. Normal attacks remove about 8% of prepared reference HP before blocks/dodges. Dodges, blocks, Bash, Windguard, tonics and healing can extend survival. There is no forced-loss condition, adaptive enemy scaling or stat reset.
+
+Battle 1 is an introductory exception: its elite has 150 HP and deals 14% of reference hero HP, rounded up (26 damage for a fresh hero). A fresh hero has 31 ATK and 183 HP; normal enemies retain 63/70 HP, and the elite needs five ordinary landed hits without criticals or skills. This avoids assuming that a new hero has already learned Sunflare or completed a full twenty-point training round. Later elites keep their existing HP, so increased hero attack also helps those fights; the five-action skill budget is now a ceiling-oriented target rather than an exact count. These numbers are derived from the formulas, not a gameplay test.
+
+The existing boss preparation steps and Endless wave multiplier remain. Currency, rewards, equipment prices, saves and training payouts are unchanged. The Prepared and Skip recent training checkpoints share these rules; the latter is exactly twenty points behind even at bosses/stage boundaries. These formulas have received source review only, without executing tests or simulations.
 
 | Skill | Availability | Role |
 | --- | --- | --- |

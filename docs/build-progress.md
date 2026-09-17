@@ -1,6 +1,6 @@
 # Browser build progress
 
-Last updated: 16 September 2026
+Last updated: 17 September 2026
 
 ## Purpose and direction
 
@@ -12,7 +12,31 @@ A Unity conversion remains a production option, including when its visual editin
 
 The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, thirty encounters across three stages and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
 
-## Fast economy testing and manual idle collection — latest local revision, 16 September 2026
+## Local preview cache correction — latest local revision, 17 September 2026
+
+Jimmy continued to see old enemy HP at localhost:4173. Direct HTTP access failed with connection refused, including outside the sandbox, and no listener was present on port 4173. The worker previously fell back to cached files when the local server stopped, making an old game playable at the same address.
+
+Loopback preview now skips offline registration and unregisters only this game's exact scoped worker. Its status tells the player to keep the local server running. The worker also stops falling back to cached files on loopback. Hosted offline behavior, saved heroes and active-run update protection remain unchanged. No automatic reload or localStorage deletion. Settings/cache are Version 26. Combat values remain the Version 25 values below. No tests, fights or publication. A temporary server returned HTTP 200 and the updated attack/elite descriptors, confirming the files served correctly. It was stopped after diagnosis because a visible, controllable terminal attachment could not be confirmed. Jimmy should launch start-game.command in his own Terminal and keep it open.
+
+## Stronger starting attack — earlier local revision, 17 September 2026
+
+Jimmy reported low attack in local battle 1 and instructed that publication must occur only on explicit request. This preference is recorded in AGENTS.md. Hero attack now uses a base of 30; enemy HP independently retains its base of 24. The approximately 25% attack increase therefore changes actual kill times. The first elite is an introductory exception at 150 HP and 26 unblocked damage. A fresh hero has 31 ATK / 183 HP, giving a five-basic-hit elite target before skills/criticals. The normal enemies remain at 63/70 HP. Later enemy HP and the three-hit undertrained threat from battle 2 are unchanged; stronger hero damage can also shorten those fights.
+
+Settings/cache are Version 25 (`obo-game-2026-09-17-25`). No tests, gameplay runs, save changes, source upload or publication were performed. Refresh the local page and start a new battle to pick up the new stats. The live game remains Version 23 from the previous successful publication.
+
+## Shorter arena fights — earlier local revision, 17 September 2026
+
+Replaced the roughly 65-hit normal enemy HP multiplier with 2.5/2.8 reference-attack budgets. Each third enemy is an elite with HP budgeted for about five offensive actions using the skills and ranks available at that encounter. Poison budgets only four early ticks, and Sunflare scales from 200% to 245% attack to avoid reference-level normal-enemy one-shots. Enemy strength remains fixed by encounter, not the actual hero.
+
+Elite attack is calibrated to defeat a matching-gear hero twenty defensive stat points behind in three unblocked hits. Dodge, block, stun, healing and existing equipment remain meaningful; no forced-loss gate was added. Prepared/Skip recent training presets now differ by exactly one twenty-point round, including at bosses. Currency, rewards, save schema and approved layouts are unchanged. The earlier five-hour playtime estimate needs recalibration with these substantially shorter fights.
+
+Settings shows Version 24; cache is `obo-game-2026-09-17-24`. Source review only; no tests, simulations or gameplay runs. See economy-design.md and economy-testing.md for the formulas and battle-5 manual comparison.
+
+Version 24 remains local: the hosting upload permission was declined before the source push, so no new Site version or deployment was created. The live game remains Version 23. Publish these edits only when Jimmy authorizes resuming the upload.
+
+The previous game Version 23 was successfully published on 17 September as Site release 6, keeping owner-only access at https://one-brave-odyssey-skyhaven.jimmybui1995.chatgpt.site. That successful deployment supersedes the older uncertain publication notes below.
+
+## Fast economy testing and manual idle collection — 16 September 2026
 
 Settings now contains a small Economy testing panel within the existing game. It uses a separate test save with a persistent TEST SAVE badge, thirty battle checkpoints and Prepared / Skip recent training / Missing gear upgrades / Extra boss practice presets. Test-only actions can award a victory through the real settlement function, start a fresh test hero, or advance idle clocks by five minutes, 24 hours or 72 hours. Returning to the real save restores its state. The URL's `?test=1` preserves mode across reloads; every game save path uses the selected storage adapter. Active runs block test-state replacement.
 
