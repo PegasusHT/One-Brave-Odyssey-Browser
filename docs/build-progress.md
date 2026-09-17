@@ -12,7 +12,29 @@ A Unity conversion remains a production option, including when its visual editin
 
 The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, thirty encounters across three stages and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
 
-## Arena scene and three-stage selection — latest local revision, 16 September 2026
+## Fast economy testing and manual idle collection — latest local revision, 16 September 2026
+
+Settings now contains a small Economy testing panel within the existing game. It uses a separate test save with a persistent TEST SAVE badge, thirty battle checkpoints and Prepared / Skip recent training / Missing gear upgrades / Extra boss practice presets. Test-only actions can award a victory through the real settlement function, start a fresh test hero, or advance idle clocks by five minutes, 24 hours or 72 hours. Returning to the real save restores its state. The URL's `?test=1` preserves mode across reloads; every game save path uses the selected storage adapter. Active runs block test-state replacement.
+
+Legacy now shows a Collect button without accumulated currency or daily currency totals. Successful manual collection has a five-minute minimum interval and requires a positive whole-coin amount. A separate saved timestamp prevents battle wins or Gallery upgrades from changing that cooldown. Those rate changes now bank pending idle resources at the old rate without adding them to the wallet. Version 4 adds these fields while preserving all prior progression; the pre-version-3 gear catch-up rule is unchanged.
+
+Settings includes Check for updates and Version 23. Installation retains the explicit update flow; starting a new run is blocked while activation is pending. The offline cache is `obo-game-2026-09-16-23` and includes `test-mode.js`. No cache or real save was deleted, and no Site publication occurred. The last documented publication predates this revision; the live private site's version could not be independently verified.
+
+A focused desktop menu preview loaded battle 10 in the isolated test save and displayed the simplified Legacy cooldown. No automated tests, battle/training runs, reward grants, purchases or idle collections were performed. See [fast economy testing](economy-testing.md) for the recommended short workflow and update/reset distinctions.
+
+## Economy and training progression — earlier local revision, 16 September 2026
+
+The first economy pass connects thirty battles, thirty equipment ranks, five trainers, spendable stat/skill points and offline income. First clears award exactly ten times the preceding first-clear currency; the next full set costs 70% of that reward across weapon, armor and shield. Existing tiers keep their artwork, while later +N ranks reuse A/B/C/D/F. Shields now reduce damage. The Shop offers one matching-set upgrade plus the existing next-item actions.
+
+Sunflare is followed by Shield Bash after battle 3 and Poison after battle 6; Windguard and Second wind open after 10 and 20. All five skills have ten ranks, campaign requirements and point costs. Bash interrupts an attack, Poison refreshes an eight-second effect, and tonics are limited to two per encounter. Enemy requirements are fixed by encounter and increase independently of the actual hero's stats. Bosses 10/20/30 receive additional preparation targets. Five hours of active play across three days is an unmeasured tuning goal, with no required wait or scripted loss.
+
+Every trainer uses stat-dependent main-bar requirements and capped combo contribution. Only completed bars or missions award stats/XP; raw hits and timed Accuracy completion no longer grant progression. Partial main bars persist, lifetime bar milestones grant allocatable points, and Accuracy now runs 60 seconds within its existing controls. Hero supports 1/5/All point allocation and upgradeable skills. Approved trainer positions and input rules are preserved.
+
+One exact wallet is stored as BigInt and serialized as decimal strings, with automatic Gold/Emerald/Sapphire/Ruby/Diamond/Star display units. Idle earnings start after the first clear, store up to 72 hours and settle at the old rate before progression changes. Save version 3 preserves existing progress and supplies qualifying legacy saves a one-time catch-up wallet floor. `economy.js` is included in cache `obo-game-2026-09-16-22`.
+
+See [economy design](economy-design.md) for formulas, source research, spending budgets, migration and manual tuning priorities. No tests, simulations, combat/training runs or publication. One focused Hero-menu preview was used to fit the new controls; see validation.
+
+## Arena scene and three-stage selection — earlier local revision, 16 September 2026
 
 Arena selection uses Jimmy's supplied hall background with aspect-preserving landscape cropping. Town's Home icon is now dark teal. Arena places an icon-only Town return at top left, existing Settings at top right, the shared level/XP bar at bottom left and the existing wallet at bottom right. The hero and opponent remain, alongside a compact Fight button; their visible names and the pre-fight reward display are removed.
 

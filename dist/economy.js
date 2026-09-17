@@ -1,0 +1,7 @@
+export const CURRENCY_UNITS=[{name:'Gold',value:1n},{name:'Emerald',value:10n**6n},{name:'Sapphire',value:10n**12n},{name:'Ruby',value:10n**18n},{name:'Diamond',value:10n**24n},{name:'Star',value:10n**30n}];
+export function coin(value){if(typeof value==='bigint')return value>0n?value:0n;if(typeof value==='number')return Number.isFinite(value)&&value>0?BigInt(Math.floor(Math.min(value,1e120))):0n;if(typeof value==='string'&&/^\d{1,121}$/.test(value))return BigInt(value);return 0n}
+export function scaleCoins(amount,numerator,denominator=100){const d=coin(denominator);return d>0n?coin(amount)*coin(numerator)/d:0n}
+export function firstClearCoins(stage){const n=Number.isFinite(stage)?Math.max(1,Math.min(30,Math.floor(stage))):1;return 100n*10n**BigInt(n-1)}
+export function campaignCoins(player){return firstClearCoins(Math.max(1,...(player.cleared||[]).filter(n=>Number.isInteger(n)&&n>=1&&n<=30)))}
+export function currencyUnit(value){const amount=coin(value);return CURRENCY_UNITS.findLast(unit=>amount>=unit.value)||CURRENCY_UNITS[0]}
+export function formatCoins(value){const amount=coin(value),unit=currencyUnit(amount),suffix=amount>=unit.value*1000n?'k':'',divisor=unit.value*(suffix?1000n:1n),hundredths=amount*100n/divisor,whole=hundredths/100n,fraction=String(hundredths%100n).padStart(2,'0').replace(/0+$/,'');return `${whole}${fraction?'.'+fraction:''}${suffix} ${unit.name}`}

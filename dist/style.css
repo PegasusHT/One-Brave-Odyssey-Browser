@@ -290,6 +290,49 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:1
 @keyframes town-arrival{0%,100%{opacity:0}12%,78%{opacity:1}}
 .home-screen #screen>.town-arrival[data-motion="false"]{opacity:1;animation:none}
 .arena-page-title:focus{outline:none}
+.wallet[data-currency="emerald"]>.coin{filter:hue-rotate(85deg) saturate(1.2)}
+.wallet[data-currency="sapphire"]>.coin{filter:hue-rotate(170deg) saturate(1.2)}
+.wallet[data-currency="ruby"]>.coin{filter:hue-rotate(300deg) saturate(1.4)}
+.wallet[data-currency="diamond"]>.coin{filter:saturate(.15) brightness(1.4)}
+.wallet[data-currency="star"]>.coin{filter:hue-rotate(220deg) brightness(1.2)}
+.hero-layout{align-items:start}
+.hero-skills .skill-tile{grid-template-columns:24px minmax(0,1fr);gap:0 6px;padding:5px 9px;min-height:0;margin-bottom:5px}
+.hero-skills .skill-tile .mini-button{grid-column:1/-1;grid-row:auto;justify-self:stretch;padding:3px 0;min-height:44px}
+.hero-skills .skill-tile .mini-button>span{min-height:30px;padding:4px 6px;font-size:10px;white-space:normal}
+.hero-skills .skill-tile small{max-width:none;font-size:10px}
+.hero-skills .skill-tile h3>span{font-size:10px;color:#ffdf9a;white-space:nowrap}
+.hero-skills .skill-symbol{font-size:24px}
+.rating-context{display:block;font-size:10px;color:#bdd4cd;margin-bottom:5px}
+.idle-limit{font-size:10px;color:#35595e;margin-top:5px}
+.shop-stock>.mini-button{padding:2px 0}
+.accuracy-goal{width:clamp(120px,22vw,190px)}
+.accuracy-goal>b{font-size:16px}
+.accuracy-goal>progress{display:block;width:100%;height:7px;accent-color:#74cfb8;margin:3px 0}
+.accuracy-goal>small{font-size:9px;line-height:1.2}
+.battle-controls{left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));gap:8px;bottom:max(10px,env(safe-area-inset-bottom))}
+.battle-controls .cluster{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;flex:1;max-width:720px}
+.battle-controls .control{min-width:0;min-height:58px;padding:5px 4px;font-size:12px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.battle-controls .battle-pause{min-width:44px;min-height:48px;font-size:18px}
+.battle-skill-icon{font-size:19px;line-height:21px}
+.battle-skill-name{font-size:10px;white-space:nowrap}
+.battle-controls .control em{font-size:9px;margin-top:2px}
+.point-amount{min-height:44px;min-width:52px;max-width:62px;border:1px solid #b8ddd944;border-radius:8px;background:#173745;color:#fff;font:inherit;font-size:11px;padding:4px}
+.hero-attributes .rating-context{font:400 9px "DM Sans",sans-serif;margin:4px 0 0}
+.hero-attributes .panel-heading{gap:5px;margin-bottom:3px}
+.settings-control{width:100%;margin:5px 0;min-height:44px}
+.settings-version{display:block;text-align:center;font-size:11px;color:#bdd4cd;margin:8px 0}
+#test-indicator{position:absolute;right:max(12px,env(safe-area-inset-right));top:calc(max(8px,env(safe-area-inset-top)) + 49px);z-index:9;padding:3px 7px;border:1px solid #ffe19c;border-radius:5px;background:#633c18;color:#fff2ce;font:700 10px 'DM Sans',sans-serif;pointer-events:none;letter-spacing:.06em}
+#test-indicator[hidden]{display:none}
+dialog.economy-test-dialog{width:min(510px,92vw);max-width:min(510px,92vw)}
+#app.menu-screen>dialog.economy-test-dialog{max-width:min(510px,92vw)}
+.test-fields{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.test-fields label{display:grid;gap:4px;font-size:12px}
+.test-fields select{width:100%;min-height:44px;padding:7px;border:1px solid #bdd4cd77;border-radius:8px;background:#173745;color:#fff;font:inherit}
+.test-note{display:block;font-size:11px;line-height:1.4;color:#bdd4cd;margin:6px 0 10px}
+.test-idle-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:10px 0}
+.test-idle-buttons button,.test-actions button{min-height:44px;padding:7px;font-size:12px}
+.test-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media(max-width:600px){.battle-controls{gap:5px}.battle-controls .cluster{gap:3px}.battle-controls .control{padding-inline:2px}.battle-skill-name{font-size:9px}.hero-skills .skill-tile{padding:6px}.accuracy-goal{width:125px}.training-hud .row{gap:5px}.training-hud .metric{min-width:55px;padding-inline:6px}}
 @media(prefers-reduced-motion:reduce){.home-screen #screen>.town-arrival{opacity:1;animation:none}}
 
 .arena-screen #home-button{display:none}
