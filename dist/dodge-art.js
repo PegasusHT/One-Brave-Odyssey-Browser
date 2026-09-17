@@ -1,12 +1,12 @@
 import {equippedHero as hero} from './hero-art.js';
 import {DODGE_TIMING} from './core.js';
-import {trainingPartner,ellipse,poly,appearTraining} from './art.js';
+import {trainingPartner,ellipse,poly,appearTraining,HERO_SCENE_ART,placeSceneHero} from './art.js';
 
 export function drawDodge(c,training,time){
 const h={x:560,y:476,scale:.972},p={x:840,y:476,scale:.72};
 const age=training.elapsed-training.dodgeAt,pose=age<0||age>=DODGE_TIMING.pose?0:Math.min(1,.45+age/.06,1-(age-DODGE_TIMING.window)/(DODGE_TIMING.pose-DODGE_TIMING.window));
 const jump=training.action==='jump'?105*pose:0,back=training.action==='back'?110*pose:0,tuck=training.action==='tuck'?.53*pose:0;
-c.save();appearTraining(c,training,h.x,h.y);c.translate(h.x-back,h.y-jump);c.scale(1,1-tuck);
+c.save();appearTraining(c,training,h.x,h.y);placeSceneHero(c,h.x-back,h.y-jump,HERO_SCENE_ART.trainingScale);c.scale(1,1-tuck);
 hero(c,0,0,h.scale,training.player.equipment,time,0,training.hit,training.player.scarf);c.restore();
 const a=training.stickAttack,lane=a?.lane??1,targetY=[355,410,466][lane];
 let reach=0,ready=0;
@@ -23,7 +23,7 @@ if(a.impactAt-training.elapsed<=DODGE_TIMING.perfect){c.strokeStyle='#fff4be';c.
 c.restore()
 }
 if(training.perfectStar>0){
-const x=h.x-back,y=h.y-jump-154*(1-tuck)-30;
+const x=h.x-back,y=h.y-jump-158*h.scale*HERO_SCENE_ART.trainingScale*(1-tuck)-30;
 c.save();c.translate(x,y);c.globalAlpha=Math.min(1,training.perfectStar/.2);
 poly(c,[[0,-19],[5,-6],[19,-6],[8,3],[12,17],[0,9],[-12,17],[-8,3],[-19,-6],[-5,-6]],'#ffe38b','#9e743e');c.restore()
 }

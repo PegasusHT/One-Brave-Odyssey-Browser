@@ -1,4 +1,13 @@
 const TAU=Math.PI*2;
+export const TOWN_ART={name:'SkyHaven',src:'./assets/town/town-facilities.png',width:1844,height:853,hero:{x:450,y:465,height:188},destinations:[{id:'forge',label:'Shop',x:290,y:393},{id:'legacy',label:'Legacy',x:930,y:282},{id:'train',label:'Training',x:940,y:570},{id:'arena',label:'Arena',x:1500,y:515}]};
+export const ARENA_ART={src:'./assets/arena/arena-hall.png',width:1448,height:1086,focusX:.5,focusY:.25};
+export const HERO_SCENE_ART={trainingScale:1.2,arenaScale:1.2};
+export function placeSceneHero(c,x,y,scale=1){const m=c.getTransform(),sx=Math.hypot(m.a,m.b),sy=Math.hypot(m.c,m.d);c.translate(x,y);c.scale(scale*(sx&&sy?sy/sx:1),scale)}
+export function townPlacement(w,h){const scale=Math.max(w/TOWN_ART.width,h/TOWN_ART.height);return {scale,x:(w-TOWN_ART.width*scale)/2,y:(h-TOWN_ART.height*scale)/2}}
+let townImage=null;
+function townBackground(){if(!townImage){townImage=new Image();townImage.src=new URL(TOWN_ART.src,import.meta.url).href}return townImage.complete&&townImage.naturalWidth?townImage:null}
+let arenaImage=null;
+function arenaBackground(){if(!arenaImage){arenaImage=new Image();arenaImage.src=new URL(ARENA_ART.src,import.meta.url).href}return arenaImage.complete&&arenaImage.naturalWidth?arenaImage:null}
 export function ellipse(c,x,y,rx,ry,color){c.fillStyle=color;c.beginPath();c.ellipse(x,y,rx,ry,0,0,TAU);c.fill()}
 export function poly(c,points,color,stroke){c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.fillStyle=color;c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=3;c.stroke()}}
 function rect(c,x,y,w,h,r,color){c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill()}
@@ -7,6 +16,7 @@ function tree(c,x,y,s=1){rect(c,x-5*s,y-40*s,10*s,45*s,2,'#746e52');ellipse(c,x,
 function island(c,x,y,s,green='#7cbc83'){poly(c,[[x-270*s,y],[x-195*s,y+100*s],[x-120*s,y+70*s],[x-45*s,y+220*s],[x+20*s,y+160*s],[x+160*s,y+150*s],[x+245*s,y+30*s]],'#657f85');poly(c,[[x-270*s,y],[x-120*s,y+70*s],[x-45*s,y+220*s],[x-70*s,y+50*s],[x+25*s,y]],'#769497');poly(c,[[x+25*s,y],[x-45*s,y+220*s],[x+20*s,y+160*s],[x+160*s,y+150*s],[x+110*s,y]],'#4e737d');ellipse(c,x,y,275*s,87*s,'#416f67');ellipse(c,x,y-12*s,275*s,84*s,green);ellipse(c,x-35*s,y-28*s,225*s,48*s,'#9dce8f')}
 function building(c,x,y,s,kind){c.save();c.translate(x,y);c.scale(s,s);ellipse(c,0,7,90,20,'#356c6944');if(kind==='arena'){ellipse(c,0,-8,91,37,'#adad91');rect(c,-80,-85,160,78,8,'#dcd5af');ellipse(c,0,-85,80,27,'#ece3bc');ellipse(c,0,-87,53,15,'#8d997e');for(let i=-65;i<=65;i+=26){rect(c,i-8,-67,16,46,8,'#607f77');rect(c,i-10,-28,20,10,2,'#eee3bc')}for(let i=-65;i<=65;i+=26)rect(c,i-9,-118,18,31,3,'#eee3bc');rect(c,-17,-51,34,45,17,'#3b686b');for(const sign of [-1,1]){rect(c,sign*99,-131,4,110,0,'#586d63');poly(c,[[sign*99,-131],[sign*99+41,-119],[sign*99,-102]],'#f08e65')}}else{rect(c,-65,-90,130,90,4,'#f2ddad');rect(c,38,-90,27,90,2,'#cbb685');poly(c,[[-82,-85],[0,-153],[82,-85]],kind==='forge'?'#365f70':'#d67558');poly(c,[[-82,-85],[0,-153],[2,-137],[-60,-85]],kind==='forge'?'#578891':'#ee9c6b');for(let i=0;i<3;i++){c.strokeStyle='#ffffff22';c.lineWidth=3;c.beginPath();c.moveTo(-56+i*16,-106-i*13);c.lineTo(54-i*16,-106-i*13);c.stroke()}rect(c,-16,-55,32,55,13,'#52777a');rect(c,-48,-61,21,28,5,'#427778');rect(c,27,-61,21,28,5,'#427778');rect(c,-49,-48,23,3,1,'#e9d298');rect(c,26,-48,23,3,1,'#e9d298');if(kind==='forge'){rect(c,36,-147,22,49,2,'#b1baa1');ellipse(c,48,-159,12,10,'#e4ecda88');ellipse(c,55,-177,17,12,'#e4ecda55');rect(c,-78,-27,44,12,3,'#477482');poly(c,[[-72,-15],[-62,-3],[-46,-3],[-41,-15]],'#294b58')}if(kind==='lodge'){rect(c,-82,-37,164,9,3,'#bb8959');rect(c,-75,-37,7,37,1,'#8f825d');rect(c,65,-37,7,37,1,'#8f825d')}}c.restore()}
 export const EQUIPMENT_ART={weapon_t1:{blade:'#ccd6bf',edge:'#f6ffeb',length:65},weapon_t2:{blade:'#79cbce',edge:'#d6ffff',length:78},weapon_t3:{blade:'#ffb24f',edge:'#fff5c2',length:91},armor_t1:{base:'#3b7481',trim:'#85b5a5'},armor_t2:{base:'#668bad',trim:'#bedadf'},armor_t3:{base:'#8257a2',trim:'#ebbd69'}};
+Object.assign(EQUIPMENT_ART,{weapon_t4:{blade:'#b9c9c9',edge:'#f4f1d8',length:91},weapon_t5:{blade:'#aeb5bf',edge:'#fff0bd',length:91},weapon_t6:{blade:'#c4cbdc',edge:'#fff6db',length:91},armor_t4:{base:'#155a5c',trim:'#dbc37d'},armor_t5:{base:'#681f2c',trim:'#e2a749'},armor_t6:{base:'#302c5c',trim:'#e6cc78'}});
 export const IDLE_PORTRAIT_ART={
 src:'./assets/hero-idle/idle.png',frameSeconds:.4,height:300,baseline:15,referenceHeight:500,
 handMask:[[-18,-10],[-13,-23],[10,-23],[16,-13],[22,-3],[20,8],[14,15],[5,18],[-7,15],[-17,9],[-21,1]],
@@ -18,49 +28,95 @@ frames:[
 {rect:[648,530,265,490],origin:[806,1014],height:478,hand:{x:744,y:878,rotation:0,scale:1}},
 {rect:[1078,525,250,495],origin:[1234,1014],height:483,hand:{x:1172,y:872,rotation:0,scale:1}}
 ]};
-export const PORTRAIT_WEAPON_ART={weapon_t3:{src:'./assets/hero-idle/wayfarer-upgrade-iii.png',pivot:[480,355],scale:.14}};
+export const HERO_WEAPON_SCALE=1.4;
+export const PORTRAIT_WEAPON_ART={weapon_t2:{src:'./assets/hero-equipment/sword-a-long.png',pivot:[323,350],scale:.137,icon:[40,157,2104,391]},weapon_t3:{src:'./assets/hero-equipment/sword-b-long.png',pivot:[325,346],scale:.137,icon:[56,154,2061,386]}};
+export const SHIELD_ART={shield_t2:{src:'./assets/hero-equipment/shield-a.png',icon:[62,52,763,765],back:[949,52,762,765],pivot:[1330,434]},shield_t3:{src:'./assets/hero-equipment/shield-b.png',icon:[56,38,795,788],back:[919,36,795,791],pivot:[1317,416]}};
+Object.assign(PORTRAIT_WEAPON_ART,{weapon_t4:{src:'./assets/hero-equipment/sword-c-long.png',pivot:[325,347],scale:.137,icon:[62,160,2049,374]},weapon_t5:{src:'./assets/hero-equipment/sword-d-long.png',pivot:[355,351],scale:.137,icon:[29,87,2113,531]},weapon_t6:{src:'./assets/hero-equipment/sword-f-long.png',pivot:[325,347],scale:.137,icon:[61,157,2053,378]}});
+Object.assign(SHIELD_ART,{shield_t4:{src:'./assets/hero-equipment/shield-c.png',icon:[36,28,809,806],back:[924,29,809,805],pivot:[1330,424]},shield_t5:{src:'./assets/hero-equipment/shield-d.png',icon:[36,28,811,807],back:[924,27,811,809],pivot:[1330,424]},shield_t6:{src:'./assets/hero-equipment/shield-f.png',icon:[49,43,794,786],back:[927,42,796,787],pivot:[1328,421]}});
+export const FULL_BODY_IDLE_ART={armor_t2:{src:'./assets/hero-equipment/set-a-full.png',rect:[268,20,600,1344],origin:[590,1360],height:1336,breathSeconds:3.4,breathStretch:.018,hand:{x:409,y:949,rotation:0},handMask:[[346,914],[366,916],[394,924],[416,924],[437,914],[452,917],[466,923],[473,934],[468,947],[457,954],[447,950],[443,969],[432,981],[415,984],[401,978],[382,977],[366,968],[353,956],[345,943],[341,929]]}};
+FULL_BODY_IDLE_ART.armor_t3={src:'./assets/hero-equipment/set-b-full.png',rect:[275,21,618,1395],origin:[610,1416],height:1394,breathSeconds:3.4,breathStretch:.018,hand:{x:410,y:975,rotation:0},handMask:[[347,940],[367,942],[395,950],[417,950],[438,940],[453,943],[467,949],[474,960],[469,973],[458,980],[448,976],[444,995],[433,1007],[416,1010],[402,1004],[383,1003],[367,994],[354,982],[346,969],[342,955]]};
+export const FULL_BODY_ATTACK_ART={armor_t2:{src:'./assets/hero-actions/set-a-attack.png',height:568,
+clips:{attack:[[null,.5],[0,.1],[1,.12],[2,.09],[3,.14],[null,.37]],raised:[[null,.35],[0,.12],[1,.75],[0,.12],[null,.4]]},
+frames:[
+{rect:[0,0,627,627],origin:[335,599],hand:{x:399,y:299,rotation:-1.3},handMask:[[393,280],[404,279],[412,288],[414,298],[410,309],[404,316],[397,320],[387,317],[380,310],[382,293]]},
+{rect:[627,0,627,627],origin:[904,599],hand:{x:830,y:187,rotation:-3.02},handMask:[[813,170],[826,166],[837,170],[844,179],[846,190],[839,200],[831,203],[826,211],[814,210],[807,201],[807,185]]},
+{rect:[0,627,627,627],origin:[333,1221],hand:{x:466,y:948,rotation:0},handMask:[[446,930],[467,926],[480,929],[486,939],[486,952],[479,959],[471,960],[465,968],[455,972],[446,967],[439,958],[439,944]]},
+{rect:[627,627,627,627],origin:[904,1221],hand:{x:896,y:1000,rotation:0},handMask:[[880,980],[895,978],[905,981],[914,989],[919,1000],[916,1009],[909,1012],[904,1018],[894,1022],[885,1018],[877,1010],[871,999],[873,988]]}
+]}};
+FULL_BODY_ATTACK_ART.armor_t3={src:'./assets/hero-actions/set-b-attack.png',height:568,clips:FULL_BODY_ATTACK_ART.armor_t2.clips,frames:FULL_BODY_ATTACK_ART.armor_t2.frames.map(frame=>({...frame,origin:[frame.origin[0],frame.origin[1]+2]}))};
+export const FULL_BODY_JUMP_ART={armor_t2:{
+sources:['./assets/hero-actions/set-a-jump-ground.png','./assets/hero-actions/set-a-jump-keyposes.png'],
+preview:[['standing',.35,0,0],['crouch',.12,0,0],['airborne',.3,0,1],['airborne',.48,1,1],['strike',.18,1,0],['landing',.24,0,0],['standing',.53,0,0]],
+frames:{
+crouch:{src:'./assets/hero-actions/set-a-jump-ground.png',height:600,rect:[0,0,512,512],origin:[256,506],hand:{x:136,y:357,rotation:0},handMask:[[117,338],[130,336],[145,342],[158,350],[161,360],[155,369],[145,374],[132,377],[118,369],[110,357],[109,348]]},
+airborne:{src:'./assets/hero-actions/set-a-jump-keyposes.png',height:960,rect:[0,0,887,887],origin:[530,925],hand:{x:430,y:236,rotation:2.3},handMask:[[414,207],[429,203],[443,209],[453,220],[461,233],[460,244],[451,254],[442,266],[428,271],[414,266],[406,258],[400,245],[400,232],[405,219]]},
+strike:{src:'./assets/hero-actions/set-a-jump-keyposes.png',height:960,rect:[887,0,887,887],origin:[1285,970],hand:{x:1506,y:692,rotation:.1},handMask:[[1465,657],[1481,650],[1503,653],[1528,662],[1543,677],[1546,696],[1538,712],[1525,720],[1512,725],[1497,727],[1484,722],[1472,711],[1462,697],[1456,681]]},
+landing:{src:'./assets/hero-actions/set-a-jump-ground.png',height:600,rect:[1024,512,512,512],origin:[1281,983],hand:{x:1186,y:846,rotation:0},handMask:[[1171,829],[1182,830],[1196,836],[1207,844],[1210,852],[1201,862],[1190,869],[1177,866],[1163,856],[1160,846],[1164,835]]}
+}}};
+FULL_BODY_JUMP_ART.armor_t3={
+src:'./assets/hero-actions/set-b-jump-land.png',sources:['./assets/hero-actions/set-b-jump-land.png'],preview:FULL_BODY_JUMP_ART.armor_t2.preview,
+frames:{
+crouch:{height:690,rect:[27,282,381,493],origin:[218,772],hand:{x:64,y:610,rotation:0},handMask:[[37,589],[53,585],[68,590],[82,600],[94,612],[91,625],[79,636],[65,640],[49,633],[36,623],[29,609],[31,597]]},
+airborne:{height:770,rect:[469,124,383,668],clip:[[469,124],[850,124],[850,450],[800,450],[800,792],[469,792]],origin:[635,852],hand:{x:562,y:307,rotation:2.3},handMask:[[548,285],[561,280],[574,286],[585,296],[592,308],[589,321],[578,329],[564,334],[550,329],[541,319],[538,305],[541,291]]},
+strike:{height:770,rect:[811,272,551,519],clip:[[900,272],[1362,272],[1362,791],[811,791],[811,450],[900,450]],origin:[1045,865],hand:{x:1199,y:657,rotation:.1},handMask:[[1175,629],[1191,625],[1210,632],[1227,642],[1236,657],[1233,673],[1221,684],[1208,689],[1193,687],[1178,677],[1167,663],[1166,647]]},
+landing:{height:680,rect:[1404,246,329,538],origin:[1557,780],hand:{x:1449,y:624,rotation:0},handMask:[[1430,607],[1443,604],[1458,609],[1471,620],[1476,633],[1469,645],[1457,651],[1444,648],[1431,641],[1420,631],[1417,618],[1421,609]]}
+}};
+FULL_BODY_IDLE_ART.armor_t2.farHand={x:752,y:938,rotation:0};
+FULL_BODY_IDLE_ART.armor_t3.farHand={x:780,y:960,rotation:0};
+for(const id of ['armor_t2','armor_t3'])FULL_BODY_ATTACK_ART[id].frames=FULL_BODY_ATTACK_ART[id].frames.map((frame,i)=>({...frame,farHand:[{x:409,y:417,rotation:0},{x:978,y:418,rotation:0},{x:406,y:1039,rotation:0},{x:979,y:1044,rotation:0}][i]}));
+for(const [id,hands] of Object.entries({armor_t2:{crouch:[397,309,-.35],airborne:[651,613,0],strike:[1175,566,.3],landing:[1366,852,0]},armor_t3:{crouch:[373,552,-.35],airborne:[690,556,0],strike:[1017,567,.3],landing:[1660,625,0]}}))for(const [name,[x,y,rotation]] of Object.entries(hands))FULL_BODY_JUMP_ART[id].frames[name].farHand={x,y,rotation};
+FULL_BODY_IDLE_ART.armor_t4={src:'./assets/hero-equipment/set-c-full.png',rect:[264,12,644,1414],origin:[612,1423],height:1407,breathSeconds:3.4,breathStretch:.018,hand:{x:410,y:971,rotation:0},farHand:{x:784,y:956,rotation:0},handMask:[[346,931],[364,931],[388,943],[412,947],[437,932],[451,936],[467,946],[472,960],[463,975],[451,977],[445,990],[432,1000],[413,1002],[399,995],[381,996],[367,987],[355,975],[346,958],[341,944]]};
+FULL_BODY_IDLE_ART.armor_t5={src:'./assets/hero-equipment/set-d-full.png',rect:[265,12,647,1423],origin:[614,1432],height:1416,breathSeconds:3.4,breathStretch:.018,hand:{x:413,y:978,rotation:0},farHand:{x:788,y:963,rotation:0},handMask:[[349,938],[367,938],[391,950],[415,954],[440,939],[454,943],[470,953],[475,967],[466,982],[454,984],[448,997],[435,1007],[416,1009],[402,1002],[384,1003],[370,994],[358,982],[349,965],[344,951]]};
+FULL_BODY_IDLE_ART.armor_t6={src:'./assets/hero-equipment/set-f-full.png',rect:[275,19,639,1416],origin:[620,1432],height:1410,breathSeconds:3.4,breathStretch:.018,hand:{x:416,y:1004,rotation:0},farHand:{x:799,y:989,rotation:0},handMask:[[352,964],[370,964],[394,976],[418,980],[443,965],[457,969],[473,979],[478,993],[469,1008],[457,1010],[451,1023],[438,1033],[419,1035],[405,1028],[387,1029],[373,1020],[361,1008],[352,991],[347,977]]};
+const newAttackSets={
+armor_t4:{set:'c',height:573,origins:[[337,603],[911,603],[337,1226],[912,1226]],offsets:[[0,0],[0,1],[0,-3],[-1,3]],farHands:[[409,417],[980,417],[408,1040],[982,1040]]},
+armor_t5:{set:'d',height:576,origins:[[337,605],[912,605],[337,1227],[913,1227]],offsets:[[0,0],[0,1],[3,-3],[1,3]],farHands:[[410,417],[981,418],[409,1041],[984,1040]]},
+armor_t6:{set:'f',height:572,origins:[[336,602],[934,602],[335,1223],[934,1223]],offsets:[[-2,0],[22,1],[-2,-2],[22,2]],farHands:[[409,417],[1003,417],[407,1040],[1004,1040]]}
+};
+for(const [id,spec] of Object.entries(newAttackSets))FULL_BODY_ATTACK_ART[id]={src:`./assets/hero-actions/set-${spec.set}-attack.png`,height:spec.height,clips:FULL_BODY_ATTACK_ART.armor_t2.clips,frames:FULL_BODY_ATTACK_ART.armor_t2.frames.map((frame,i)=>{const [dx,dy]=spec.offsets[i],[x,y]=spec.farHands[i];return {...frame,origin:spec.origins[i],hand:{...frame.hand,x:frame.hand.x+dx,y:frame.hand.y+dy},handMask:frame.handMask.map(([px,py])=>[px+dx,py+dy]),farHand:{x,y,rotation:0}}})};
+const newJumpSets={
+armor_t4:{set:'c',bounds:{crouch:[27,283,377,490],airborne:[468,125,380,668],strike:[811,273,550,515],landing:[1405,244,328,540]},origins:{crouch:[218,771],airborne:[637,852],strike:[1045,865],landing:[1558,780]},offsets:{crouch:[0,4],airborne:[0,0],strike:[0,0],landing:[0,0]},farHands:{crouch:[369,550,-.35],airborne:[690,556,0],strike:[1017,567,.3],landing:[1666,629,0]}},
+armor_t5:{set:'d',bounds:{crouch:[20,281,383,495],airborne:[466,122,380,672],strike:[806,273,556,515],landing:[1405,244,336,541]},origins:{crouch:[212,774],airborne:[635,852],strike:[1045,865],landing:[1560,783]},offsets:{crouch:[-6,4],airborne:[-1,-1],strike:[5,-1],landing:[1,0]},farHands:{crouch:[364,550,-.35],airborne:[689,555,0],strike:[1017,567,.3],landing:[1671,629,0]}},
+armor_t6:{set:'f',bounds:{crouch:[28,283,379,489],airborne:[468,123,380,670],strike:[808,273,553,515],landing:[1405,244,327,538]},origins:{crouch:[218,770],airborne:[637,852],strike:[1045,865],landing:[1557,780]},offsets:{crouch:[0,4],airborne:[1,0],strike:[-1,1],landing:[-1,0]},farHands:{crouch:[370,550,-.35],airborne:[690,556,0],strike:[1017,567,.3],landing:[1665,629,0]}}
+};
+for(const [id,spec] of Object.entries(newJumpSets)){const src=`./assets/hero-actions/set-${spec.set}-jump-land.png`;FULL_BODY_JUMP_ART[id]={src,sources:[src],preview:FULL_BODY_JUMP_ART.armor_t2.preview,frames:Object.fromEntries(Object.entries(FULL_BODY_JUMP_ART.armor_t3.frames).map(([name,frame])=>{const [dx,dy]=spec.offsets[name],[x,y,rotation]=spec.farHands[name];return [name,{...frame,rect:spec.bounds[name],origin:spec.origins[name],hand:{...frame.hand,x:frame.hand.x+dx,y:frame.hand.y+dy},handMask:frame.handMask.map(([px,py])=>[px+dx,py+dy]),farHand:{x,y,rotation}}]}))}}
 export const MODULAR_EQUIPMENT_ART={
-armor_t2:{src:'./assets/hero-equipment/set-a-armor.png',icon:[504,124,391,453],parts:{
-torso:{rect:[504,124,391,453],pivot:[710,543],scale:.35,clip:[[614,124],[818,124],[814,190],[824,249],[853,286],[867,344],[856,426],[895,577],[560,577],[571,453],[573,404],[612,377],[640,335],[650,286],[682,260],[661,214],[614,190]]},
+armor_t2:{src:'./assets/hero-equipment/set-a-armor.png',bottomsSrc:'./assets/hero-equipment/set-a-bottoms.png',joint:'#62564e',icon:[504,124,391,453],parts:{
+torso:{rect:[504,124,391,453],pivot:[710,543],scale:.35,clip:[[630,124],[818,124],[814,190],[824,249],[853,286],[895,286],[895,577],[504,577],[504,197],[536,197],[548,201],[573,213],[594,237],[614,262],[642,270],[665,257],[677,242],[669,217],[646,184],[618,169]]},
 nearSleeve:{rect:[137,536,247,285],pivot:[283,596],tip:[208,773]},
-farSleeve:{rect:[140,885,244,278],pivot:[223,947],tip:[290,1122]}
+farSleeve:{rect:[140,885,244,278],pivot:[223,947],tip:[290,1122]},
+pelvis:{sheet:'armorBottoms',rect:[63,958,358,207],pivot:[247,1000],scale:.31,clip:[[63,958],[421,958],[421,1070],[275,1110],[217,1102],[63,1063]]},
+nearThigh:{sheet:'armorBottoms',rect:[142,106,240,345],pivot:[258,143],tip:[269,412]},
+nearShin:{sheet:'armorBottoms',rect:[568,113,169,355],pivot:[655,145],tip:[655,437]},
+nearFoot:{sheet:'armorBottoms',rect:[918,312,238,171],pivot:[982,344],scale:.3},
+farThigh:{sheet:'armorBottoms',rect:[122,550,233,309],pivot:[267,580],tip:[202,820]},
+farShin:{sheet:'armorBottoms',rect:[543,550,222,327],pivot:[610,584],tip:[695,844]},
+farFoot:{sheet:'armorBottoms',rect:[921,732,258,160],pivot:[983,764],scale:.28}
 }},
-armor_t3:{src:'./assets/hero-equipment/set-b-armor.png',icon:[480,117,435,500],parts:{
-torso:{rect:[480,117,435,500],pivot:[699,569],scale:.325,clip:[[626,117],[808,117],[822,202],[854,253],[899,296],[915,617],[525,617],[541,548],[577,461],[587,401],[623,355],[636,301],[635,260],[626,221],[603,203]]},
+armor_t3:{src:'./assets/hero-equipment/set-b-armor.png',bottomsSrc:'./assets/hero-equipment/set-b-bottoms.png',joint:'#333e59',icon:[480,117,435,500],parts:{
+torso:{rect:[480,117,435,500],pivot:[699,569],scale:.325},
 nearSleeve:{rect:[162,509,234,281],pivot:[296,573],tip:[235,747]},
-farSleeve:{rect:[162,892,244,279],pivot:[243,959],tip:[317,1130]}
-}},
-helmet_t2:{src:'./assets/hero-equipment/set-a-helmet.png',icon:[106,149,456,463],parts:{helmet:{rect:[106,149,456,463],pivot:[335,552],scale:.39}}},
-helmet_t3:{src:'./assets/hero-equipment/set-b-helmet.png',icon:[143,238,469,479],parts:{helmet:{rect:[143,238,469,479],pivot:[398,667],scale:.38}}},
-bottoms_t2:{src:'./assets/hero-equipment/set-a-bottoms.png',icon:[63,958,358,207],joint:'#62564e',parts:{
-pelvis:{rect:[63,958,358,207],pivot:[247,1000],scale:.31,clip:[[63,958],[421,958],[421,1070],[275,1110],[217,1102],[63,1063]]},
-nearThigh:{rect:[142,106,240,345],pivot:[258,143],tip:[269,412]},
-nearShin:{rect:[568,113,169,355],pivot:[655,145],tip:[655,437]},
-nearFoot:{rect:[918,312,238,171],pivot:[982,344],scale:.3},
-farThigh:{rect:[122,550,233,309],pivot:[267,580],tip:[202,820]},
-farShin:{rect:[543,550,222,327],pivot:[610,584],tip:[695,844]},
-farFoot:{rect:[921,732,258,160],pivot:[983,764],scale:.28}
-}},
-bottoms_t3:{src:'./assets/hero-equipment/set-b-bottoms.png',icon:[63,963,371,229],joint:'#333e59',parts:{
-pelvis:{rect:[63,963,371,229],pivot:[247,1007],scale:.3,clip:[[63,963],[434,963],[434,1087],[275,1130],[217,1122],[63,1080]]},
-nearThigh:{rect:[107,97,270,375],pivot:[257,138],tip:[268,434]},
-nearShin:{rect:[571,98,194,388],pivot:[669,139],tip:[680,458]},
-nearFoot:{rect:[930,318,268,192],pivot:[993,351],scale:.275},
-farThigh:{rect:[123,551,260,335],pivot:[270,584],tip:[214,852]},
-farShin:{rect:[551,551,248,366],pivot:[621,585],tip:[725,883]},
-farFoot:{rect:[931,745,280,179],pivot:[997,780],scale:.26}
+farSleeve:{rect:[162,892,244,279],pivot:[243,959],tip:[317,1130]},
+pelvis:{sheet:'armorBottoms',rect:[63,963,371,229],pivot:[247,1007],scale:.3,clip:[[63,963],[434,963],[434,1087],[275,1130],[217,1122],[63,1080]]},
+nearThigh:{sheet:'armorBottoms',rect:[107,97,270,375],pivot:[257,138],tip:[268,434]},
+nearShin:{sheet:'armorBottoms',rect:[571,98,194,388],pivot:[669,139],tip:[680,458]},
+nearFoot:{sheet:'armorBottoms',rect:[930,318,268,192],pivot:[993,351],scale:.275},
+farThigh:{sheet:'armorBottoms',rect:[123,551,260,335],pivot:[270,584],tip:[214,852]},
+farShin:{sheet:'armorBottoms',rect:[551,551,248,366],pivot:[621,585],tip:[725,883]},
+farFoot:{sheet:'armorBottoms',rect:[931,745,280,179],pivot:[997,780],scale:.26}
 }}
 };
-const rigStanding={hipX:0,hipY:0,lean:0,head:0,nearArm:-.15,nearForearm:.14,nearWrist:0,farArm:.15,farForearm:-.04,nearFootX:-30,nearFootY:153,nearFootAngle:0,farFootX:39,farFootY:145,farFootAngle:0};
+const rigStanding={hipX:0,hipY:0,lean:0,head:0,nearArm:-.15,nearForearm:.14,nearWrist:0,farArm:.15,farForearm:-.04,farWrist:0,nearFootX:-30,nearFootY:153,nearFootAngle:0,farFootX:39,farFootY:145,farFootAngle:0};
 export const RIG_HERO_ART={
-sources:{upper:'./assets/hero-rig/upper.png',lower:'./assets/hero-rig/lower.png'},
-directedAngles:['nearArm','nearForearm','nearWrist'],
+sources:{upper:'./assets/hero-rig/upper.png',lower:'./assets/hero-rig/lower.png',identity:'./assets/hero-equipment/set-a-full.png'},
+directedAngles:['nearArm','nearForearm','nearWrist','farArm','farForearm','farWrist'],
 view:{width:620,height:630},
-body:{floor:192,torsoScale:.45,pelvisScale:.34,headScale:.58,neck:[0,-140],
+body:{floor:192,torsoScale:.45,pelvisScale:.34,headScale:.58,neck:[0,-140],neckAttachment:[1.8,-120.6],
 near:{hip:[-28,18],shoulder:[-42,-107],upperArm:56,forearm:56,thigh:70,shin:68,handScale:.26,footScale:.3,weaponRotation:-.04},
 far:{hip:[28,15],shoulder:[43,-100],upperArm:53,forearm:52,thigh:68,shin:65,handScale:.23,footScale:.28}},
 parts:{
-head:{sheet:'upper',rect:[89,98,287,284],pivot:[236,362]},
+head:{sheet:'identity',rect:[268,20,600,568],pivot:[603,562],scale:.34,clip:[[268,20],[868,20],[868,535],[716,535],[697,547],[673,552],[642,550],[619,543],[614,581],[594,579],[585,550],[545,535],[517,539],[482,536],[449,546],[420,538],[268,538]]},
+neck:{sheet:'upper',rect:[587,105,138,121],pivot:[650,160],clip:[[604,105],[704,130],[710,176],[724,204],[678,224],[596,172]]},
 torso:{sheet:'upper',rect:[505,105,285,368],pivot:[646,428]},
 pelvis:{sheet:'upper',rect:[875,206,325,252],pivot:[1038,255],clip:[[875,206],[1200,206],[1200,319],[1080,347],[1000,338],[875,319]]},
 nearUpperArm:{sheet:'upper',rect:[129,524,200,277],pivot:[267,579],tip:[185,762]},
@@ -68,7 +124,7 @@ nearForearm:{sheet:'upper',rect:[563,556,176,248],pivot:[610,594],tip:[692,766]}
 nearHand:{sheet:'upper',rect:[976,654,150,154],pivot:[1036,679],grip:[1047,753]},
 farUpperArm:{sheet:'upper',rect:[143,885,193,277],pivot:[205,934],tip:[282,1121]},
 farForearm:{sheet:'upper',rect:[590,924,141,241],pivot:[630,956],tip:[680,1137]},
-farHand:{sheet:'upper',rect:[974,1007,148,166],pivot:[1025,1040]},
+farHand:{sheet:'upper',rect:[974,1007,148,166],pivot:[1025,1040],grip:[1048,1118]},
 nearThigh:{sheet:'lower',rect:[135,69,227,346],pivot:[270,115],tip:[197,380]},
 nearShin:{sheet:'lower',rect:[560,97,159,302],pivot:[658,135],tip:[622,369]},
 nearFoot:{sheet:'lower',rect:[928,238,238,177],pivot:[986,280]},
@@ -112,10 +168,30 @@ attack:{src:'./assets/hero-actions/attack.png',windup:.24,recovery:.32,frames:[
 {rect:[1085,523,308,474],clip:[[1085,534],[1200,534],[1200,523],[1393,523],[1393,997],[1085,997]],origin:[1233,992],hand:{x:1185,y:829,rotation:0,scale:1}}
 ]}
 };
+const starterIdleHands=[[414,366],[856,364],[1284,358],[421,867],[856,873],[1283,869]];
+const starterIdleFrames=IDLE_PORTRAIT_ART.frames.map((frame,i)=>({...frame,handMask:IDLE_PORTRAIT_ART.handMask.map(([x,y])=>[frame.hand.x+x,frame.hand.y+y]),farHand:{x:starterIdleHands[i][0],y:starterIdleHands[i][1],rotation:0}}));
+FULL_BODY_IDLE_ART.armor_t1={src:IDLE_PORTRAIT_ART.src,...starterIdleFrames[0],frames:starterIdleFrames,frameSeconds:IDLE_PORTRAIT_ART.frameSeconds,breathSeconds:3.4,breathStretch:0,weaponFallback:'original'};
+const starterAttackHands=[[436,334],[908,312],[1361,322],[238,747],[700,749],[1363,827]];
+FULL_BODY_ATTACK_ART.armor_t1={src:ACTION_HERO_ART.attack.src,height:ACTION_HERO_ART.referenceHeight,weaponFallback:'original',defaultFrames:{raised:2,attack:4},gameFrames:[1,2,4,5],combat:{windup:[[0,1/3],[1,2/3],[2,1]],recovery:[[3,.25],[4,.5625],[5,1]]},clips:{attack:[[0,.18],[1,.16],[2,.16],[3,.12],[4,.16],[5,.18],[null,.36]],raised:[[null,.35],[1,.12],[2,.75],[1,.12],[null,.4]]},frames:ACTION_HERO_ART.attack.frames.map((frame,i)=>({...frame,handMask:ACTION_HERO_ART.handMask.map(([x,y])=>[frame.hand.x+x,frame.hand.y+y]),farHand:{x:starterAttackHands[i][0],y:starterAttackHands[i][1],rotation:0}}))};
+const starterJumpNames=['crouch','takeoff','airborne','hold','strike','landing'],starterJumpHands=[[433,398],[922,261],[1382,221],[428,698],[689,753],[1373,826]];
+FULL_BODY_JUMP_ART.armor_t1={src:ACTION_HERO_ART.jump.src,sources:[ACTION_HERO_ART.jump.src],weaponFallback:'original',preview:FULL_BODY_JUMP_ART.armor_t2.preview,frames:Object.fromEntries(ACTION_HERO_ART.jump.frames.map((frame,i)=>[starterJumpNames[i],{...frame,height:ACTION_HERO_ART.referenceHeight,handMask:ACTION_HERO_ART.handMask.map(([x,y])=>[frame.hand.x+x,frame.hand.y+y]),farHand:{x:starterJumpHands[i][0],y:starterJumpHands[i][1],rotation:0}}]))};
 export const CRITICAL_ART={heroX:490,groundY:476,dummyX:900,jumpX:660,jumpHeight:132,strikeX:806,missX:650,scale:.972};
-export function hero(c,x,y,s=1,equipment={},time=0,attack=0,hit=0,scarf='#63dbc4',action=null,pose=null){const a=EQUIPMENT_ART[equipment.armor]||EQUIPMENT_ART.armor_t1;const w=EQUIPMENT_ART[equipment.weapon]||EQUIPMENT_ART.weapon_t1;c.save();c.translate(x,y);c.scale(s,s);if(pose?.shadow!==false)ellipse(c,0,0,45,10,'#183c4844');c.rotate(pose?.lean||0);c.scale(pose?.stretchX||1,pose?.stretchY||1);c.translate(attack*18,Math.sin(time*3)*2);if(pose?.legs){for(const [i,angle] of pose.legs.entries()){c.save();c.translate(i?17:-15,-38);c.rotate(angle);rect(c,-9,0,18,33,6,'#293e4d');rect(c,-12,25,27,12,5,'#524e42');c.restore()}}else{if(action==='kick'&&attack>0){c.save();c.translate(-14,-36);c.rotate(attack*1.4);rect(c,-10,0,18,48,6,'#293e4d');rect(c,-17,38,27,12,5,'#524e42');c.restore()}else rect(c,-24,-38,18,33,6,'#293e4d');rect(c,8,-38,18,33,6,'#293e4d');rect(c,-29,-13,27,12,5,'#524e42');rect(c,7,-13,29,12,5,'#524e42');}poly(c,[[-23,-94],[24,-94],[30,-39],[-29,-39]],a.base,'#274c58');rect(c,-30,-85,20,24,8,a.trim);rect(c,13,-85,20,24,8,a.trim);rect(c,-26,-48,54,9,3,'#625a42');rect(c,-4,-49,12,12,2,'#e4bd6a');poly(c,[[-24,-96],[-61,-82],[-45,-69],[-67,-55],[-19,-66]],scarf);ellipse(c,-3,-117,29,33,'#bd7e55');ellipse(c,1,-120,27,31,'#f0bd83');poly(c,[[-29,-120],[-33,-143],[-17,-153],[-4,-151],[10,-158],[20,-145],[30,-139],[27,-123],[15,-136],[3,-130],[-9,-138],[-15,-115]],'#3d4350');rect(c,0,-123,5,8,2,'#203443');rect(c,18,-123,5,8,2,'#203443');c.strokeStyle='#ba7d55';c.lineWidth=2;c.beginPath();c.arc(13,-110,5,0,Math.PI);c.stroke();rect(c,-25,-99,52,13,6,scarf);c.save();c.translate(28,-76);if(action==='guard'){c.rotate(-.55);rect(c,-1,-7,14,28,6,'#edb480');rect(c,-16,9,27,13,6,'#f0bd83')}else{c.rotate(pose?.swordAngle??(-.5+attack*(action==='0'?.65:action==='1'?1.65:action==='2'?2.6:action==='kick'?.1:1.9)));rect(c,3,-10,12,34,6,'#edb480');rect(c,8,-51,8,50,3,'#725541');rect(c,-4,-38,32,7,2,'#dfb464');poly(c,[[8,-38],[5,-w.length-25],[12,-w.length-46],[21,-w.length-25],[17,-38]],w.blade,'#345867');poly(c,[[12,-w.length-46],[12,-40],[17,-40],[21,-w.length-25]],w.edge)}c.restore();if(hit>0){c.globalAlpha=hit*.5;ellipse(c,0,-85,45,70,'#fff7df')}c.restore()}
+export function hero(c,x,y,s=1,equipment={},time=0,attack=0,hit=0,scarf='#63dbc4',action=null,pose=null){const a=EQUIPMENT_ART[equipment.armor]||EQUIPMENT_ART.armor_t1;const w=EQUIPMENT_ART[equipment.weapon]||EQUIPMENT_ART.weapon_t1;c.save();c.translate(x,y);c.scale(s,s);if(pose?.shadow!==false)ellipse(c,0,0,45,10,'#183c4844');c.rotate(pose?.lean||0);c.scale(pose?.stretchX||1,pose?.stretchY||1);c.translate(attack*18,Math.sin(time*3)*2);if(pose?.legs){for(const [i,angle] of pose.legs.entries()){c.save();c.translate(i?17:-15,-38);c.rotate(angle);rect(c,-9,0,18,33,6,'#293e4d');rect(c,-12,25,27,12,5,'#524e42');c.restore()}}else{if(action==='kick'&&attack>0){c.save();c.translate(-14,-36);c.rotate(attack*1.4);rect(c,-10,0,18,48,6,'#293e4d');rect(c,-17,38,27,12,5,'#524e42');c.restore()}else rect(c,-24,-38,18,33,6,'#293e4d');rect(c,8,-38,18,33,6,'#293e4d');rect(c,-29,-13,27,12,5,'#524e42');rect(c,7,-13,29,12,5,'#524e42');}poly(c,[[-23,-94],[24,-94],[30,-39],[-29,-39]],a.base,'#274c58');rect(c,-30,-85,20,24,8,a.trim);rect(c,13,-85,20,24,8,a.trim);rect(c,-26,-48,54,9,3,'#625a42');rect(c,-4,-49,12,12,2,'#e4bd6a');poly(c,[[-24,-96],[-61,-82],[-45,-69],[-67,-55],[-19,-66]],scarf);ellipse(c,-3,-117,29,33,'#bd7e55');ellipse(c,1,-120,27,31,'#f0bd83');poly(c,[[-29,-120],[-33,-143],[-17,-153],[-4,-151],[10,-158],[20,-145],[30,-139],[27,-123],[15,-136],[3,-130],[-9,-138],[-15,-115]],'#3d4350');rect(c,0,-123,5,8,2,'#203443');rect(c,18,-123,5,8,2,'#203443');c.strokeStyle='#ba7d55';c.lineWidth=2;c.beginPath();c.arc(13,-110,5,0,Math.PI);c.stroke();rect(c,-25,-99,52,13,6,scarf);c.save();c.translate(28,-76);if(action==='guard'){c.rotate(-.55);rect(c,-1,-7,14,28,6,'#edb480');rect(c,-16,9,27,13,6,'#f0bd83')}else{c.rotate(pose?.swordAngle??(-.5+attack*(action==='0'?.65:action==='1'?1.65:action==='2'?2.6:action==='kick'?.1:1.9)));rect(c,3,-10,12,34,6,'#edb480');c.save();c.translate(12,0);c.scale(HERO_WEAPON_SCALE,HERO_WEAPON_SCALE);c.translate(-12,0);rect(c,8,-51,8,50,3,'#725541');rect(c,-4,-38,32,7,2,'#dfb464');poly(c,[[8,-38],[5,-w.length-25],[12,-w.length-46],[21,-w.length-25],[17,-38]],w.blade,'#345867');poly(c,[[12,-w.length-46],[12,-40],[17,-40],[21,-w.length-25]],w.edge);c.restore()}c.restore();if(hit>0){c.globalAlpha=hit*.5;ellipse(c,0,-85,45,70,'#fff7df')}c.restore()}
 export function enemy(c,x,y,s=1,type=0,t=0,hit=0){c.save();c.translate(x,y);c.scale(s,s);ellipse(c,0,0,53,11,'#16394944');const bob=Math.sin(t*4)*5;if(type%3===0){ellipse(c,0,-38+bob,48,38,'#478a79');ellipse(c,-8,-48+bob,35,29,'#80c67d');poly(c,[[-30,-62+bob],[-39,-91+bob],[-10,-68+bob]],'#e4d49b');poly(c,[[16,-67+bob],[36,-92+bob],[35,-59+bob]],'#e4d49b');ellipse(c,-17,-43+bob,7,9,'#fff5d4');ellipse(c,13,-43+bob,7,9,'#fff5d4');ellipse(c,-19,-43+bob,3,5,'#273f47');ellipse(c,11,-43+bob,3,5,'#273f47');rect(c,-10,-25+bob,15,4,2,'#365c4f')}else if(type%3===1){poly(c,[[-20,-44+bob],[-88,-74+bob],[-73,-20+bob],[-40,-27+bob]],'#666398');poly(c,[[20,-44+bob],[88,-74+bob],[73,-20+bob],[40,-27+bob]],'#666398');ellipse(c,0,-47+bob,29,42,'#ac82b0');poly(c,[[-23,-68+bob],[-28,-110+bob],[-3,-84+bob]],'#9272a5');poly(c,[[23,-68+bob],[28,-110+bob],[3,-84+bob]],'#9272a5');ellipse(c,-10,-53+bob,9,11,'#ffe2a1');ellipse(c,10,-53+bob,9,11,'#ffe2a1');ellipse(c,-12,-53+bob,3,6,'#383c61');ellipse(c,8,-53+bob,3,6,'#383c61')}else{poly(c,[[-52,-9],[-60,-64],[-28,-102],[23,-109],[59,-64],[50,-9]],'#6e8295');poly(c,[[-52,-9],[-60,-64],[-28,-102],[-7,-57],[-16,-8]],'#91a8ab');poly(c,[[-28,-102],[23,-109],[59,-64],[-7,-57]],'#b1c4b5');rect(c,-26,-56,16,8,3,'#ffdc78');rect(c,12,-56,16,8,3,'#ffdc78');poly(c,[[-9,-87],[0,-113],[12,-89],[0,-68]],'#63d6c3')}if(hit>0){c.globalAlpha=hit*.6;ellipse(c,0,-48,52,55,'#fff')}c.restore()}
-export function drawWorld(c,w,h,t=0,scene='town',equipment={},drawHero=hero){c.save();c.scale(w/1400,h/700);const g=c.createLinearGradient(0,0,0,700);g.addColorStop(0,'#87becb');g.addColorStop(.65,'#cee2cb');g.addColorStop(1,'#f6e6b9');c.fillStyle=g;c.fillRect(0,0,1400,700);ellipse(c,1120,102,54,54,'#fff1bd');ellipse(c,1120,102,69,69,'#fff0bd22');for(let i=0;i<8;i++)cloud(c,((i*251+t*3)%1800)-200,85+(i%3)*74,.65+(i%3)*.35,.35);poly(c,[[0,440],[180,289],[350,403],[510,253],[770,453],[950,289],[1150,398],[1400,271],[1400,700],[0,700]],'#87b9b84b');if(scene==='town'){island(c,830,354,1.65);island(c,260,309,.29,'#8dc6a0');tree(c,250,285,.8);island(c,1290,253,.38,'#8dbb98');tree(c,1280,232,.8);c.strokeStyle='#e9d4a2';c.lineWidth=28;c.lineCap='round';c.beginPath();c.moveTo(630,412);c.bezierCurveTo(705,404,700,291,785,299);c.bezierCurveTo(900,310,967,320,1045,334);c.stroke();c.beginPath();c.moveTo(770,314);c.lineTo(824,208);c.stroke();building(c,855,227,1.05,'arena');building(c,1022,361,.92,'forge');for(const [x,y,s] of [[438,350,1.3],[482,295,.9],[1054,232,1.2],[1140,335,.9],[950,432,.7],[645,242,.8],[1085,420,.8]])tree(c,x,y,s);building(c,470,354,.76,'lodge');ellipse(c,723,362,73,30,'#79945f');ellipse(c,723,358,67,26,'#decc8c');for(let i=0;i<3;i++){rect(c,680+i*42,304,7,48,2,'#8b7651');ellipse(c,684+i*42,309,18,21,'#eacf95');ellipse(c,684+i*42,309,12,15,'#cc755f');ellipse(c,684+i*42,309,6,8,'#edd9a3')}drawHero(c,700,276,.57,equipment,t);for(let i=0;i<30;i++){const x=420+(i*97)%745,y=350+(i*31)%95;ellipse(c,x,y,2.5,3,i%2?'#ffdc8b':'#fff2c9')}cloud(c,310,584,1.7,.5);cloud(c,1150,644,2,.45)}else{island(c,710,607,3.4);ellipse(c,700,531,570,72,'#b2c78c');ellipse(c,700,540,480,48,'#d8cd98');for(const [x,y,s] of [[100,475,1.8],[1320,475,2],[225,420,1.2],[1180,405,1.4]])tree(c,x,y,s);if(scene==='battle'){for(let i=0;i<8;i++){rect(c,370+i*90,295,35,130,6,'#a3b4a099');rect(c,360+i*90,285,55,18,5,'#d4dabb99')}}}c.restore()}
+export function drawWorld(c,w,h,t=0,scene='town',equipment={},drawHero=hero){
+if(scene==='arena'){
+const image=arenaBackground(),scale=Math.max(w/ARENA_ART.width,h/ARENA_ART.height),width=ARENA_ART.width*scale,height=ARENA_ART.height*scale;
+c.save();c.fillStyle='#b69c51';c.fillRect(0,0,w,h);if(image)c.drawImage(image,(w-width)*ARENA_ART.focusX,(h-height)*ARENA_ART.focusY,width,height);c.restore();return
+}
+if(scene==='town'||scene==='home'){
+const image=townBackground(),placement=townPlacement(w,h);
+c.save();c.fillStyle='#87becb';c.fillRect(0,0,w,h);c.translate(placement.x,placement.y);c.scale(placement.scale,placement.scale);
+if(image)c.drawImage(image,0,0,TOWN_ART.width,TOWN_ART.height);
+if(scene==='town')drawHero(c,TOWN_ART.hero.x,TOWN_ART.hero.y,TOWN_ART.hero.height/158,equipment,t);
+c.restore();return
+}
+c.save();c.scale(w/1400,h/700);const g=c.createLinearGradient(0,0,0,700);g.addColorStop(0,'#87becb');g.addColorStop(.65,'#cee2cb');g.addColorStop(1,'#f6e6b9');c.fillStyle=g;c.fillRect(0,0,1400,700);ellipse(c,1120,102,54,54,'#fff1bd');ellipse(c,1120,102,69,69,'#fff0bd22');for(let i=0;i<8;i++)cloud(c,((i*251+t*3)%1800)-200,85+(i%3)*74,.65+(i%3)*.35,.35);poly(c,[[0,440],[180,289],[350,403],[510,253],[770,453],[950,289],[1150,398],[1400,271],[1400,700],[0,700]],'#87b9b84b');island(c,710,607,3.4);ellipse(c,700,531,570,72,'#b2c78c');ellipse(c,700,540,480,48,'#d8cd98');for(const [x,y,s] of [[100,475,1.8],[1320,475,2],[225,420,1.2],[1180,405,1.4]])tree(c,x,y,s);if(scene==='battle'){for(let i=0;i<8;i++){rect(c,370+i*90,295,35,130,6,'#a3b4a099');rect(c,360+i*90,285,55,18,5,'#d4dabb99')}}c.restore()
+}
 
 export function trainingPartner(c,release=0,windup=0,lane=1,stick=null){
 const low=!stick&&lane===2?Math.min(1,release*2):0;
