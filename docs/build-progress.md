@@ -12,7 +12,132 @@ A Unity conversion remains a production option, including when its visual editin
 
 The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, twelve encounters and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
 
-## Independent armor, helmets and bottoms integrated — 16 September 2026
+## Starter original sprite sheets — latest local revision, 16 September 2026
+
+Jimmy requested the original `assets/hero-actions/attack.png` for the Starter instead of the rigged body. Starter now uses that six-drawing attack sheet, the original `hero-idle/idle.png` loop and `hero-actions/jump-land.png` through the same complete-body rendering path as the other outfits. Existing source crops, roots, display heights and the 1.4× sword multiplier remain. The six attack keys run in the preview and Arena uses the original three windup/three recovery keys at its existing timing. Strength uses the supplied lift, preparation, strike and recovery drawings.
+
+Town, portraits, trainers, Arena and Hero previews use the Starter’s complete sprites even when a later sword or shield is equipped. The Hero editor’s Starter choice is Game art only; part fitting is unavailable for that set. No new source images, layout changes, equipment progression changes or gameplay balance changes. Legacy A/B fitting remains available.
+
+Cache `obo-game-2026-09-16-17` retains the existing file list and safe update behavior. No tests or publication were performed. One focused Starter attack preview is recorded in validation.
+
+## C/D/F armory and upgrade-only shop — earlier local revision, 16 September 2026
+
+The three supplied sets are added after A/B as tiers 4/5/6 (C/D/F). Each supplies an unchanged standing PNG, four attack drawings, four jump/landing drawings, sword and two-face shield. Runtime files use `set-c`, `set-d`, `set-f`, `sword-c/d/f-long` and `shield-c/d/f` names. Existing tier IDs, prices and bonuses remain stable; additional progression values are provisional and await Jimmy’s playtesting. See [armory integration](armory-integration.md) for progression and rendering details.
+
+All complete outfits use the shared full-body path in Town, player portraits, Arena and all five trainers. Existing character display heights, world positions, gameplay controls and the 1.4× sword multiplier remain. Strength uses the supplied attack keys; its kick feedback reuses crouch/landing drawings because this batch contains no kick drawing. Dodge retains its existing movement transforms, Block retains its aiming shield path with the body sword hidden, and Critical/Arena select the new outfit’s action keys. No new art was generated.
+
+Shop now displays current equipment and one next-upgrade button for Armor, Weapon and Shield. Purchases advance one tier and automatically equip the upgrade. Lower-equipment selection and downgrade buttons are removed. Loading an older save selects the highest owned item in each slot without charging gold; owned items and other progression remain. Shields retain their cosmetic status. First-clear/session settlement is unchanged.
+
+Hero motion and the existing Hero editor each use one Armory set dropdown for Starter, A, B, C, D and F. It selects a matching armor/sword/shield preview without purchasing or changing saved equipment. The editor defaults to complete outfit artwork, preserves legacy A/B part fitting through its Preview control, and hides limb controls for complete artwork. Facing, pose, playback and zoom remain available.
+
+Cache `obo-game-2026-09-16-16` adds all fifteen images and retains the existing safe update activation behavior. No tests, gameplay sessions, publication or physical-phone verification were requested or performed. Focused visual preview details are recorded in [validation](validation.md).
+
+## Long swords, shield equipment and next-set prompts — earlier, 16 September 2026
+
+Both supplied long swords replace the tier-2/tier-3 appearances with refitted grips, keeping the shared 1.4× multiplier and existing weapon stats. Unchanged runtime images are `sword-a-long.png`, `sword-b-long.png`, `shield-a.png` and `shield-b.png` in `assets/hero-equipment/`. The outside shield crops supply Shop icons; inside crops attach at the far hand behind the complete body or rig. Per-pose attachments cover the current A/B full-body drawings. The approved Set B airborne/strike drawings hide the far hand, so their shield remains partly behind the body. Block training uses the equipped shield appearance on its existing aiming path without changing collision rules.
+
+Shields are independent purchases: No shield (`shield_t1`) is the free default, Skyranger buckler (`shield_t2`) costs 120 gold, and Dawnwarden shield (`shield_t3`) costs 450. They are explicitly cosmetic for this integration; combat balance is unchanged. Save normalization accepts owned shield choices and defaults older saves to none. Hero motion offers a transient shield selector. Cache `obo-game-2026-09-16-14` includes the four new images.
+
+The [next-set prompt pack](new-equipment-sets-prompts.md) contains suggested C/D/E designs, five reusable prompts with exact reference attachments, filenames and a separate-chat handoff. Each set needs a standing master, four-pose attack sheet, four-pose jump/landing sheet, sword and two-face shield sheet: fifteen PNGs total. No new images were generated here.
+
+Jimmy explicitly asked to stop extensive animation review. `AGENTS.md` and the handoff now require brief, focused previews instead of checking every outfit/pose on each request; prompt-only work needs no browser review. Further preview work stopped. No tests, Git commands, publication or editor work.
+
+## Supplied Sword A and 1.4× swords — earlier integration, 16 September 2026
+
+Jimmy revised the shared equipped-sword multiplier to `HERO_WEAPON_SCALE=1.4`. The supplied `sword_a.png` is copied unchanged to `assets/hero-equipment/sword-a.png` and replaces the appearance of the first weapon upgrade, `weapon_t2` (Cloudsteel saber). Its grip pivot is `(447,358)` with base attachment scale `.12`; the Shop thumbnail uses a padded source crop. Item IDs, names, prices and bonuses remain unchanged. The complete Town outfits from the preceding revision remain in use.
+
+Visually reviewed Sword A on six full-body Set A/B standing, attack and jump/landing poses, plus the actual Shop illustration helper, through a temporary rendering fixture. Grip placement, foreground fist coverage and blade direction were inspected; this was not a purchase or gameplay session. Saved `sword-a-grips-140.png` in the thread visualization directory and removed the fixture. No tests, Git commands, publication or editor work. Cache `obo-game-2026-09-16-13` adds the new sword image and retains existing update activation behavior.
+
+The [longer-sword and shield-view prompts](sword-length-and-shield-view-prompts.md) request a 30% blade-only extension and straight-on orthographic front/back shield faces. The angled shield result is a design reference only and is not integrated. This supersedes earlier three-quarter shield wording; no new image generation was performed.
+
+## Complete Town outfits and 1.5× swords — earlier revision, 16 September 2026
+
+Jimmy requested 1.5× the original equipped-sword size, replacing the previous 1.3× multiplier. The shared attachment factor is now `HERO_WEAPON_SCALE=1.5`; it is not multiplied by 1.3 again. Grip anchors, body scale and equipment stats are unchanged.
+
+Town now calls `townHero`, which first renders the equipped Set A/B complete master with the existing quiet breathing, saved facing and game/OS motion preferences. It retains the Town foot anchor `(700,276)` and `158 × .57` world-height conversion. The existing equipped renderer remains a loading/base-outfit fallback. Training render routes are unchanged. This fixes the previous Town-only use of articulated armor despite complete outfit portraits and action sheets being available.
+
+Viewed both complete outfits in the actual Town UI at 844×390 using temporary in-memory app copies, without buying equipment or changing the saved player. Set B screenshot: `town-set-b-sword-150.png` in the thread visualization directory. Removed the temporary files after review. No tests, Git commands, publication or editor work. Cache `obo-game-2026-09-16-12` retains the existing asset list and update activation behavior.
+
+## Set B actions and larger swords — earlier local integration, 16 September 2026
+
+Jimmy supplied `set-b-full.png` (1086×1448), `set-b-attack.png` (1254×1254) and `jump-land-setB.png` (1774×887). Unchanged runtime copies total 3,075,651 bytes. The complete master supplies portraits and gentle idle breathing; the attack sheet supplies four poses; the merged jump sheet supplies crouch, airborne preparation, low strike and grounded landing. Preview selection and Critical full-body routing now use available outfit descriptors instead of a Set A-only condition. Arena uses the available A/B full-body attack and standing frames with its existing normal-attack timestamp and windup/recovery timing. Other training actions retain their existing rig paths.
+
+Set B's master has its own baseline and reference height. Attack cell placement closely matches Set A, with a two-pixel boot baseline adjustment. The irregular merged jump sheet has independent reference heights, roots and grips; clip polygons separate overlapping airborne/strike bounding rectangles. The supplied middle poses conceal the far hand/arm; no missing limb was invented. Future shield fitting will need to account for that art difference. Preview falls back to the existing rig while full-body images load. Arena presentation now also respects the operating system's reduced-motion preference.
+
+Jimmy then requested swords at 1.3× their previous size. `HERO_WEAPON_SCALE=1.3` applies once at equipped-sword attachments in full-body, starter-sprite, rig and procedural fallback renderers. The hand position, body scale, foreground finger mask and sword rotation are retained. Source sword images, item stats/prices and independent Shop icons are unchanged.
+
+Visual review used the real rendering helpers for all nine Set B drawings with both procedural and supplied swords, plus frozen Critical/Arena compositions and a Set A comparison. See `docs/validation.md` for scope. No tests, gameplay sessions, editor features, Git commands, publishing or image generation. Cache `obo-game-2026-09-16-11` lists all three new PNGs and retains the existing update activation behavior.
+
+## Set B standing and actions — earlier art handoff, 16 September 2026
+
+Jimmy requested Set B assets using the approved Set A poses. The [Set B prompt pack](set-b-animation-prompts.md) contains four copy-ready requests: complete standing master, four attack poses, two airborne poses, and the two selected ground poses. Approve the master first and attach the same approved result to every sheet request. Outfit replacement preserves the original complete head and uses the existing Set B armor/bottoms as costume references. No helmet or gloves. The master supplies idle through the existing subtle breathing transform, so this plan needs nine useful drawings and no idle sheet. Ground cells 1/6 keep their original layout while the unused four cells remain transparent. Coordinate/style consistency still needs inspection and fitting after generation. This handoff does not generate or integrate Set B art; no tests, editor work, Git or publication.
+
+## Set A accepted jump and landing — latest local integration, 16 September 2026
+
+Jimmy approved the two complete poses from `ChatGPT Image Sep 16, 2026 at 08_17_54 AM.png`, plus only frames 1 and 6 of `ChatGPT Image Sep 16, 2026 at 07_56_23 AM.png`. Unchanged copies are `assets/hero-actions/set-a-jump-keyposes.png` (1774×887) and `assets/hero-actions/set-a-jump-ground.png` (1536×1024), about 2.9 MB combined. The sequence is crouch → airborne preparation → low forward strike → grounded landing, returning to the existing master. Prompt notes now specify folding the wrist/palm back while keeping the elbow toward screen-right.
+
+Hero → Animation preview → Set A → Airborne or Landing starts the complete 2.2-second preview loop. Per-sheet reference heights (960 and 600 source pixels), virtual standing origins, per-pose grips and foreground fist masks align the supplied drawings without independently enlarging each bent silhouette. The separate sword points down-left in preparation and slightly down-right at the low strike. Standing retains the original full-body master; all drawings include the original hair. Four distinct drawings still produce visible pose changes, especially on landing and recovery; no generated intermediates or crossfades were added.
+
+Critical training now uses these complete Set A frames too. Its existing world-position function owns jump travel. Crouch covers the grounded beginning of rise, airborne holds through wait/finish, successful descent uses the low strike, and missed/early jumps return without a strike. Grounded recovery uses the accepted landing before standing. Other outfits and Arena rendering retain their existing action paths. Timing, input, scoring, settlement and equipment progression are unchanged.
+
+Desktop visual review covers the supplied and procedural sword grips, relative scale and grounded baselines, plus frozen Critical preparation/strike/landing compositions. The actual Hero preview was opened at 844×390. No tests, gameplay sessions, editor changes, Git commands, publication or image generation were performed. Cache `obo-game-2026-09-16-9` includes both new sheets; activation behavior is unchanged. Hit/defeat remain pending.
+
+## Jump pose references supersede the six-frame corrections — earlier handoff, 16 September 2026
+
+The second jump result still misses Jimmy's intended action. He supplied two screenshots for pose mechanics: an airborne backswing with the blade angled down-left behind the head, and a strong forward lean ending with the weapon hand low and blade nearly horizontal right. The latter does not clearly show ground contact; do not force a planted squat into that key pose. The far/shield arm must remain lowered beside the body, explicitly confirmed despite the screenshots showing it outward.
+
+The [fresh-agent prompt](set-a-reference-pose-prompts.md) requests just those two full-body Set A key poses in one two-cell sheet, using the original master for identity and the screenshots for pose only. Exclude rejected sheets and the earlier schematic from the fresh reference set. No source image edits, generated images, runtime integration, tests, editor work, Git or publishing changes were made in this handoff.
+
+## Jump, landing, hit and defeat — next art handoff, 16 September 2026
+
+Jimmy requested jump/landing next and efficient hit/defeat coverage. The [new prompt pack](set-a-jump-hit-defeat-prompts.md) supplies one 3×2 jump/landing sheet prompt and one 2×2 hit/defeat prompt. The six jump poses cover crouch, takeoff, holdable airborne preparation, downswing, strike landing and non-striking landing. The four reaction poses share ordinary recoil with the defeat opening, followed by stagger, kneel and a seated final hold. This is a proposed ten-drawing batch, not runtime implementation or a smoothness guarantee. Generate/review the jump sheet first.
+
+Keep the existing original master, received attack references, complete original hairstyle, bare hands and separate equipment. Do not commission a new master/idle or every outfit. Existing Critical world motion supplies the jump arc. Later defeat integration needs a separate presentation clock because combat stops at zero HP and currently opens results immediately; combat/input must stop and settlement/save stay once-only while the visual defeat finishes. See the prompt pack for detailed integration notes. No code, tests, editor work, Git commands, image generation or publication were performed for this handoff.
+
+## Set A four-pose attack sheet — latest local preview, 16 September 2026
+
+Jimmy supplied a single 2×2 attack sheet, `ChatGPT Image Sep 16, 2026 at 07_12_34 AM.png`. Its unchanged runtime copy is `assets/hero-actions/set-a-attack.png`: 1254×1254 RGBA, 871,499 bytes, four 627×627 cells. Hero → Animation preview → Armor set · Set A → Attack now plays those full-body drawings with the separate equipped sword. Selecting Attack for Set A starts playback; Pause freezes the current phase. Raised arm shows the received preparation pose and can play its lift/hold/return sequence. Standing retains the supplied complete master and its quiet breathing. Other action/gameplay routes are not migrated in this trial.
+
+`FULL_BODY_ATTACK_ART` uses one 568-pixel reference height for all four cells and per-frame foot origins to remove layout offsets without resizing each visible silhouette. Per-frame grip positions, weapon angles and small foreground fist masks keep the sword attached. Preparation points the blade screen-left behind the hero; strike and recovery point right. The shared full-body renderer now uses compact centered handles for procedural tier-1/2 swords; the supplied tier-3 blade keeps its authored pivot.
+
+The 1.32-second preview cycle holds the original master, then lift/preparation/strike/recovery, then returns to the exact master. Drawings switch discretely; there is no crossfade or invented intermediate arm motion. Four keys are enough to inspect the attack but not a smoothness guarantee. Recovery-to-master still has a noticeable hand-position jump, and lift/preparation/strike may benefit from selected intermediate art after Jimmy reviews the result. Keep jump and additional outfit generation deferred.
+
+Visual review at 844×390 covered Set A Raised arm and Attack playback. A temporary static page displayed all four fitted poses with procedural tier-1 and supplied tier-3 swords; its source was removed after capture. Screenshot `set-a-attack-poses.png` is in the current thread's visualization directory. No tests, gameplay sessions, editor work, Git commands, image generation or publication. The unchanged PNG is listed in cache `obo-game-2026-09-16-8`; update activation behavior remains unchanged.
+
+## Set A quiet idle and equipped identity — latest, 16 September 2026
+
+The supplied `setA.png` is the accepted first complete-body reference; no replacement master needs generating. Its unchanged runtime copy is `assets/hero-equipment/set-a-full.png` (about 0.9 MB). Set A now uses this complete drawing in Shop, Hero and Arena selection portraits and the Standing motion preview. A continuous 3.4-second breathing cycle changes vertical scale by at most 1.8%, anchored at the feet; the sword and finger mask follow the same transform. This is a minimal code-driven idle, not a generated sequence. Standing starts playing automatically and retains Pause/Play and motion preferences. Saved facing applies to the complete idle.
+
+All existing rig poses now use one complete hair/face/head crop from that same drawing, replacing the bald head. No separate hair overlay is used. Active gameplay retains its existing articulated body and movement so it does not alternate body silhouettes between idle and attack. The complete-body action-frame migration is still future work. No editor features were changed.
+
+Next art batch: only four Set A normal-attack key drawings (lift, raised preparation, strike and recovery), using this master for identity, outfit and style. Review registration, weapon grips, silhouettes and timing in-game before requesting selective in-betweens; jump/landing follows. Do not mass-generate all actions or outfits. Prompts constrain the art but do not guarantee matching proportions or positions. Each accepted drawing needs registration and visual review. The older prompt pack below is a reference, not an instruction to generate all sheets now.
+
+Local desktop visual review showed Set A equipped in Shop, its Hero portrait, automatically playing Standing and the complete head in Raised arm at 844×390. A temporary in-memory copy of the app allowed equipment switching without changing the real save; it was removed. No tests, Git commands, publication or image generation. Cache is `obo-game-2026-09-16-7`; update activation behavior is unchanged.
+
+## Complete head and full-body art direction — latest, 16 September 2026
+
+Jimmy paused editor work and requires explicit requests before any Git command or publication. The new art should contain one complete head with the original hairstyle, face and ears drawn together, and preferably include that head directly in every complete-body frame. Do not restore hair by attaching separate hair pieces to the bald cutout head. The short-lived hair attachment attempt was removed without changing source PNGs.
+
+The [Set A full-body prompt pack](set-a-full-body-animation-prompts.md) now supplies a complete master prompt, idle/normal-attack/critical-jump-and-landing prompts, consistent canvas and origin guidance, and a targeted frame correction prompt. The old outfit assets are optional design references, not a required construction. Generate and approve the master before commissioning the action frames. No images, tests, Git commands, publication or editor changes were performed for this prompt handoff; no full-frame runtime replacement is claimed.
+
+## Full Armor outfits and hero editor — current revision, 16 September 2026
+
+Jimmy superseded the separate equipment-slot model: no helmets. Armor now means one complete coordinated outfit of clothes, pants and shoes; matching gloves are optional future artwork. The Shop categories are Armor, Weapons, Shields and Fairy, with the last two reserved for later work. Existing `armor_t1`–`armor_t3` IDs, prices and HP bonuses remain stable. The received A/B torso and lower-body images form the two full outfits. Retired helmet/bottoms purchases are refunded once during save normalization, and their ownership/slot entries are removed. This migration is not yet covered by an executed test in this revision.
+
+Jimmy explicitly authorized a visual editor for palms, legs, part positions and direction. It is available at `hero-editor.html` through Hero → Animation preview → Open hero editor. Part fit supplies per-part x/y, rotation in degrees, scale and flips across poses; pose controls edit the selected pose's joint angles and hip/foot targets. The near-palm fit carries its sword attachment. Facing turns the complete modular hero. Equipment choices are preview samples. The [hero editor guide](hero-editor.md) explains the controls and limits.
+
+Drafts and applied adjustments use separate localStorage keys through `rig-config.js`, separate from progression. Apply affects only modular rendering in this browser/origin; it does not alter the complete starter sprites or publish a change. Downloaded JSON is the handoff for reviewed source integration and a later release. The editor shares `rig-art.js` and retains the current rig. No source images were generated or rewritten.
+
+The reported missing armor back was traced to torso masks cutting away the supplied opaque shoulder sockets. The correction restores the underarm/back shell: Set A retains the socket and cream lining while trimming its top plates; Set B retains its padded socket. This supersedes the earlier broad shoulder exclusions. The latest Set A Raised arm and Set B Airborne previews show the restored opaque back.
+
+For a possible later switch to complete-body frames, Jimmy requires the **original starter hero's hairstyle and identity**, not the bald fitting head. No helmets are wanted. First approve one full-body Set A master drawing, then plan consistent frame-by-frame idle, attack, jump and landing sequences. A single pose per action cannot replace those sequences. Keep matching canvas dimensions, character scale and root/ground anchors, with separate sword/shield images and per-frame hand/grip anchors for swapping. Fairy remains a later separate companion. The current bald rig remains temporary until replacement sequences are supplied and approved. [Next-art notes](hero-rig-next-art.md) contain one clearly future master-body prompt; no image generation is requested now.
+
+Desktop visual review covered the latest no-helmet Set A Raised arm and Set B Airborne at 1100×600, Play/Pause, Shop's four categories and Hero preview controls at 844×390, and editor layouts at 844×390, 667×375 and 568×320. Direct editor checks covered palm dragging/rotation with the sword attached, Undo, far-palm/shin rotation, facing, a wrist pose adjustment and Apply/Revert/Reset; reviewer fits were cleared afterward. See [validation](validation.md) for exact scope. No automated tests, gameplay, migration, offline-editor or physical-phone checks were run, following Jimmy's preference. The sections below record earlier milestones and are superseded where they describe separate helmet/bottoms purchases or an editor still awaiting authorization.
+
+Release cache `obo-game-2026-09-16-5` includes the hero editor and `rig-config.js`, and removes the unused helmet images. Update activation still waits until the current run is finished; no active training or arena session is reloaded.
+
+
+## Independent armor, helmets and bottoms integrated — 16 September 2026 (superseded equipment model)
 
 Jimmy supplied six PNGs and chose separate purchases for armor, helmets and bottoms. Their unchanged runtime copies are `dist/assets/hero-equipment/set-a-armor.png`, `set-b-armor.png`, `set-a-helmet.png`, `set-b-helmet.png`, `set-a-bottoms.png` and `set-b-bottoms.png`. Set A/B armor now supplies the appearance of existing `armor_t2`/`armor_t3`; stable IDs, names, prices and bonuses remain unchanged. `MODULAR_EQUIPMENT_ART` in `dist/art.js` owns the source rectangles, pivots and garment-piece fitting.
 
@@ -107,12 +232,13 @@ Jimmy approved the action placement and requested horizontal swords for standing
 - `dist/strength-layout.js` owns Strength placement and the controller positions reused by Dodge; `dist/strength-art.js` renders Strength in the game and the layout workbench.
 - `dist/block-art.js` renders the centered Block scene; `BLOCK_RULES` in `core.js` defines its collision geometry and initial pacing. The white joystick is bound in `game.js`.
 - `dist/dodge-art.js` renders Dodge at fixed 40%/60% character positions. Dodge timing descriptors live in `dist/core.js`; attack resolution and rewards use `dist/training.js` and `settleTraining`.
-- `dist/layout-editor.html` is a standalone visual placement tool with a separate local draft and JSON export.
+- `dist/layout-editor.html` is the earlier scene-placement workbench with a separate local draft and JSON export.
+- `dist/hero-editor.html`, `hero-editor.js` and `hero-editor.css` provide the authorized hero-part/pose editor; `dist/rig-config.js` validates and stores drafts/applied adjustments, and `dist/rig-art.js` shares rendering with the game. See `docs/hero-editor.md`.
 - `dist/battle.js` owns arena and survival combat.
 - `dist/art.js` owns replaceable procedural Canvas art and equipment appearance descriptors.
 - `dist/game.js` owns screens, input, settlement, saving, lifecycle and optional WebMCP tools.
 - Progress persists in `localStorage` under `one-brave-odyssey.browser.v1`.
-- Stable equipment IDs are `weapon_t1` through `weapon_t3` and `armor_t1` through `armor_t3`.
+- Stable equipment IDs are `weapon_t1` through `weapon_t3` and `armor_t1` through `armor_t3`; Armor now equips a full clothes/pants/shoes set. Helmets and separate bottoms are retired.
 - Last tested release: all 59 gameplay tests and six mobile-cache tests passed, including Critical’s fake-avoidance credit, miss/no-cue penalties, delayed airborne cue, lifetime mission normalization and once-only settlement. Chrome touch checks pass at 844×390, 667×375 and 568×320 with no runtime errors or overflow. These are desktop-emulated checks; physical iPhone playtesting remains.
 
 ## Running and phone testing

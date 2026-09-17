@@ -1,12 +1,24 @@
-# Two modular equipment sets
+# Equipment art direction — full Armor outfits
 
-Jimmy approved two designs per equipment slot. The complete pack contains **12 PNGs for ten equipment items**, across six batches of two images: armor, helmets, bottoms, Set A shield outer/inner faces, Set B shield outer/inner faces, and swords. Armor and bottoms contain several separate moving pieces within their PNG. Each shield item needs two views of the same physical shield. A/B are working art labels. The received armor maps to existing `armor_t2`/`armor_t3` with unchanged prices and bonuses; helmets and bottoms now have their own independently saved purchase/equipment slots.
+Latest sword/shield request: the supplied Sword A is integrated at `weapon_t2`, with global equipped-sword scale 1.4×. Use the [longer blade and straight-on shield prompts](sword-length-and-shield-view-prompts.md) for the next art edits. The shield's three-quarter view below is superseded by orthographic outside/inside views; keep Set A's round silhouette circular.
 
-**Received: six PNGs** — armor A/B, helmet A/B and bottoms A/B. These six are integrated locally with independent Shop purchases, saved equipment and shared rig drawing in previews and active scenes. **Remaining: six PNGs** — four shield images and two swords, to be supplied later. Prompts 1–3 are retained as references; do not regenerate those received items.
+Jimmy's current direction supersedes the independent helmet and bottoms plan below. **No helmets. Armor is one complete outfit of clothes, pants and shoes**, with matching gloves optional later. Shop has **Armor sets, Weapons, Shields and Fairy**. Weapons remain separate; Shields and Fairy are marked Coming soon. Existing armor IDs, prices and bonuses remain unchanged.
 
-Set A uses the previously approved practical brown leather, cream cloth and bronze style. Set B is a stronger-looking coordinated steel set with navy cloth, restrained teal details and brass trim. Keep comparable proportions so any helmet, armor, bottoms, sword and shield can mix between A and B.
+The four received A/B armor and bottoms PNGs supply the current two outfits: `set-a-armor.png` + `set-a-bottoms.png` for `armor_t2`, and the matching B files for `armor_t3`. Their file split supports the existing rig; it does not create separate purchases. The two received helmet PNGs are retired reference assets and are not rendered. The original complete starter sprites remain in use for base armor.
 
-The received armor, helmets and bottoms have an initial local fitting; shields and swords remain later work. Head/neck contact, near-side diagonal alignment and the incorrect far hand/palm still need fitting or replacement later. Jimmy also suggested a visual editor for a later task; this is not a request to build one now. Do not bake the current attachment errors into equipment. The existing starter sprite set remains complete and separate; no new starter hair is needed.
+Set A is practical brown leather, cream cloth and bronze. Set B is steel with navy cloth, restrained teal details and brass trim. The current cutout rig stays in place while Jimmy uses the authorized [hero editor](hero-editor.md) to review fitting. No new image generation is requested in this revision.
+
+## Future full-body option
+
+Complete body frames per Armor set could remove visible cutout seams, but require consistent frame-by-frame action sequences. One picture per action is not an animation replacement. Every sequence needs the same canvas, character proportions, scale, facing and root/ground anchors, with coherent intermediate poses and transitions.
+
+**Future full-body art must keep the original starter hero's hairstyle and identity. Do not use the temporary bald modular head and do not add a helmet.** Begin with one approved Set A full-body neutral master before planning idle, attack, jump and landing frames. The [next-art brief](hero-rig-next-art.md) contains the future master-image prompt and reference files. Frame counts, timings and packing are later integration decisions after approving the master and action plan.
+
+Swords and future shields remain separate layers, with per-frame hand/grip anchors so they can swap independently of the outfit. Shield art will need coherent outer and inner views; no hands should be baked into either weapon or shield images. Fairy is a later separate companion, not part of an Armor image.
+
+## Archived modular prompt pack — superseded, not a current generation request
+
+The following prompts preserve the origin and layout of the supplied cutout assets. They originally described separate armor, helmet and bottoms purchases and an editor deferred until later. Those product decisions are superseded by the full-outfit model and authorized editor above. **Do not regenerate helmets or follow the old independent-slot/fitting-order instructions.** The old bald-head rule applies only to the retired helmet brief, never to future complete-body art. Shield and sword prompts are retained as possible later references, not tasks to run now.
 
 ## References and workflow
 

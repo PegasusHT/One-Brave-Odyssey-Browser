@@ -160,15 +160,18 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:1
 .menu-profile>canvas{width:100%;height:clamp(150px,44vh,260px);object-fit:contain}
 .profile-combat{display:flex;justify-content:center;gap:16px;font-size:12px;font-weight:700;margin-top:4px}
 .shop-stock{display:grid;gap:4px;min-width:0}
-.shop-categories{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.shop-categories .mini-button{min-width:0}
-.shop-categories .mini-button>span{padding-inline:5px}
 .equipment-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 18px}
-.equipment-tile{display:grid;justify-items:center;min-width:0;text-align:center}
+.equipment-tile{display:grid;justify-items:center;min-width:0;text-align:center;align-content:start}
+.equipment-slot{font-weight:700;font-size:13px}
+.equipment-current{font-size:10px;line-height:13px;color:#35595e;margin-top:3px;min-height:26px;max-width:100%}
+.equipment-current::before{content:"Equipped · "}
+.equipment-max{min-height:44px;display:grid;align-items:center;font-size:12px;font-weight:700;color:#295f50}
 .equipment-tile .menu-illustration{height:64px}
 .equipment-tile h2{font:700 12px 'DM Sans',sans-serif;line-height:16px}
 .item-bonus{font-size:10px;margin-top:2px;color:#35595e}
-.equipment-tile .mini-button{min-width:72px}
+.equipment-tile .mini-button{min-width:72px;width:100%;max-width:170px}
+.equipment-tile .mini-button>span{padding-inline:6px;gap:4px}
+.equipment-tile .gold-amount .coin{width:17px;height:14px}
 .tonic-stock{display:flex;align-items:center;gap:10px;background:#173745e8;color:#f2f5e8;border:1px solid #c5e4dc77;border-radius:12px;padding:0 12px}
 .tonic-stock .menu-illustration{width:44px;height:48px}
 .tonic-stock>div{flex:1;font-size:12px}
@@ -214,7 +217,7 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:1
 .journal-panel dt{color:#bdd4cd}
 .journal-panel dd{margin:0;font-weight:700}
 #app.menu-screen>dialog{max-width:min(360px,90vw);padding:18px}#app.menu-screen>dialog h2{font-size:23px}#app.menu-screen>dialog p{font-size:12px}#app.menu-screen>dialog button{font-size:13px}
-@media(max-width:740px){.destination-body{inset:68px 3% 12px}.training-stations{gap:8px}.station-info{padding:7px}.station-heading h2{font-size:12px}.station-heading>b{font-size:13px}.station-info .mini-button{font-size:11px}.shop-layout{grid-template-columns:22% minmax(0,1fr);gap:3%}.equipment-grid{gap:7px}.equipment-tile h2{font-size:11px}.hero-layout{grid-template-columns:22% minmax(172px,35%) minmax(160px,1fr);gap:2%}.menu-panel{padding:9px}.profile-combat{gap:8px;font-size:10px}.profile-name h2{font-size:17px}.attribute-row{gap:4px}.attribute-row b{font-size:11px}.skill-tile{padding:7px;gap:3px 4px;grid-template-columns:22px minmax(0,1fr)}.skill-symbol{font-size:22px}.skill-tile h3{font-size:11px}.skill-tile small{font-size:9px}.legacy-layout{gap:2%;grid-template-columns:1fr 1fr .8fr}.legacy-actions{gap:2px}.legacy-actions .mini-button{font-size:10px}.legacy-actions .mini-button>span{padding-inline:6px}.journal-panel dl>div{font-size:11px;padding:8px 0}}
+@media(max-width:740px){.destination-body{inset:68px 3% 12px}.training-stations{gap:8px}.station-info{padding:7px}.station-heading h2{font-size:12px}.station-heading>b{font-size:13px}.station-info .mini-button{font-size:11px}.shop-layout{grid-template-columns:22% minmax(0,1fr);gap:3%}.equipment-grid{gap:7px}.equipment-tile h2{font-size:11px}.equipment-tile .mini-button{font-size:10px}.equipment-slot{font-size:12px}.hero-layout{grid-template-columns:22% minmax(172px,35%) minmax(160px,1fr);gap:2%}.menu-panel{padding:9px}.profile-combat{gap:8px;font-size:10px}.profile-name h2{font-size:17px}.attribute-row{gap:4px}.attribute-row b{font-size:11px}.skill-tile{padding:7px;gap:3px 4px;grid-template-columns:22px minmax(0,1fr)}.skill-symbol{font-size:22px}.skill-tile h3{font-size:11px}.skill-tile small{font-size:9px}.legacy-layout{gap:2%;grid-template-columns:1fr 1fr .8fr}.legacy-actions{gap:2px}.legacy-actions .mini-button{font-size:10px}.legacy-actions .mini-button>span{padding-inline:6px}.journal-panel dl>div{font-size:11px;padding:8px 0}}
 @media(max-height:350px){.destination-body{top:60px}.training-station .menu-illustration{height:72px}.station-info{padding:6px}.training-station .mini-button{padding-block:6px;min-height:44px}.equipment-tile .menu-illustration{height:44px}.hero-layout .menu-profile>canvas{height:126px}.legacy-place .menu-illustration{height:110px}}
 
 .station-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin-top:4px}
@@ -232,11 +235,13 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:1
 .rig-figure figcaption{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:10px;color:#173745;font-size:11px;font-weight:700;text-shadow:0 1px 0 #ffffff70}
 .rig-controls{display:grid;gap:5px;align-content:start;max-height:100%;min-height:0;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;padding:3px}
 .rig-pose-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 8px}
-.rig-gear-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 8px;padding-top:5px;border-top:1px solid #17374533}
-.rig-gear-controls .mini-button{font-size:10px}
+.rig-set-control{display:grid;gap:5px;font-size:11px;font-weight:700}
+.rig-set-control select{width:100%;min-height:44px;padding:8px 12px;border:1px solid #98c9bc;border-radius:10px;font:inherit;font-size:13px;color:#edf5e8;background:#234b55;touch-action:manipulation}
+.rig-set-control select:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .rig-controls button{touch-action:pan-y}
 .rig-controls .mini-button{width:100%;min-height:46px}
 .rig-controls .mini-button>span{min-height:34px;padding-inline:8px}
 .rig-controls>.mini-button{font-size:11px}
+.rig-editor-link{display:flex;min-height:44px;align-items:center;justify-content:center;color:#173745;font-size:12px;font-weight:700;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:740px){.rig-menu .destination-body{inset:62px 3% 10px}.rig-layout{grid-template-columns:minmax(0,1fr) 208px;gap:2%}}
 @media(max-height:350px){.rig-menu .destination-body{top:58px}.rig-controls{gap:2px}.rig-pose-controls{gap:0 7px}.rig-controls .mini-button{min-height:44px;padding-block:5px}.hero-profile-preview{gap:0}.hero-profile-preview .menu-profile{gap:3px}.hero-profile-preview>.mini-button{padding-block:5px}}

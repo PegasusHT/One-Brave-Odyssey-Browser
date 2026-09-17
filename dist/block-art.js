@@ -1,6 +1,7 @@
 import {equippedHero as hero} from './hero-art.js';
 import {BLOCK_RULES} from './core.js';
 import {ellipse,poly,appearTraining,trainingShield} from './art.js';
+import {heldShield} from './portrait-art.js';
 
 function orange(c,x,y,rotation=0){
 c.save();c.translate(x,y);c.rotate(rotation);
@@ -23,9 +24,9 @@ if(motion&&pulse>0){c.save();c.globalAlpha*=pulse*.65;c.lineWidth=4;c.strokeStyl
 if(hit>0){c.save();c.globalAlpha*=hit*.45;c.strokeStyle='#d67454';c.lineWidth=5;c.beginPath();c.arc(x,y,57+(motion?(1-hit)*22:0),0,Math.PI*2);c.stroke();c.restore()}
 const heldRadius=shieldRadius-28*low*low-recoil,sx=x+Math.cos(angle)*heldRadius,sy=y+Math.sin(angle)*heldRadius;
 c.save();c.translate(hx,hy);if(Math.cos(angle)<-.1)c.scale(-1,1);if(motion)c.rotate(-recoil*.006);
-c.scale(1,1-low*.12);hero(c,0,0,.92,training.player.equipment,t,0,hit,training.player.scarf,'guard');c.restore();
+c.scale(1,1-low*.12);hero(c,0,0,.92,{...training.player.equipment,shield:'shield_t1'},t,0,hit,training.player.scarf,'guard');c.restore();
 if(low>0){c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle='#c4875c';c.lineWidth=13;c.beginPath();const side=Math.cos(angle)<-.1?-1:1;c.moveTo(hx+side*22,hy-63);c.lineTo(hx+side*32,hy-40+low*7);c.lineTo(sx,sy-8);c.stroke();ellipse(c,sx,sy-8,8,7,'#efbb83');c.restore()}
-trainingShield(c,sx,sy,angle,pulse);
+if(heldShield(c,sx,sy,104,training.player.equipment.shield,Math.cos(angle)*Math.PI/2))ellipse(c,sx,sy,8,7,'#efbb83');else trainingShield(c,sx,sy,angle,pulse);
 c.restore();
 for(const o of training.objects.items){
 if(!o.active)continue;

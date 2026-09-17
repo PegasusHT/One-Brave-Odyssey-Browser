@@ -16,4 +16,6 @@ Mobile offline files are listed in `dist/sw.js`. Bump `CACHE_NAME` for each rele
 
 Jimmy’s current preference: do not run tests unless he explicitly asks. For UI revisions, implement the layout and show a visual preview first. This supersedes the earlier default test commands for this workflow.
 
+For equipment and animation art updates, keep review brief and focused on the changed asset. Do not run an exhaustive preview of every outfit, pose or animation after each request. One representative visual preview is enough by default; expand only for a concrete reported issue or Jimmy’s explicit request. Prompt-only work needs no browser or animation review.
+
 Menu design preference: follow the approved Home/Arena style across destinations—full landscape scenery, centered short title, small Town return, gold and Settings, compact visible controls with generous tap areas, and minimal text. Keep prices, effects and progression numbers needed for decisions. Preserve approved training gameplay layouts while redesigning their selection menus.
