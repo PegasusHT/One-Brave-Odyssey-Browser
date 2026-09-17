@@ -1,12 +1,12 @@
 import {equippedHero as hero} from './hero-art.js';
-import {Pool,TRAINING_INTRO,TRAINING_PACE,CRITICAL_TIMING,DODGE_TIMING,trainingMission,PRACTICE_KINDS,BLOCK_RULES,GROUNDS} from './core.js';
+import {Pool,TRAINING_INTRO,TRAINING_PACE,CRITICAL_TIMING,DODGE_TIMING,trainingMission,trainingGoalTarget,trainingYield,PRACTICE_KINDS,BLOCK_RULES,GROUNDS} from './core.js';
 import {ellipse,poly,appearTraining,CRITICAL_ART,HERO_SCENE_ART,placeSceneHero} from './art.js';
 import {drawStrength} from './strength-art.js';
 import {drawDodge} from './dodge-art.js';
 import {drawBlock} from './block-art.js';
 import {drawCritical} from './critical-art.js';
 export class Training{
-constructor(kind,player,feedback){this.kind=kind;this.streak=PRACTICE_KINDS.includes(kind);this.statName=GROUNDS.find(g=>g.id===kind)?.name||kind;this.player=player;this.feedback=feedback;this.elapsed=0;this.countdown=TRAINING_INTRO;this.reducedMotion=false;this.hits=0;this.combo=this.streak?1:0;this.comboFeedback=0;this.comboStar=false;this.bestCombo=0;this.misses=0;this.rewarded=false;this.done=false;this.objects=new Pool(20);this.effects=new Pool(32);this.nextSpawn=.5;this.cooldown=0;this.attack=0;this.hit=0;this.lane=1;this.flash=0;this.target=700;this.phase=0;this.lastText='';this.lastTextLife=0;this.goalTarget=4;this.goalProgress=0;this.goals=0;this.bonusStrength=0;this.bonusDodge=0;this.bonusBlock=0;this.bonusCrit=0;this.criticalRound=null;this.criticalRounds=0;this.shieldAngle=0;this.blockPulse=0;this.blockAngle=0;this.impactAngle=0;this.perfectDodges=0;this.perfectStar=0;this.stickAttack=null;this.dodgeAt=-Infinity;this.bonusXp=0;this.goalFeedback=0;this.throwPose=0;this.throwLane=1;this.action='1';this.tutorialRemaining=this.streak&&!player.tutorials?.[kind]?4:0;this.missionNumber=this.streak?player.trainingMissions?.[kind]||1:0;this.missionProgress=0;this.missionsCompleted=0;this.missionStats=0;this.missionXp=0;this.missionFeedback=0;this.missionMessage='';this.savePending=false}
+constructor(kind,player,feedback){this.kind=kind;this.streak=PRACTICE_KINDS.includes(kind);this.statName=GROUNDS.find(g=>g.id===kind)?.name||kind;this.player=player;this.startingStat=player.stats[kind];this.feedback=feedback;this.elapsed=0;this.countdown=TRAINING_INTRO;this.reducedMotion=false;this.hits=0;this.combo=1;this.comboFeedback=0;this.comboStar=false;this.bestCombo=0;this.misses=0;this.rewarded=false;this.done=false;this.objects=new Pool(20);this.effects=new Pool(32);this.nextSpawn=.5;this.cooldown=0;this.attack=0;this.hit=0;this.lane=1;this.flash=0;this.target=700;this.phase=0;this.lastText='';this.lastTextLife=0;this.goalTarget=trainingGoalTarget(kind,this.startingStat);this.goalProgress=player.trainingProgress?.[kind]||0;this.goals=0;this.bonusStrength=0;this.bonusAccuracy=0;this.bonusDodge=0;this.bonusBlock=0;this.bonusCrit=0;this.criticalRound=null;this.criticalRounds=0;this.shieldAngle=0;this.blockPulse=0;this.blockAngle=0;this.impactAngle=0;this.perfectDodges=0;this.perfectStar=0;this.stickAttack=null;this.dodgeAt=-Infinity;this.bonusXp=0;this.goalFeedback=0;this.throwPose=0;this.throwLane=1;this.action='1';this.tutorialRemaining=this.streak&&!player.tutorials?.[kind]?4:0;this.missionNumber=player.trainingMissions?.[kind]||1;this.missionProgress=0;this.missionSuccesses=0;this.missionsCompleted=0;this.missionStats=0;this.missionXp=0;this.missionFeedback=0;this.missionMessage='';this.savePending=false}
 get motion(){return this.player.settings.motion&&!this.reducedMotion}
 entrance(delay=0){if(!this.motion)return 1;const p=Math.max(0,Math.min(1,(TRAINING_INTRO-this.countdown-delay)/.65));return 1-(1-p)**3}
 spawnStrength(lane,kick=false){
@@ -142,7 +142,7 @@ this.perfectStar=Math.max(0,this.perfectStar-dt);
 if(this.kind==='dodge')this.stepDodge();
 if(this.kind==='block')this.stepBlock(dt);
 if(this.kind==='crit')this.stepCritical();
-if(!this.streak&&this.elapsed>=30){this.elapsed=30;this.done=true;return}
+if(!this.streak&&this.elapsed>=60){this.elapsed=60;this.done=true;return}
 if(this.kind==='strength'&&this.elapsed>=this.nextSpawn){
 this.spawnStrength(Math.floor(Math.random()*3),Math.random()<.22);
 this.nextSpawn=this.elapsed+1.25/(TRAINING_PACE*(1+Math.min(this.elapsed,120)/180))
@@ -160,20 +160,33 @@ o.y=o.startY+(o.targetY-o.startY)*u-4*o.arc*u*(1-u)
 if(this.kind==='strength'&&o.x<345){o.active=false;this.fail(350,o.y)}
 }
 }
-if(this.streak&&this.missionNumber===missionBefore&&this.misses===missesBefore)this.missionEvent('time',dt);
+if(this.missionNumber===missionBefore&&this.misses===missesBefore)this.missionEvent('time',dt);
 for(const e of this.effects.items){if(!e.active)continue;e.life-=dt;e.x+=e.vx*dt;e.y+=e.vy*dt;e.vy+=100*dt;if(e.life<=0)e.active=false}
 }
 input(action){if(this.done||this.countdown>0||this.kind==='block')return;if(this.kind==='dodge'){this.inputDodge(action);return}if(this.kind==='crit'){this.inputCritical(action);return}if(this.cooldown>0)return;this.cooldown=.23;this.attack=1;this.action=action;if(this.kind==='strength'){const kick=action==='kick';const lane=Number(action);const o=this.objects.items.find(o=>o.active&&(kick?o.kick&&Math.abs(o.y-425)<65:!o.kick&&o.lane===lane&&Math.abs(o.x-430)<85&&Math.abs(o.y-(210+lane*130))<65));if(o){o.active=false;this.success(o.x,o.y,o.kick)}}else if(this.kind==='accuracy'){const x=700+Math.sin(this.phase*2.6)*305;if(Math.abs(x-this.target)<60){this.success(x,345);this.target=500+Math.random()*400}else this.fail(x,345)}}
+bankGoals(){
+this.goalTarget=trainingGoalTarget(this.kind,this.startingStat+this.goals+this.missionStats);
+while(this.goalProgress+1e-9>=this.goalTarget){
+this.goalProgress=Math.max(0,this.goalProgress-this.goalTarget);this.goals++;
+if(this.kind==='strength')this.bonusStrength++;else if(this.kind==='accuracy')this.bonusAccuracy++;else if(this.kind==='dodge')this.bonusDodge++;else if(this.kind==='block')this.bonusBlock++;else this.bonusCrit++;
+this.bonusXp+=6;this.goalFeedback=1.8;this.savePending=true;
+this.goalTarget=trainingGoalTarget(this.kind,this.startingStat+this.goals+this.missionStats)
+}
+}
 missionEvent(event,value=1){
-if(!this.streak||this.done)return;
-const mission=trainingMission(this.kind,this.missionNumber);
-if(mission.type==='unhurt'){if(event==='contact')this.missionProgress=0;else if(event==='time')this.missionProgress+=value}
-else if(mission.type==='perfect'&&event==='star')this.missionProgress++;
-else if(mission.type==='perfectCombo'){if(event==='skipStar')this.missionProgress=0;else if(event==='star')this.missionProgress++}
-else if(mission.type==='combo'&&(event==='success'||event==='contact'))this.missionProgress=this.combo;
-else if(mission.type==='goals'&&event==='goals')this.missionProgress+=value;
-if(this.missionProgress+1e-9>=mission.target){
-this.missionStats+=mission.reward;this.missionXp+=mission.reward*6;this.missionsCompleted++;this.missionNumber++;this.missionProgress=0;this.missionFeedback=2;this.missionMessage='';this.savePending=true
+if(this.done)return;
+const mission=trainingMission(this.kind,this.missionNumber);let eligible=false;
+if(event==='success')this.missionSuccesses++;
+if(mission.type==='unhurt'){
+if(event==='contact'){this.missionProgress=0;this.missionSuccesses=0}
+else if(event==='time'&&this.missionSuccesses>0)this.missionProgress+=value;
+eligible=(event==='success'||event==='time')&&this.missionSuccesses>=2
+}else if(mission.type==='perfect'&&event==='star'){this.missionProgress++;eligible=true}
+else if(mission.type==='perfectCombo'){if(event==='skipStar')this.missionProgress=0;else if(event==='star'){this.missionProgress++;eligible=true}}
+else if(mission.type==='combo'&&(event==='success'||event==='contact')){this.missionProgress=this.combo;eligible=event==='success'}
+else if(mission.type==='goals'&&event==='goals'){this.missionProgress+=value;eligible=true}
+if(eligible&&this.missionProgress+1e-9>=mission.target){
+this.missionStats+=mission.reward;this.missionXp+=mission.reward*6;this.missionsCompleted++;this.missionNumber++;this.missionProgress=0;this.missionSuccesses=0;this.missionFeedback=2;this.missionMessage='';this.savePending=true;this.bankGoals()
 }
 }
 success(x,y,star=false){
@@ -181,9 +194,9 @@ if(this.done)return;
 const goals=this.goals,mission=this.missionNumber,credits=star?2:1;
 for(let i=0;i<credits;i++){
 this.hits++;
-if(this.streak)this.goalProgress+=this.combo*(1+.25*(this.player.trainingLevels[this.kind]-1));
+this.goalProgress+=Math.min(this.combo,4)*trainingYield(this.player,this.kind);this.savePending=true;
 this.combo++;this.bestCombo=Math.max(this.combo,this.bestCombo);
-if(this.streak)while(this.goalProgress>=this.goalTarget){this.goalProgress-=this.goalTarget;this.goals++;if(this.kind==='strength')this.bonusStrength++;else if(this.kind==='dodge')this.bonusDodge++;else if(this.kind==='block')this.bonusBlock++;else this.bonusCrit++;this.bonusXp+=6;this.goalTarget+=2;this.goalFeedback=1.8;this.savePending=true}
+this.bankGoals()
 }
 this.lastText='';this.lastTextLife=0;this.comboFeedback=.42;this.comboStar=star;
 this.missionEvent('success');
@@ -191,7 +204,7 @@ if(this.missionNumber===mission&&star)this.missionEvent('star');
 if(this.missionNumber===mission&&this.goals>goals)this.missionEvent('goals',this.goals-goals);
 this.burst(x,y,this.kind==='block'&&!star?'#b5ffec':'#fff0a0');this.feedback(star&&this.kind==='crit'?'star':this.kind==='block'?(star?'star':'block'):'hit')
 }
-fail(x,y){if(this.done)return;this.misses++;this.combo=this.streak?1:0;this.comboFeedback=0;this.comboStar=false;this.missionEvent('contact');this.hit=1;this.flash=1;this.lastText=this.streak?'':'Keep going';this.lastTextLife=this.streak?0:.8;this.burst(x,y,'#ed997b');this.feedback('miss')}
+fail(x,y){if(this.done)return;this.misses++;this.combo=1;this.comboFeedback=0;this.comboStar=false;this.missionEvent('contact');this.hit=1;this.flash=1;this.lastText=this.streak?'':'Keep going';this.lastTextLife=this.streak?0:.8;this.burst(x,y,'#ed997b');this.feedback('miss')}
 burst(x,y,color){for(let i=0;i<8;i++)this.effects.spawn({type:'spark',x,y,vx:Math.cos(i*Math.PI/4)*140,vy:Math.sin(i*Math.PI/4)*140,life:.5,maxLife:.5,color})}
 draw(c,t){if(this.kind==='strength'){drawStrength(c,this,t);return}if(this.kind==='dodge'){drawDodge(c,this,t);return}if(this.kind==='block'){drawBlock(c,this);return}if(this.kind==='crit'){drawCritical(c,this);return}c.save();appearTraining(c,this,290,475,.12);placeSceneHero(c,290,475,HERO_SCENE_ART.trainingScale);hero(c,0,0,.9,this.player.equipment,t,this.attack,this.hit,this.player.scarf);c.restore();c.save();c.font='700 16px "DM Sans",sans-serif';c.textAlign='center';if(this.kind==='accuracy'){c.fillStyle='#355e61';c.fillText('TAP WHEN THE SIGHT CROSSES THE TARGET',750,230);for(const [r,col] of [[65,'#efcf93'],[48,'#d77360'],[29,'#f6e5ac'],[12,'#d77360']])ellipse(c,this.target,345,r,r,col);c.strokeStyle='#456e7380';c.lineWidth=4;c.beginPath();c.moveTo(360,345);c.lineTo(1040,345);c.stroke();const x=700+Math.sin(this.phase*2.6)*305;c.strokeStyle='#173a4b';c.lineWidth=4;c.strokeRect(x-16,329,32,32);c.beginPath();c.moveTo(x,315);c.lineTo(x,375);c.moveTo(x-30,345);c.lineTo(x+30,345);c.stroke()}for(const e of this.effects.items){if(!e.active||!this.player.settings.motion)continue;c.globalAlpha=e.life/e.maxLife;ellipse(c,e.x,e.y,5,5,e.color)}c.globalAlpha=1;if(this.lastTextLife>0){c.font='700 28px "DM Sans",sans-serif';c.fillStyle=this.combo?'#fff7ce':'#944e46';c.strokeStyle='#34626a';c.lineWidth=3;if(this.combo)c.strokeText(this.lastText,720,this.kind==='strength'?575:165);c.fillText(this.lastText,720,this.kind==='strength'?575:165)}c.restore()}
 }

@@ -1,3 +1,25 @@
+## Fast test mode and Collect cooldown — 16 September 2026
+
+- No automated tests, battle simulations, fights, trainer runs, purchases, test-victory awards or idle collections were performed. The new tools are available for Jimmy's focused manual economy checks.
+- At 844×390, previewed Settings and its Economy testing panel, then loaded Prepared battle 10 through the panel. Only the separate test save was changed. Arena displayed the selected checkpoint; Legacy displayed the Collect-only button disabled with its remaining cooldown in accessible text. Preview showed the TEST SAVE badge and preserved the existing menu layout. No physical-phone testing or viewport matrix.
+- Source review covered selected-save routing, mode persistence through `?test=1`, active-run guards, real reward-function reuse, banked old-rate idle income, persisted manual cooldown and empty/early collection behavior. A review found an update-activation race; new training/battle starts now reject while an update is applying.
+- Settings shows Version 23 and adds an explicit update check. Existing server reused. No real saved progress, site data or offline cache was deleted; no deployment or update activation was exercised. Cache `obo-game-2026-09-16-23` includes `test-mode.js`.
+- The last documented Site publication is September 12, but the current live private-site version could not be verified. Clearing local caches cannot fetch unpublished changes. See [economy testing and updates](economy-testing.md).
+
+## Economy and progression — 16 September 2026
+
+- No tests, syntax-check commands, combat simulations, training/battle runs, purchases or point spending. Pacing, win rates, late-game numbers, save round trips and offline earnings have not been execution-validated. Existing numerical test expectations have not been updated for the new balance.
+- One focused Hero-menu preview at 844×390 shows Sunflare, Shield Bash and Poison rank cards, compact 1/5/All stat allocation, next-encounter stat context and the compact wallet. Refined the same menu after its first preview clipped the fifth stat row. Later skills remain in the internally scrollable panel. No responsive matrix or physical-phone testing.
+- Reused the existing visible local server; no new server or publication. The existing save loaded through version-3 migration (its small legacy wallet was raised to the documented 78 Gold catch-up floor); no clears, equipment, skill ranks or trained stats were edited for the preview.
+- Source review covers exact currency/save conversion, sequential equipment upgrades, first-clear and training settlement guards, carried main-bar progress, skill effects, wave transitions, capped tonic uses and old-rate passive settlement. The review is not a substitute for manual balance validation.
+- Cache `obo-game-2026-09-16-22` includes `economy.js`. Offline installation/update activation was not exercised. See [economy design](economy-design.md) for formulas and manual tuning priorities.
+
+## Arena layout — 16 September 2026
+
+- Earlier focused previews at 844×390 and 568×320 showed the supplied hall, corner controls, hero/opponent portraits, ten-battle panel and Fight control. Browsed Stage 2 and 3; uncleared later battles and Fight remained disabled, and the final page disabled its next arrow.
+- Town's Home icon was reviewed in dark teal. The visible focus outline on the stage heading was subsequently removed in CSS. No Arena fights, purchases or progress modifications were performed for that layout revision.
+- Thirty-battle routing and legacy Endless unlock preservation received source review only. This record describes the earlier Arena layout pass; the economy changes above supersede its numerical balance.
+
 ## Larger proportional heroes — 16 September 2026
 
 - One representative 844×390 desktop Town preview shows the larger Starter on the existing stage, with the Hero target and nearby labels retained. No additional outfit/animation matrix or live gameplay preview was run.

@@ -1,5 +1,5 @@
 export function setupMobile(onChange){
-const state={ready:false,updateReady:false,status:'Preparing offline play…',registration:null,applying:false};
+const state={ready:false,updateReady:false,status:'Preparing offline play…',registration:null,applying:false,checking:false};
 const change=()=>onChange(state);
 const message=(worker,type)=>new Promise(resolve=>{
 if(!worker){resolve(null);return}
@@ -18,6 +18,18 @@ state.applying=true;
 const result=await message(state.registration.waiting,'APPLY_UPDATE');
 if(!result?.ok){state.applying=false;return result?'Close other game windows, then try again.':'The update could not start. Try again when online.'}
 return ''
+};
+state.checkForUpdates=async()=>{
+if(state.checking)return;
+if(!navigator.onLine){state.status='Go online to check for an update.';change();return}
+if(!state.registration){state.status='Offline updates are unavailable here. Reopen the hosted game online.';change();return}
+state.checking=true;state.status='Checking for an update…';change();
+try{
+await state.registration.update();
+state.updateReady=Boolean(state.registration.waiting);
+state.status=state.updateReady?'An update is ready to install.':state.registration.installing?'Downloading the update…':'No newer published version was found.'
+}catch{state.status='The update check could not finish. Try again online.'}
+finally{state.checking=false;change()}
 };
 if(!('serviceWorker' in navigator)||!window.isSecureContext){state.status='Offline play needs the installed HTTPS version';queueMicrotask(change);return state}
 navigator.serviceWorker.addEventListener('controllerchange',()=>{if(state.applying)location.reload();else refresh()});

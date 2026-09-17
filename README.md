@@ -1,5 +1,14 @@
 # One Brave Odyssey — Browser game
 
+## Fast economy checks and current updates
+
+Settings → Economy testing opens a separate test save. Jump to any battle with a prepared or underprepared loadout, use Award test victory to inspect reward/purchase flow immediately, or advance the idle clock. Return to real save preserves the normal adventure. See [the short testing workflow](docs/economy-testing.md).
+
+Legacy uses a Collect-only button with a saved five-minute minimum cooldown. Accrued resources stay banked until collection; new victories and Gallery upgrades preserve the previous earning rate without auto-collecting.
+
+This local revision is Version 23. Settings → Check for updates → Install game update refreshes published game files while keeping progress. Local changes must first be published to the existing Site before the hosted phone app can receive them. Clearing site data can erase a hero; use Fresh test hero to inspect a new start safely. No publication occurred in this revision.
+
+
 An original mobile-first game developed in JavaScript for rapid iteration toward a polished, sellable App Store release. The current target is iPhone 17 Pro Max in landscape; broader responsive support comes later. This first-chapter build is a development milestone toward a fully completed game. Unity is an optional future production path if content growth or browser limitations require it. No Unity files or hero assets are required or reused.
 
 ## Run locally
