@@ -8,8 +8,8 @@ Status: design proposal for approval. This document does not change combat, prog
 - Present release: Intro, Battle 10 story page, and Battle 20 story page with a Stage 3 cliffhanger.
 - Future release: Battle 30 story page and a separate ending page.
 - Each page uses three silent images. Artwork contains no captions, dialogue, names, or level text.
-- Combat roster through Battle 20 uses **11 combat illustrations**: three reusable normal monsters, six reusable elites, and two unique bosses.
-- The complete present-release art scope is **20 shipping illustrations**: 11 combat images plus nine panels across the Intro, Battle 10, and Battle 20 pages. Reference sheets are additional working files, not runtime art.
+- Combat roster through Battle 20 uses **12 combat illustrations**: six reusable normal monsters, four reusable elites, and two unique bosses.
+- The complete present-release art scope is **21 shipping illustrations**: 12 combat images plus nine panels across the Intro, Battle 10, and Battle 20 pages. Reference sheets are additional working files, not runtime art.
 - Normal monsters and reusable elites show `Lv. #` beside their names. Only Battles 10 and 20 use the **Boss** label.
 - Stage 3, Crownwing, and the true ending are story-bible material only while Stage 3 remains Coming soon.
 
@@ -35,9 +35,9 @@ A mascot companion can be explored later, but this story does not depend on one 
 
 SkyHaven and the surrounding Cloudring islands are held together by the **Skyheart**, a warm golden crystal protected in the town's central shrine. A dark relic called the **Hollow Crown** twists the great guardian Crownwing. Crownwing strikes the Skyheart and scatters its three main shards across the islands.
 
-The fallen shards frighten ordinary wildlife and overcharge the strongest guardians. The adventurer follows the shard trails through Cloudring, breaks the dark growth around each guardian, and recovers the light without killing the creature. Brambleback holds the green shard, Skybreaker holds the blue shard, and Crownwing keeps the final gold shard at Nightspire.
+The fallen shards agitate creatures, awaken old constructs, draw roaming bandits toward the broken paths, and overcharge the strongest guardians. The adventurer follows the shard trails through Cloudring, breaks the dark growth around each guardian, and recovers the light without killing the creature. Brambleback holds the green shard, Skybreaker holds the blue shard, and Crownwing keeps the final gold shard at Nightspire.
 
-The Hollow Crown is a one-off story object, not a player relic or a new gameplay system. Normal monsters do not become evil species; they are displaced or agitated creatures. This lets a victory end in cleansing and recovery rather than death.
+The Hollow Crown is a one-off story object, not a player relic or a new gameplay system. Normal foes are displaced creatures, awakened constructs, or opportunistic raiders. The three guardian victories end in cleansing and recovery rather than death.
 
 The three shards must remain recognizable without color:
 
@@ -113,7 +113,7 @@ Trigger: immediately after the future Battle 30 page, with a separate Skip actio
 
 1. The hero places the green, blue, and gold shards into the empty shrine.
 2. The Skyheart reforms. Broad rings of golden wind reconnect the islands and relight the paths.
-3. Return to the Intro's shrine composition as a visual bookend. The hero and three cleansed guardians stand prominently beneath the restored Skyheart; normal creatures appear only as peaceful background silhouettes. The teal scarf lifts in a calm wind.
+3. Return to the Intro's shrine composition as a visual bookend. The hero and three cleansed guardians stand prominently beneath the restored Skyheart; peaceful wildlife and restored constructs appear only as background silhouettes. The teal scarf lifts in a calm wind.
 
 ## Monster roles
 
@@ -131,9 +131,12 @@ The current game calls every third enemy a Boss. The future art integration shou
 
 | Art ID | Name | Design | Reuse |
 |---|---|---|---|
-| `mossling` | Mossling | Low, round horned creature; leaf-green moss, cream horns, coral cheeks | All 20 battles |
-| `flutterbat` | Flutterbat | Broad horizontal bat silhouette; lavender fur, plum wings, warm-gold eyes | All 20 battles |
-| `pebbleguard` | Pebbleguard | Compact square stone creature; warm slate, small moss patches, teal core | All 20 battles |
+| `slime` | Slime | Mint cloud-jelly body, round eyes, one soft curl on top | All 20 battles |
+| `bat` | Bat | Round body, broad kite-shaped wings, lavender and plum coloring | All 20 battles |
+| `bandit` | Bandit | Small masked raccoon-like sky raider with a hood and satchel | All 20 battles |
+| `boar` | Boar | Stout body, short cream tusks, leafy back tuft | All 20 battles |
+| `mushroom` | Mushroom | Hopping creature with a wide parasol cap and simple feet | All 20 battles |
+| `golem` | Golem | Squat floating-stone construct with a teal core and no visible runes | All 20 battles |
 
 Normals stay visually identical as their level rises. The name and level do the differentiation, as requested.
 
@@ -141,17 +144,15 @@ Normals stay visually identical as their level rises. The name and level do the 
 
 | Art ID | Name | Design | Battles |
 |---|---|---|---|
-| `thornhorn` | Thornhorn | Stocky ram-boar with bramble antlers and a low charging silhouette | 1, 4, 7 |
-| `glowmoth` | Glowmoth | Round owl-moth with broad crescent wings, large glowing wing spots, and violet thorn marks | 2, 5, 8 |
-| `craghide` | Craghide | Wide tortoise-gorilla guardian with layered rock shoulders | 3, 6, 9 |
+| `thornhorn` | Thornhorn | Large ram-boar with bramble antlers and a low charging silhouette | 1, 3, 5, 7, 9 |
+| `glowmoth` | Glowmoth | Round owl-moth with broad crescent wings, large glowing wing spots, and violet thorn marks | 2, 4, 6, 8 |
 
 ### Stage 2 elites
 
 | Art ID | Name | Design | Battles |
 |---|---|---|---|
-| `galehorn` | Galehorn | Taller relative of Thornhorn with forked cyan horns and wind-cut armor shapes | 11, 14, 17 |
-| `sparkbeak` | Sparkbeak | Fast indigo bird-like flier with swept wings, a bright beak, and cyan shard marks | 12, 15, 18 |
-| `rune-golem` | Rune Golem | Tall floating-stone construct with detached fists and a broken rune ring | 13, 16, 19 |
+| `stormbeak` | Stormbeak | Large indigo hawk with swept wings, a bright beak, and cyan shard marks | 11, 13, 15, 17, 19 |
+| `rune-golem` | Rune Golem | Tall floating-stone construct with detached fists, carved runes, and a broken rune ring | 12, 14, 16, 18 |
 
 These visuals may suggest weight, speed, or stage theme, but they should not promise special attacks or phases until monster-specific combat behavior exists.
 
@@ -187,28 +188,28 @@ These visuals may suggest weight, speed, or stage theme, but they should not pro
 
 | Battle | Wave 1 | Wave 2 | Wave 3 |
 |---:|---|---|---|
-| 1 | Mossling · Lv. 1 | Flutterbat · Lv. 1 | Thornhorn · Lv. 1 **Elite** |
-| 2 | Flutterbat · Lv. 2 | Pebbleguard · Lv. 2 | Glowmoth · Lv. 2 **Elite** |
-| 3 | Pebbleguard · Lv. 3 | Mossling · Lv. 3 | Craghide · Lv. 3 **Elite** |
-| 4 | Mossling · Lv. 4 | Pebbleguard · Lv. 4 | Thornhorn · Lv. 4 **Elite** |
-| 5 | Flutterbat · Lv. 5 | Mossling · Lv. 5 | Glowmoth · Lv. 5 **Elite** |
-| 6 | Pebbleguard · Lv. 6 | Flutterbat · Lv. 6 | Craghide · Lv. 6 **Elite** |
-| 7 | Mossling · Lv. 7 | Flutterbat · Lv. 7 | Thornhorn · Lv. 7 **Elite** |
-| 8 | Flutterbat · Lv. 8 | Pebbleguard · Lv. 8 | Glowmoth · Lv. 8 **Elite** |
-| 9 | Pebbleguard · Lv. 9 | Mossling · Lv. 9 | Craghide · Lv. 9 **Elite** |
-| 10 | Mossling · Lv. 10 | Pebbleguard · Lv. 10 | **Brambleback · Lv. 10 — Boss** |
-| 11 | Mossling · Lv. 11 | Flutterbat · Lv. 11 | Galehorn · Lv. 11 **Elite** |
-| 12 | Flutterbat · Lv. 12 | Pebbleguard · Lv. 12 | Sparkbeak · Lv. 12 **Elite** |
-| 13 | Pebbleguard · Lv. 13 | Mossling · Lv. 13 | Rune Golem · Lv. 13 **Elite** |
-| 14 | Mossling · Lv. 14 | Pebbleguard · Lv. 14 | Galehorn · Lv. 14 **Elite** |
-| 15 | Flutterbat · Lv. 15 | Mossling · Lv. 15 | Sparkbeak · Lv. 15 **Elite** |
-| 16 | Pebbleguard · Lv. 16 | Flutterbat · Lv. 16 | Rune Golem · Lv. 16 **Elite** |
-| 17 | Mossling · Lv. 17 | Flutterbat · Lv. 17 | Galehorn · Lv. 17 **Elite** |
-| 18 | Flutterbat · Lv. 18 | Pebbleguard · Lv. 18 | Sparkbeak · Lv. 18 **Elite** |
-| 19 | Pebbleguard · Lv. 19 | Mossling · Lv. 19 | Rune Golem · Lv. 19 **Elite** |
-| 20 | Flutterbat · Lv. 20 | Pebbleguard · Lv. 20 | **Skybreaker · Lv. 20 — Boss** |
+| 1 | Slime · Lv. 1 | Bat · Lv. 1 | Thornhorn · Lv. 1 **Elite** |
+| 2 | Bandit · Lv. 2 | Boar · Lv. 2 | Glowmoth · Lv. 2 **Elite** |
+| 3 | Mushroom · Lv. 3 | Golem · Lv. 3 | Thornhorn · Lv. 3 **Elite** |
+| 4 | Slime · Lv. 4 | Bandit · Lv. 4 | Glowmoth · Lv. 4 **Elite** |
+| 5 | Bat · Lv. 5 | Mushroom · Lv. 5 | Thornhorn · Lv. 5 **Elite** |
+| 6 | Boar · Lv. 6 | Golem · Lv. 6 | Glowmoth · Lv. 6 **Elite** |
+| 7 | Slime · Lv. 7 | Boar · Lv. 7 | Thornhorn · Lv. 7 **Elite** |
+| 8 | Bat · Lv. 8 | Golem · Lv. 8 | Glowmoth · Lv. 8 **Elite** |
+| 9 | Bandit · Lv. 9 | Mushroom · Lv. 9 | Thornhorn · Lv. 9 **Elite** |
+| 10 | Slime · Lv. 10 | Mushroom · Lv. 10 | **Brambleback · Lv. 10 — Boss** |
+| 11 | Bat · Lv. 11 | Bandit · Lv. 11 | Stormbeak · Lv. 11 **Elite** |
+| 12 | Boar · Lv. 12 | Mushroom · Lv. 12 | Rune Golem · Lv. 12 **Elite** |
+| 13 | Slime · Lv. 13 | Golem · Lv. 13 | Stormbeak · Lv. 13 **Elite** |
+| 14 | Bat · Lv. 14 | Boar · Lv. 14 | Rune Golem · Lv. 14 **Elite** |
+| 15 | Bandit · Lv. 15 | Golem · Lv. 15 | Stormbeak · Lv. 15 **Elite** |
+| 16 | Mushroom · Lv. 16 | Bat · Lv. 16 | Rune Golem · Lv. 16 **Elite** |
+| 17 | Golem · Lv. 17 | Boar · Lv. 17 | Stormbeak · Lv. 17 **Elite** |
+| 18 | Bandit · Lv. 18 | Slime · Lv. 18 | Rune Golem · Lv. 18 **Elite** |
+| 19 | Mushroom · Lv. 19 | Boar · Lv. 19 | Stormbeak · Lv. 19 **Elite** |
+| 20 | Golem · Lv. 20 | Bat · Lv. 20 | **Skybreaker · Lv. 20 — Boss** |
 
-Role is a separate badge in the interface, not part of the monster name. For example, show `Thornhorn · Lv. 4` beside an **Elite** badge and `Brambleback · Lv. 10` beside a **Boss** badge.
+Role is a separate badge in the interface, not part of the monster name. For example, show `Glowmoth · Lv. 4` beside an **Elite** badge and `Brambleback · Lv. 10` beside a **Boss** badge.
 
 ## Combat image specification
 
@@ -232,18 +233,18 @@ Relative on-screen scale:
 
 | Role | Approximate height versus hero | Shape language |
 |---|---:|---|
-| Normal | 65–80% | Rounded and compact |
+| Normal | 65–80% | Simple, compact silhouette |
 | Elite | 95–115% | One enlarged defining feature |
 | Boss | 135–160% | Unique silhouette with a readable core |
 
 ## Production order
 
 1. Approve this story, the three stage themes, and all names.
-2. Generate Mossling, Flutterbat, Pebbleguard, Glowmoth, Brambleback, and Skybreaker separately. Then assemble those approved images with a canonical hero scale silhouette into a reference lineup. Do not ask an image model to create the full lineup in one image, because identities and scale may blend.
-3. Generate and approve the three normal combat assets.
-4. Generate the three Stage 1 elites and Brambleback.
-5. Generate the three Stage 2 elites and Skybreaker.
-6. Check one focused 568 × 320 combat preview with the hero, one normal, Glowmoth, and Skybreaker before integrating the 11 approved combat images. Keep battle numbers, stats, rewards, and save progression unchanged.
+2. Generate Slime, Bandit, Golem, Rune Golem, Brambleback, and Skybreaker separately. Then assemble those approved images with a canonical hero scale silhouette into a reference lineup. Do not ask an image model to create the full lineup in one image, because identities and scale may blend.
+3. Generate and approve the six normal combat assets.
+4. Generate the two Stage 1 elites and Brambleback.
+5. Generate the two Stage 2 elites and Skybreaker.
+6. Check one focused 568 × 320 combat preview with the hero, Bandit, Rune Golem, and Skybreaker before integrating the 12 approved combat images. Keep battle numbers, stats, rewards, and save progression unchanged.
 7. Create the nine current-release story panels only after the hero, Brambleback, Skybreaker, Skyheart, shards, and Hollow Crown have approved reference designs.
 8. Defer the six Battle 30 and ending panels, the Crownwing combat asset, and all Stage 3 enemies until Stage 3 production begins.
 

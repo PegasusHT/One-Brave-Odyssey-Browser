@@ -35,6 +35,6 @@ Use safe-area spacing and generous touch targets. Keep the lower corner panels c
 
 Additional towns and Stage 3 encounters remain follow-up work; this change does not invent names or artwork for other islands. Existing pointer-down/keyboard actions, safe-area padding, orientation/visibility pausing and explicit offline update activation remain in use.
 
-Version 30 remains local; publication requires Jimmy's explicit request. No automated tests or gameplay sessions were run for these layout revisions. See `validation.md` for the exact visual preview scope and outstanding checks.
+These changes are published as game Version 1.0.0.1 at Jimmy's request. Future publication still requires an explicit request. No automated tests or gameplay sessions were run for these layout revisions. See `validation.md` for the exact visual preview scope and outstanding checks.
 
 The marker row reflects the actual three-monster encounter, not the four positions in the supplied visual reference. Endless reuses three-position groups and exposes the absolute monster number to assistive technology. Currency names remain in accessible labels and exact-value tooltips; visible wallet, standard price and battle-reward amounts use the denomination-colored icon plus number. Town’s Shop anchor is now (215,358) in the source image, 20 pixels farther left and 15 pixels down from Version 29's (235,343), following Jimmy's placement adjustment.

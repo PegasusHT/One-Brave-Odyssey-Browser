@@ -1,3 +1,9 @@
+## Dotted-version publication — 1.0.0.1, 21 September 2026
+
+- Settings now displays Version 1.0.0.1 and the offline cache is `obo-game-1.0.0.1`. The documented release format is `major.feature.patch.revision`, independent of save schema and hosting release numbers. No runtime modules or assets were added.
+- The native private deployment reported `succeeded` at 07:33:54 UTC for Site release 8 and source `9a562ca1d1d2a853146444499e7e9a8845694839`, at the existing game URL. Existing owner-only access was preserved. The packaging helper completed successfully for the configured static output.
+- No additional tests, browser QA, gameplay checks or physical-phone checks were run for publication. Installed-app update behavior remains for Jimmy to confirm through Settings → Check for updates → Install game update after finishing a run.
+
 ## Shop affordability and label refinement — Version 30
 
 - Removed battle-clear checks from both individual equipment purchases and full-set purchases, together with the Shop’s locked labels and disabled states. Source review confirms unchanged next-rank progression, rank-20 maximum, affordability checks, duplicate/owned-item guards, prices and save writes.

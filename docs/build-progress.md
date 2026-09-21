@@ -2,6 +2,12 @@
 
 Last updated: 21 September 2026
 
+## Published release — Version 1.0.0.1, 21 September 2026
+
+Jimmy requested publication of all current changes and dotted version labels. The former local Version 30 is now game Version **1.0.0.1**, starting the `major.feature.patch.revision` convention. Ordinary small updates increment the final component. Settings and offline cache (`obo-game-1.0.0.1`) match; save schema and hosting release numbering remain independent.
+
+This release includes twenty active encounters, Stage 3 Coming soon, the finishing-blow/result fix and outcome poses, the Default Gameplay Layout and monster progress markers, icon-and-number currency displays, the adjusted Town Shop label, and equipment upgrades gated only by affordability through rank 20. Publication uses the existing private Site. No additional tests or browser QA are requested for publishing. Hosting confirmed success at 07:33:54 UTC on 21 September 2026. Game Version 1.0.0.1 is live at https://one-brave-odyssey-skyhaven.jimmybui1995.chatgpt.site with existing owner-only access. Site release 8, deployment `appgdep_6ab0dddac3888191afecc62af4ee799f`, published source `9a562ca1d1d2a853146444499e7e9a8845694839`. An isolated publication checkout preserved the hosting history and exact current source tree. No additional tests, gameplay runs or physical-device checks were performed.
+
 ## Local revision — gold-only equipment upgrades, 21 September 2026
 
 Version 30 removes battle-clear gates from individual weapon, armor and shield upgrades and the matching-set purchase. The hero can buy each next rank whenever the wallet covers its unchanged price, including set 15 before clearing battle 14. Sequential upgrades, duplicate-purchase protection, exact currency checks and the active rank-20 limit remain. Previously owned higher equipment stays preserved. Skill and training-ground requirements are unchanged.
