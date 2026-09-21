@@ -1,6 +1,7 @@
 const TAU=Math.PI*2;
-export const TOWN_ART={name:'SkyHaven',src:'./assets/town/town-facilities.png',width:1844,height:853,hero:{x:450,y:465,height:188},destinations:[{id:'forge',label:'Shop',x:290,y:393},{id:'legacy',label:'Legacy',x:930,y:282},{id:'train',label:'Training',x:940,y:570},{id:'arena',label:'Arena',x:1500,y:515}]};
+export const TOWN_ART={name:'SkyHaven',src:'./assets/town/town-facilities.png',width:1844,height:853,hero:{x:450,y:465,height:188},destinations:[{id:'forge',label:'Shop',x:215,y:358},{id:'legacy',label:'Legacy',x:930,y:282},{id:'train',label:'Training',x:940,y:570},{id:'arena',label:'Arena',x:1500,y:515}]};
 export const ARENA_ART={src:'./assets/arena/arena-hall.png',width:1448,height:1086,focusX:.5,focusY:.25};
+export const ARENA_BATTLE_ART={width:1400,height:700,heroX:410,enemyX:980,feetY:500,offsetY:-50};
 export const HERO_SCENE_ART={trainingScale:1.2,arenaScale:1.2};
 export function placeSceneHero(c,x,y,scale=1){const m=c.getTransform(),sx=Math.hypot(m.a,m.b),sy=Math.hypot(m.c,m.d);c.translate(x,y);c.scale(scale*(sx&&sy?sy/sx:1),scale)}
 export function townPlacement(w,h){const scale=Math.max(w/TOWN_ART.width,h/TOWN_ART.height);return {scale,x:(w-TOWN_ART.width*scale)/2,y:(h-TOWN_ART.height*scale)/2}}
@@ -199,7 +200,7 @@ if(image)c.drawImage(image,0,0,TOWN_ART.width,TOWN_ART.height);
 if(scene==='town')drawHero(c,TOWN_ART.hero.x,TOWN_ART.hero.y,TOWN_ART.hero.height/158,equipment,t);
 c.restore();return
 }
-c.save();c.scale(w/1400,h/700);const g=c.createLinearGradient(0,0,0,700);g.addColorStop(0,'#87becb');g.addColorStop(.65,'#cee2cb');g.addColorStop(1,'#f6e6b9');c.fillStyle=g;c.fillRect(0,0,1400,700);ellipse(c,1120,102,54,54,'#fff1bd');ellipse(c,1120,102,69,69,'#fff0bd22');for(let i=0;i<8;i++)cloud(c,((i*251+t*3)%1800)-200,85+(i%3)*74,.65+(i%3)*.35,.35);poly(c,[[0,440],[180,289],[350,403],[510,253],[770,453],[950,289],[1150,398],[1400,271],[1400,700],[0,700]],'#87b9b84b');island(c,710,607,3.4);ellipse(c,700,531,570,72,'#b2c78c');ellipse(c,700,540,480,48,'#d8cd98');for(const [x,y,s] of [[100,475,1.8],[1320,475,2],[225,420,1.2],[1180,405,1.4]])tree(c,x,y,s);if(scene==='battle'){for(let i=0;i<8;i++){rect(c,370+i*90,295,35,130,6,'#a3b4a099');rect(c,360+i*90,285,55,18,5,'#d4dabb99')}}c.restore()
+c.save();c.scale(w/1400,h/700);const g=c.createLinearGradient(0,0,0,700);g.addColorStop(0,'#87becb');g.addColorStop(.65,'#cee2cb');g.addColorStop(1,'#f6e6b9');c.fillStyle=g;c.fillRect(0,0,1400,700);ellipse(c,1120,102,54,54,'#fff1bd');ellipse(c,1120,102,69,69,'#fff0bd22');for(let i=0;i<8;i++)cloud(c,((i*251+t*3)%1800)-200,85+(i%3)*74,.65+(i%3)*.35,.35);poly(c,[[0,440],[180,289],[350,403],[510,253],[770,453],[950,289],[1150,398],[1400,271],[1400,700],[0,700]],'#87b9b84b');island(c,710,607,3.4);const arenaOffset=scene==='battle'?ARENA_BATTLE_ART.offsetY:0;ellipse(c,700,531+arenaOffset,570,72,'#b2c78c');ellipse(c,700,540+arenaOffset,480,48,'#d8cd98');for(const [x,y,s] of [[100,475,1.8],[1320,475,2],[225,420,1.2],[1180,405,1.4]])tree(c,x,y,s);if(scene==='battle'){for(let i=0;i<8;i++){rect(c,370+i*90,295,35,130,6,'#a3b4a099');rect(c,360+i*90,285,55,18,5,'#d4dabb99')}}c.restore()
 }
 
 export function trainingPartner(c,release=0,windup=0,lane=1,stick=null){

@@ -1,12 +1,14 @@
 # Economy and progression
 
-Updated 17 September 2026. Jimmy requested implementation without tests. These are authored tuning targets, not measured completion times or win rates.
+Updated 21 September 2026. Jimmy requested implementation without tests. These are authored tuning targets, not measured completion times or win rates.
 
 ## The intended loop
 
-Clear a new battle, buy the next matching equipment set, spend earned stat/skill points, practise each of the five disciplines, then return to the Arena. Strong execution, earlier overtraining and different builds can change the order. There is no timer that forces a loss, compulsory training checklist, energy system or required offline wait.
+Clear a new battle, spend gold on equipment and earned stat/skill points on the hero, practise each of the five disciplines, then return to the Arena. Equipment can advance whenever the wallet covers the next rank; it does not require a battle clear. Strong execution, earlier overtraining and different builds can change the order. There is no timer that forces a loss, compulsory training checklist, energy system or required offline wait.
 
-The campaign has 30 encounters in three stages of ten. Battles 10, 20 and 30 are preparation peaks. The original five-hour budget included about 145 minutes of ordinary training (29 intervals × five trainers × one minute), 100–110 minutes of combat, and 45–55 minutes for boss preparation, upgrades and navigation. The 17 September request replaces long fights with short 2–3-hit normals and approximately five-action elites, so the old combat-time allocation and five-hour total are no longer supported estimates. Five hours across three days remains a broader pacing goal to revisit after manual feedback; this pass adds no extra grind or waiting. Two or three extra practice runs before a boss are a design intention, not a guaranteed requirement.
+The browser first release has 20 encounters in two active stages of ten. Battles 10 and 20 are preparation peaks; Stage 3 is Coming soon. Endless survival opens after battle 20, with older earned unlocks retained. Two or three extra practice runs before a boss are a design intention, not a guaranteed requirement.
+
+The historical 30-encounter, five-hour budget included about 145 minutes of ordinary training (29 intervals × five trainers × one minute), 100–110 minutes of combat, and 45–55 minutes for boss preparation, upgrades and navigation. The 17 September change to short 2–3-hit normals and approximately five-action elites, followed by the reduction to 20 encounters, means that budget is not a current completion-time estimate. Pacing needs manual feedback; the reduced scope adds no extra grind or waiting.
 
 ## Sources and spending
 
@@ -23,7 +25,7 @@ The first-clear reward for battle n is exactly `100 × 10^(n−1)` gold. The Lod
 | Tonic | 2%; at most two uses in an encounter |
 | Lodge or Gallery upgrade | 10% |
 
-Equipment prices are fixed by rank. Training, skill, tonic and Legacy prices follow current campaign progress. This keeps small purchases relevant after the wallet grows. Buying the full set is a convenience action over the existing three equipment slots; individual upgrades still work. New gear ranks require the corresponding battle clear, preventing idle wealth from skipping the equipment sequence.
+Equipment prices are fixed by rank. Training, skill, tonic and Legacy prices follow current campaign progress. This keeps small purchases relevant after the wallet grows. Buying the full set is a convenience action over the existing three equipment slots; individual upgrades still work. Both purchase paths require enough gold but no battle clear. Upgrades remain sequential: each slot advances to its next rank, and a matching-set purchase completes the next set without skipping or rebuying pieces. Active offers end at rank 20. The rank-based prices below are unchanged; the battle references describe their pricing basis, not purchase requirements.
 
 | New victory | First-clear reward | Next full set |
 | --- | --- | --- |
@@ -31,14 +33,16 @@ Equipment prices are fixed by rank. Training, skill, tonic and Legacy prices fol
 | Battle 2 | 1k Gold | 700 Gold |
 | Battle 5 | 1 Emerald | 700k Gold |
 | Battle 10 | 100k Emerald | 70k Emerald |
-| Battle 20 | 1k Ruby | 700 Ruby |
-| Battle 30 | 10 Star | Campaign equipment complete |
+| Battle 20 | 1k Ruby | Active equipment complete |
+| Battle 30 — legacy/future formula, unavailable | 10 Star | Legacy rank-30 equipment complete |
+
+The historical rank-21 matching set cost 700 Ruby after battle 20. That descriptor is retained for old save compatibility, but the set is unavailable to buy while Stage 3 is Coming soon. The battle-30 row records the retained reward formula, not a playable encounter or a committed future balance target.
 
 ## One wallet, readable denominations
 
 Gold → Emerald → Sapphire → Ruby → Diamond → Star. Each denomination represents one million of the preceding one; `k` means one thousand. These are automatic display units of one balance, not separate resources, premium currencies or a conversion shop. Prices and the wallet use the same formatter. A title exposes the exact gold equivalent.
 
-Thirty tenfold rewards exceed JavaScript's safe integer range. Currency therefore uses BigInt for arithmetic and decimal strings in JSON saves. The conversion never rounds a purchase balance to a displayed denomination. Existing numeric saves are accepted; precision already lost in an old numeric save cannot be reconstructed. Currency utilities live in `economy.js`, while reward, price and gameplay rules remain in `core.js`.
+Twenty tenfold rewards already exceed JavaScript's safe integer range. Currency therefore uses BigInt for arithmetic and decimal strings in JSON saves. The conversion never rounds a purchase balance to a displayed denomination. Existing numeric saves are accepted; precision already lost in an old numeric save cannot be reconstructed. Currency utilities live in `economy.js`, while reward, price and gameplay rules remain in `core.js`. The economy helpers still support the earlier 30-encounter range to preserve older saved balances, price bases and idle earning rates.
 
 ## Training that remains meaningful
 
@@ -46,13 +50,13 @@ All five trainers award direct stats only for a completed main bar or side missi
 
 Main-bar cost is `ceil(base × sqrt(1 + max(0, stat−5)/200))`. Bases are Strength 18, Accuracy 16, Dodge 20, Block 18 and Critical 24, reflecting their different opportunity rates. The effective stat includes this run's completed rewards. Restarting does not reset a high stat to an easy bar. Unfinished main-bar points persist; leaving without a completion preserves progress but awards no stat.
 
-Successful actions contribute up to four combo credits, multiplied by ground yield. Stars still count as two successful credits. The visible combo can keep rising, but its reward contribution is capped, preventing quadratic payouts from overwhelming the increasing bar cost. Grounds have five levels, with 25% more yield per upgrade; upgrades open after battles 1, 7, 14 and 21.
+Successful actions contribute up to four combo credits, multiplied by ground yield. Stars still count as two successful credits. The visible combo can keep rising, but its reward contribution is capped, preventing quadratic payouts from overwhelming the increasing bar cost. Grounds have five levels, with 25% more yield per upgrade; upgrades open after battles 1, 7, 14 and 20. `TRAINING_UPGRADE_REQUIREMENTS` is shared by purchase rules, the menu and test checkpoints.
 
 Side-mission rewards stay at +1 rather than growing with the mission number. Mission difficulty growth is bounded. Avoid-damage missions require successful actions before time can count, so standing idle cannot start completing them. Accuracy keeps its existing target/throw controls, now has a 60-second run, and shows its stat bar and mission in the existing HUD area. The approved gameplay layouts of the other four trainers remain intact.
 
 ## Combat, equipment and skills
 
-Combat power grows far more slowly than currency. Weapon and armor multipliers grow 3.5% per equipment rank; shield ranks add 0.6 percentage points of incoming-damage reduction, up to 17.4%. All 30 ranks have gameplay value. Original tiers 1–6 retain their appearance IDs; later ranks cycle through A/B/C/D/F art with +N names. No new artwork is required.
+Combat power grows far more slowly than currency. Weapon and armor multipliers grow 3.5% per equipment rank; shield ranks add 0.6 percentage points of incoming-damage reduction, reaching 11.4% at active rank 20. All 20 active ranks have gameplay value. Original tiers 1–6 retain their appearance IDs; later ranks cycle through A/B/C/D/F art with +N names. No new artwork is required. Already-owned legacy ranks 21–30 retain their previous values, including 17.4% shield reduction at rank 30, but cannot be newly purchased.
 
 Each battle has a fixed reference stat target. The baseline advances by 20 per encounter, which budgets both direct training gains and allocated points. Stage transitions retain an additional 28-point step, and bosses add 28 points. Enemy strength never reads the actual player's current stats. Attack and health depend on trained stats and equipment; hit, dodge, block and critical probabilities compare the relevant stat with the encounter target. Training therefore keeps helping beyond the old early-game caps.
 
@@ -76,7 +80,7 @@ The existing boss preparation steps and Endless wave multiplier remain. Currency
 | Windguard | After battle 10 | Reduce damage from a limited number of hits |
 | Second wind | After battle 20 | Emergency healing with a long cooldown |
 
-Skills have ten ranks, with a visible current-to-next effect comparison. Windguard shortens its cooldown at every rank and gains another protected hit every third upgrade. Campaign milestones limit the maximum purchasable rank, and higher ranks cost more skill points. The first-clear bonus supplies eight allocatable stat points and three skill points, in addition to XP. Healing has a limited budget: two tonics per encounter, plus a 60-second Second wind cooldown. This preserves the value of defensive training. Poison and stun clear when a wave ends; damage cannot spill from a defeated enemy into the replacement.
+Skills have ten ranks, with a visible current-to-next effect comparison. Windguard shortens its cooldown at every rank and gains another protected hit every third upgrade. Campaign requirements follow the existing three-clear interval through rank 7, then cap at 20 clears: ranks 8–10 can be purchased after finishing Stage 2, subject to their point and coin costs. Second wind still opens after battle 20 for replays and Endless. Higher ranks cost more skill points. The first-clear bonus supplies eight allocatable stat points and three skill points, in addition to XP. Healing has a limited budget: two tonics per encounter, plus a 60-second Second wind cooldown. This preserves the value of defensive training. Poison and stun clear when a wave ends; damage cannot spill from a defeated enemy into the replacement.
 
 ## Idle income and returning players
 
@@ -84,7 +88,7 @@ Idle income starts after the first clear without requiring a Gallery purchase. A
 
 Before a new first clear or Gallery upgrade changes the earning rate, accrued income is banked at the previous rate, without crediting the wallet or resetting the manual collection timer. This prevents an old absence from being valued at a newly unlocked, tenfold-higher reward. Offline earnings use the existing local timestamp; this remains a local prototype, not a server-authoritative economy.
 
-Existing equipment, earned stats, unlocked skills, clears and Endless access are preserved. Currency saves migrate to version 4 under the existing storage key. Version 4 adds pending idle currency and a separate manual-collection timestamp; the catch-up wallet adjustment remains limited to saves older than version 3. Legacy learned skills start at rank one. Existing cleared saves receive a one-time wallet floor of 78% of their highest first-clear reward, sufficient to catch up through missing sequential sets, because their earlier victories paid the old rewards. First-clear and session settlement guards remain in place.
+Existing equipment, earned stats, unlocked skills, clears and Endless access are preserved, including owned ranks and clears 21–30 from the previous scope. Active choices stop at 20 without deleting that data or reducing the exact wallet. Currency saves remain version 4 under the existing storage key. Version 4 adds pending idle currency and a separate manual-collection timestamp; the catch-up wallet adjustment remains limited to saves older than version 3. Legacy learned skills start at rank one. Eligible cleared saves from before version 3 receive a one-time wallet floor of 78% of their highest first-clear reward, sufficient to catch up through missing sequential sets, because their earlier victories paid the old rewards. First-clear and session settlement guards remain in place; unavailable campaign encounters cannot settle new rewards.
 
 ## Why these choices
 
@@ -98,7 +102,7 @@ The technical choice of exact integer currency follows BigInt's ability to repre
 
 No tests, combat simulations or gameplay runs were performed for this pass. The first useful observations are actual stats earned in a minute by each trainer, encounter duration, health remaining when a prepared hero wins, skill usage, and the wallet remaining after buying the next set. Compare the first few battles and each boss before judging late-campaign pacing. Tune reward rates, enemy pressure and prices separately so a correction to one does not destabilize all three.
 
-This implementation supports the intended loop but does not guarantee losing whenever one minute of training is skipped. Such a guarantee would require an explicit gate or scripted loss; strong play and preparation are allowed to succeed sooner. Five hours is the desired calibration point, not a claim established without playtesting.
+This implementation supports the intended loop but does not guarantee losing whenever one minute of training is skipped. Such a guarantee would require an explicit gate or scripted loss; strong play and preparation are allowed to succeed sooner. The shortened campaign has no measured completion-time claim.
 
 ## Fast manual workflow
 

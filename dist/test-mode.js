@@ -1,4 +1,4 @@
-import {SAVE_KEY,TOTAL_BATTLES,STATS,SKILLS,COMBAT_BALANCE,freshPlayer,referenceStat,firstClearCoins,scaleCoins} from './core.js';
+import {SAVE_KEY,TOTAL_BATTLES,TRAINING_UPGRADE_REQUIREMENTS,STATS,SKILLS,COMBAT_BALANCE,freshPlayer,referenceStat,firstClearCoins,scaleCoins} from './core.js';
 
 export const TEST_SAVE_KEY='one-brave-odyssey.browser.test.v1';
 export const TEST_PREPARATIONS=[{id:'ready',label:'Prepared'},{id:'undertrained',label:'Skip recent training'},{id:'ungeared',label:'Missing gear upgrades'},{id:'extra',label:'Extra boss practice'}];
@@ -17,7 +17,7 @@ const battle=Number.isFinite(stage)?Math.max(1,Math.min(TOTAL_BATTLES,Math.floor
 const mode=TEST_PREPARATIONS.some(option=>option.id===preparation)?preparation:'ready';
 const player=freshPlayer(timestamp),clears=battle-1,tier=mode==='ungeared'?Math.max(1,battle-3):battle;
 const stat=Math.max(1,referenceStat(battle)+(mode==='undertrained'?-COMBAT_BALANCE.trainingRound:mode==='extra'?2*COMBAT_BALANCE.trainingRound:0));
-const trainingLevel=1+[1,7,14,21].filter(required=>clears>=required).length,skillLevel=Math.min(10,1+Math.floor(clears/3));
+const trainingLevel=1+TRAINING_UPGRADE_REQUIREMENTS.slice(1).filter(required=>clears>=required).length,skillLevel=Math.min(10,1+Math.floor(clears/3));
 player.name='Test Rook';
 player.stage=battle;
 player.cleared=Array.from({length:clears},(_,index)=>index+1);

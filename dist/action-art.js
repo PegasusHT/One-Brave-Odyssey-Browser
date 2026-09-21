@@ -67,9 +67,37 @@ else if(phase==='recovery'&&r.landed&&age<.3){spec=ACTION_HERO_ART.jump;index=r.
 return drawFrame(c,pose.x,pose.y,158*CRITICAL_ART.scale,training.player.equipment,spec,index,training.hit,false)
 }
 
+function drawArenaOutcome(c,battle,motion){
+const age=battle.outcomeElapsed;
+if(!battle.done||motion&&age<(battle.won?ACTION_HERO_ART.attack.recovery:.16))return false;
+const equipment=battle.player.equipment,settle=motion?Math.max(0,Math.min(1,(age-.16)/.4)):1;
+const options={motion:false,animated:false,shadow:false,hit:0,facing:getAppliedRigConfig().facing};
+c.save();ellipse(c,410,500,47,6,'#183c4833');c.translate(410,500);c.rotate(battle.won?0:.18*settle);c.translate(-410,-500);
+let rendered=battle.won?fullBodyAttack(c,410,500,158*1.65,equipment,0,{...options,pose:'raised'}):fullBodyJump(c,410,500,158*1.65,equipment,0,{...options,frame:'crouch'});
+if(!rendered&&hasRigEquipment(equipment)){
+const pose=battle.won?rigPose('raised'):rigPose('landing');
+if(!battle.won){pose.head=.2;pose.nearArm=.15;pose.nearForearm=.35;pose.nearWrist=0}
+rendered=drawRigHero(c,410,500,158*1.65,equipment,0,{...options,pose})
+}
+if(!rendered)rendered=drawFrame(c,410,500,158*1.65,equipment,battle.won?ACTION_HERO_ART.attack:ACTION_HERO_ART.jump,battle.won?2:5,0,false);
+c.restore();
+if(!rendered)return false;
+c.save();
+if(battle.won){
+c.strokeStyle='#ffe8a0';c.lineWidth=3;c.lineCap='round';
+for(const [x,y,size] of [[348,254,5],[441,216,7],[491,270,5]]){const lift=motion?Math.min(1,(age-.32)/.5)*12:0;c.beginPath();c.moveTo(x-size,y-lift);c.lineTo(x+size,y-lift);c.moveTo(x,y-lift-size);c.lineTo(x,y-lift+size);c.stroke()}
+}else{
+c.strokeStyle='#42677e';c.lineWidth=4;c.lineCap='round';
+for(let i=0;i<3;i++){const x=388+i*10,y=292+i*3;c.beginPath();c.moveTo(x,y);c.lineTo(x-2,y+13);c.stroke()}
+}
+c.restore();return true
+}
+
 export function drawArenaHero(c,battle){
 const attack=ACTION_HERO_ART.attack,until=battle.nextTurn-battle.time,since=battle.time-battle.normalAttackAt,motion=battle.player.settings.motion&&!motionPreference?.matches;
 const equipment=battle.player.equipment,fullAttack=FULL_BODY_ATTACK_ART[equipment.armor];
+for(const src of FULL_BODY_JUMP_ART[equipment.armor]?.sources||[])asset(src);
+if(drawArenaOutcome(c,battle,motion))return true;
 if(fullAttack||FULL_BODY_IDLE_ART[equipment.armor]){
 if(fullAttack)asset(fullAttack.src);
 let frame=null;

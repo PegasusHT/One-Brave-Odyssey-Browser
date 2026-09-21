@@ -1,16 +1,52 @@
 # Browser build progress
 
-Last updated: 17 September 2026
+Last updated: 21 September 2026
+
+## Local revision — gold-only equipment upgrades, 21 September 2026
+
+Version 30 removes battle-clear gates from individual weapon, armor and shield upgrades and the matching-set purchase. The hero can buy each next rank whenever the wallet covers its unchanged price, including set 15 before clearing battle 14. Sequential upgrades, duplicate-purchase protection, exact currency checks and the active rank-20 limit remain. Previously owned higher equipment stays preserved. Skill and training-ground requirements are unchanged.
+
+Town’s Shop title moves from (235,343) to (215,358) in the source image: 20 pixels farther left and 15 pixels down. Local cache: `obo-game-2026-09-21-30`. No publication or tests. See validation.md for the focused visual preview scope.
+
+## Local revision — arena progress and compact currency, 21 September 2026
+
+Version 29 moves Cloudring and the battle number to a compact top-center plaque. A connected three-monster progress row follows the reference: cleared gold dots, a current-position arrow and a final boss skull. The row updates as opponents change; Endless reuses groups of three. Wallets, standard icon prices and battle coin rewards show an icon and number without a visible currency name; accessible labels retain the denomination. Town’s Shop anchor moves from (290,393) to (235,343), exposing the flag near the hero. The Default Gameplay Layout note is updated accordingly.
+
+Local cache: `obo-game-2026-09-20-29`. No publication or tests. Focused visual preview details are in validation.md.
+
+## Local revision — Default Gameplay Layout, 20 September 2026
+
+Arena combat now uses the named **Default Gameplay Layout**. Full scenery replaces the black top strip. Back sits at the top left, Settings at the top right, level/XP at the bottom left, gold at the bottom right, and the skills/tonic controls at the bottom center. Cloudring is centered between the fighters. Each fighter's name and HP bar sits beneath its image, with Boss beside the third-wave enemy's HP bar. Back preserves the existing paused Resume/Retreat flow.
+
+Combat narration is removed from the scene, while compact status labels remain. Results use a short outcome title and the actual reward amounts rather than explanatory paragraphs. The existing brief victory/defeat scene and once-only reward settlement remain in place. Approved training gameplay layouts are unchanged. The reusable specification and request wording, “Use the Default Gameplay Layout for [scene]”, are recorded in [arena layouts](arena-layout.md) and referenced in AGENTS.md.
+
+Settings/cache are Version 28 (`obo-game-2026-09-20-28`). This revision remains local; the published game is still Version 26. No tests or gameplay sessions were requested or run. Visual preview scope and any remaining checks are recorded in [validation](validation.md).
+
+## Local revision — 20 encounters and battle endings, 20 September 2026
+
+Jimmy chose to continue browser development for the first release. Stages 1 and 2 contain the active twenty encounters; Stage 3 remains visible as Coming soon with no selectable encounters or enabled Fight action. Endless now opens after encounter 20. Shop and armory previews offer twenty matching armor, weapon and shield tiers, reduced from thirty; the six appearance families and stable IDs are unchanged. Existing saves keep previously owned tiers 21–30, their appearance/stat descriptors, cleared IDs and exact currency. Shop cannot sell those later tiers, and Arena records count only the twenty active encounters. Final training-ground upgrade eligibility changes from 21 clears to 20, and skill rank requirements cap at 20; earlier costs and requirements are unchanged. Second wind remains a post-20 unlock usable in survival.
+
+The reported finishing-blow freeze was traced to `frame()`: STRIKE and direct skills can set `session.done` from the input handler, before the next frame. The old frame guard skipped every completed session, including the only call that opened battle results. Completed battle handling now runs independently from combat stepping. Input-driven finishes immediately cache and save their settlement, and step-driven finishes use the same path. The result modal uses that cached result and its own `resultShown` guard; existing session/first-clear reward idempotency remains in place.
+
+`Battle.finish(won)` stops combat and clears temporary combat states. `advanceOutcome(dt)` advances only visual state during a 1.65-second ending: the winner raises the sword while the defeated opponent collapses/fades; on a loss, the hero crouches and slumps with subdued blue marks. Existing source art is reused; no new generation or outfit redesign. Reduced motion uses static outcome poses. Skill controls disappear during the ending and results follow automatically. Retreat still opens its result immediately. Hidden-page/portrait/dialog states stop the ending clock; returning to landscape with no dialog resumes it. Pending endings remain protected from game-update activation and test-save replacement, and pagehide preserves already-earned rewards.
+
+Settings/cache are Version 27 (`obo-game-2026-09-20-27`). Existing runtime files remain in the offline list; no new shipping module or asset is added. No tests, gameplay runs, combat simulation or publication were performed. A focused 844×390 desktop visual review covered Stage 3 and one representative outfit's static win/loss poses, without changing real progression. Physical-phone verification and live finishing-blow checks remain for Jimmy's playtest. The temporary pose fixture was removed after review. The existing localhost server was reused; no additional server was started. The published game remains Version 26.
+
+## Latest publication — 17 September 2026
+
+Jimmy explicitly requested publication. Game Version 26 was successfully published as Site release 7 at 18:22 UTC, retaining owner-only access and the existing address: https://one-brave-odyssey-skyhaven.jimmybui1995.chatgpt.site. Deployment `appgdep_6aac2fdda4b08191a5fda75390dd8cb2` reported succeeded. Published source `b822ef91becf1c183501246f0bb0546d63f599b8` has the same source tree as Jimmy's committed `0f20ba1ce91a1725ccead33a7b4191a9e2f34b4f`; the temporary publication checkout preserved the hosting history through a merge. No game files were changed for publication, and no gameplay tests or phone checks were run.
+
+This successful publication supersedes the local-only status in earlier entries below. Installed players can finish their run, reopen online, and use Settings → Check for updates → Install game update. Future revisions remain local until Jimmy explicitly requests another publication.
 
 ## Purpose and direction
 
 The goal is a sellable, playable, fully completed game that meets market expectations and can be published on the App Store. Mobile landscape is the primary experience, with iPhone 17 Pro Max as the current target phone. Broader responsive support will be developed in a future iteration; existing compact landscape checks remain regression coverage.
 
-JavaScript and the browser currently provide a fast development path for a playable MVP, gameplay experiments and concrete layout references. AI agents can iterate efficiently here. The production goal remains a polished commercial game. Jimmy wants direct control over UI placement, scene objects and animations, and is evaluating Unity for the polished version. Preserve this browser build as the playable behavior and layout reference if production moves to Unity.
+JavaScript and the browser currently provide a fast development path for a playable MVP, gameplay experiments and concrete layout references. AI agents can iterate efficiently here. The production goal remains a polished commercial game. Jimmy wants direct control over UI placement, scene objects and animations. On 20 September he chose to continue browser development to finish the first release. A future Unity migration remains optional.
 
 A Unity conversion remains a production option, including when its visual editing workflow better supports Jimmy’s design process or when expanded content/browser limitations justify it. If needed, use the browser behavior as the reference and port complete vertical slices deliberately. There is no commitment to a Unity port before release; packaging, device performance, release content, polish and App Store readiness still need to be completed and validated.
 
-The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, thirty encounters across three stages and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
+The current loop includes town, five training minigames, stat and skill growth, mostly automatic arena battles with tap events, coins, equipment, training-ground upgrades, lodge/gallery progression, twenty active encounters across two stages, a Coming soon third stage and endless survival. The setting, names, procedural art and interface are original. The accepted visual direction is a colorful sky-island town with a small teal-scarf adventurer.
 
 ## Local preview cache correction — latest local revision, 17 September 2026
 

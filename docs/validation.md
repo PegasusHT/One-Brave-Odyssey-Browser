@@ -1,3 +1,31 @@
+## Shop affordability and label refinement — Version 30
+
+- Removed battle-clear checks from both individual equipment purchases and full-set purchases, together with the Shop’s locked labels and disabled states. Source review confirms unchanged next-rank progression, rank-20 maximum, affordability checks, duplicate/owned-item guards, prices and save writes.
+- At 844×390, a temporary in-memory preview with rank-14 gear, only battles 1–13 cleared and enough currency showed enabled rank-15 individual and full-set offers. No purchase was executed. A second view showed the Town Shop label at its revised (215,358) anchor, slightly down and farther left, clear of the flag.
+- No tests, syntax checks, purchase transactions, gameplay sessions, save writes or physical-device checks were run. The temporary preview was removed. Existing local server reused; Settings/cache Version 30 remains unpublished.
+
+## Arena progress and Town label — Version 29 visual preview
+
+- Focused 844×390 desktop previews used the production arena HUD, progress updater, Town placement and renderers with a temporary in-memory fixture. The second of three monster markers showed the current arrow, the boss marker remained upcoming, and Cloudring/Battle 4 appeared at the top center. The wallet showed its icon and numeric amount without its currency name.
+- The Town preview displayed the shifted Shop label left/up of the hero platform flag. The flag remains visible. No gameplay stepping, reward settlement or save writes occurred in the preview.
+- No tests, syntax checks, live fights, smaller-screen matrix or physical phone checks were run. The temporary preview file was removed. Existing server reused; Version 29 remains local and unpublished.
+
+## Default Gameplay Layout — Version 28 visual preview
+
+- Arena combat now uses the documented Default Gameplay Layout: full scenery, corner navigation/progression/wallet, bottom-center skills, centered Cloudring title, and under-character names, HP and status labels. The third-wave Boss badge sits beside the enemy bar.
+- Desktop visual previews at 844×390 and 568×320 used the actual battle renderer and extracted production HUD/result markup with a temporary in-memory fixture. No combat stepping, settlement or save writes occurred. The short-screen preview exposed a wrapped HP unit; the metadata row now wraps whole labels. The compact reward panel shows reward totals including level-up points, with reduced padding on short screens.
+- The temporary fixture was removed. No automated tests, syntax checks, gameplay runs or physical-device checks were performed, following Jimmy’s preference. Intermediate 667×375 and live interactions remain unverified. Existing local server reused; nothing published.
+- Settings and offline cache are Version 28. No new runtime module or asset was added, so the offline file list stays unchanged.
+
+## Twenty-encounter scope and outcome visual review — 20 September 2026
+
+- Source review identified the input-finish bug: STRIKE/Sunflare/Bash could set done before the old frame guard, bypassing battle results. The new completed-battle route is separate from combat stepping, caches once-only settlement before the visual hold, and protects pending endings from save replacement and update activation.
+- A second source review caught an orientation pause edge: closing Settings in portrait during the ending could leave paused set. Pending endings now derive pause from visibility/orientation whenever no dialog is open.
+- At 844×390 desktop viewport, the real Arena menu displayed Stage 3 Coming soon with no encounter choices, no opponent preview and a disabled Fight action. An existing separate test save was used only for menu navigation; no checkpoint loading, purchases or rewards were triggered.
+- A temporary static fixture reused the actual Battle/hero renderers to display Set A victory and defeat at 844×390. It used an in-memory hero and fixed outcome age, with no combat stepping, input, reward settlement or save writes. Reviewed the caption placement, raised-sword victory, fallen/faded foe and crouched/slumped defeat; increased the defeat lean and darkened its emotion marks for readability. The fixture was removed after review.
+- No automated tests, syntax checks, simulated fights, live battle completion, phone testing or publication. End-to-end finishing blows, reward persistence and small-screen interaction still need a requested gameplay check or Jimmy's playtest. Visual review does not establish those behaviors.
+- Local Version 27; cache list is unchanged because no new runtime module or art asset ships. Reused the existing localhost server without starting another process.
+
 ## Localhost stale-cache diagnosis — 17 September 2026
 
 - Read-only HTTP inspection found no server listening on4173; both ordinary and escalated localhost requests failed to connect. No gameplay tests were run.

@@ -8,7 +8,9 @@ Mobile landscape is primary. Use pointer-down, large targets, safe-area padding,
 
 Keep weapon_t1/armor_t1 and later tiers stable. Gameplay descriptors are in core.js and replaceable appearance descriptors are in art.js. Do not use paid AI generation. Keep first-clear and session reward settlement idempotent.
 
-The existing .openai/hosting.json identifies the private Site; reuse it. Do not register another Site. Follow Sites skills for hosting. Current scope is a prototype with five trainers, 30 arena encounters grouped into three stages of ten, skills, gear, lodge/gallery upgrades and endless survival. The other two towns, additional mission types, advanced talents and further art are follow-up work.
+Equipment upgrades require enough gold, with no battle-clear gate for either individual items or matching sets. Keep next-rank purchasing sequential through the active rank-20 limit, with existing prices, affordability and duplicate-purchase guards. Skill and training-ground requirements are separate.
+
+The existing .openai/hosting.json identifies the private Site; reuse it. Do not register another Site. Follow Sites skills for hosting. Continue the browser version toward the first release: five trainers, 20 arena encounters grouped into two active stages of ten, Stage 3 marked Coming soon, skills, 20 active matching weapon/armor/shield ranks, lodge/gallery upgrades and endless survival after encounter 20. Preserve older saved progression and equipment beyond the active limit. The other two towns, Stage 3 encounters, additional mission types, advanced talents and further art are follow-up work.
 
 Publish only when Jimmy explicitly asks. Keep ordinary changes local; a previous publication request does not authorize publishing later revisions.
 
@@ -21,3 +23,5 @@ Jimmy’s current preference: do not run tests unless he explicitly asks. For UI
 For equipment and animation art updates, keep review brief and focused on the changed asset. Do not run an exhaustive preview of every outfit, pose or animation after each request. One representative visual preview is enough by default; expand only for a concrete reported issue or Jimmy’s explicit request. Prompt-only work needs no browser or animation review.
 
 Menu design preference: follow the approved Home/Arena style across destinations—full landscape scenery, centered short title, small Town return, gold and Settings, compact visible controls with generous tap areas, and minimal text. Keep prices, effects and progression numbers needed for decisions. Preserve approved training gameplay layouts while redesigning their selection menus.
+
+The reusable gameplay design is named **Default Gameplay Layout**, documented in `docs/arena-layout.md`. Apply it when Jimmy asks to use that name: full scenery with no black top strip, Back top left, Settings top right, level/XP bottom left, gold icon and number without a currency name bottom right, and skills bottom center. The arena implementation places Cloudring and its battle number at the top center with connected monster progress dots and a boss marker, places names/HP beneath their images, shows Boss beside the final-wave HP bar, and keeps combat statuses with concise rewards. Only arena combat currently uses it; preserve approved training gameplay layouts unless Jimmy asks to apply it there.

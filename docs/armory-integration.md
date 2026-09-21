@@ -1,10 +1,14 @@
 # Armory integration
 
+Current first-release scope, 21 September 2026: 20 active armor ranks, reduced from 30, with matching weapon and shield ranks. The six original appearances remain; ranks 7–20 reuse A/B/C/D/F with +N names. `ARMORY_SETS` exposes these 20 active choices. `ITEMS` retains descriptors through rank 30 so older owned equipment, stable IDs and values survive loading, while purchases and new offers stop at rank 20. Current prices and bonuses are documented in [economy design](economy-design.md).
+
 ## Progression
 
 Starter → Set A → Set B → Set C → Set D → Set F maps to tier IDs 1–6. Armor, weapons and shields advance independently through one upgrade button per slot. Buying the next item automatically equips it; owned or lower tiers and skipped tiers cannot be purchased. Loading an existing save equips its highest owned tier in each slot. No migration charge or refund is needed for this change.
 
-Earlier equipment values remain unchanged. New values below are initial tuning, not playtested balance. Bonuses are the item's total bonus, not an amount added on top of the earlier tier.
+Local Version 30 removes battle-clear requirements from both individual equipment upgrades and the matching-set action. Enough gold is the only progression requirement for the next purchase: set 15 can be bought before battle 14 is cleared. Rank prices are unchanged, upgrades remain sequential through active rank 20, and affordability, duplicate-purchase and maximum-rank guards remain in place. A matching-set purchase charges only for its missing pieces. Skill and training-ground unlock requirements are separate and unchanged.
+
+The values below record the earlier C/D/F art integration and are superseded by the percentage-based equipment economy. They are historical, not current shop prices or bonuses.
 
 | Set | Weapon gold / ATK bonus | Armor gold / HP bonus | Cosmetic shield gold |
 | --- | --- | --- | --- |
