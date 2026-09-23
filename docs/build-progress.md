@@ -2,6 +2,12 @@
 
 Last updated: 21 September 2026
 
+## Design handoff — normal monster animation prompts, 21 September 2026
+
+`docs/normal-monster-animation-prompts.md` contains the master-first image-agent workflow for Slime, Bat, Bandit, Boar, Mushroom and Golem. Each normal has one reference-master prompt plus separate four-frame idle, attack and family-friendly defeat-sheet prompts with consistent left-facing camera, roots, scale, alpha, filenames and identity locks. The prompts keep attack travel, shadows and hit effects code-driven and preserve the current battle mechanics.
+
+This is prompt-only work. No monster art was generated or integrated, no runtime/cache/version changed, and no tests, server, gameplay, save or publication action was performed.
+
 ## Published release — Version 1.0.0.1, 21 September 2026
 
 Jimmy requested publication of all current changes and dotted version labels. The former local Version 30 is now game Version **1.0.0.1**, starting the `major.feature.patch.revision` convention. Ordinary small updates increment the final component. Settings and offline cache (`obo-game-1.0.0.1`) match; save schema and hosting release numbering remain independent.

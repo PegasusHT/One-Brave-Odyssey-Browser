@@ -241,7 +241,7 @@ Relative on-screen scale:
 
 1. Approve this story, the three stage themes, and all names.
 2. Generate Slime, Bandit, Golem, Rune Golem, Brambleback, and Skybreaker separately. Then assemble those approved images with a canonical hero scale silhouette into a reference lineup. Do not ask an image model to create the full lineup in one image, because identities and scale may blend.
-3. Generate and approve the six normal combat assets.
+3. Generate and approve the six normal combat assets using the master-first idle, attack, and defeat workflow in [normal monster animation prompts](normal-monster-animation-prompts.md).
 4. Generate the two Stage 1 elites and Brambleback.
 5. Generate the two Stage 2 elites and Skybreaker.
 6. Check one focused 568 × 320 combat preview with the hero, Bandit, Rune Golem, and Skybreaker before integrating the 12 approved combat images. Keep battle numbers, stats, rewards, and save progression unchanged.
